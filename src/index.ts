@@ -37,7 +37,12 @@ export class BigAmount {
       } else if (typeof x === "bigint") {
         return new BigAmount(x, 1n);
       } else if (typeof x === "number") {
-        // TODO approximate
+        throw new RangeError(
+          Number.isFinite(x)
+            ? `non-integer Number value: ${x}` +
+              "; pass it as a string or use `fromNumber()` instead"
+            : `unsupported Number value: ${x}`
+        );
       } else if (typeof x === "string") {
         // TODO parse
       }
@@ -50,6 +55,59 @@ export class BigAmount {
       }
       return BigAmount.create(x).div(BigAmount.create(y));
     }
+  }
+
+  /**
+   * Creates a `BigAmount` from `Number`. Unlike `create()`, this method finds a
+   * rational approximate of non-integer finite number.
+   */
+  static fromNumber(x: number, precision = 100_000_000): BigAmount {
+    if (Number.isInteger(x)) {
+      return new BigAmount(BigInt(x), 1n);
+    } else if (!Number.isFinite(x)) {
+      throw new RangeError(`unsupported Number value: ${x}`);
+    }
+
+    // Approximate `x`'s coefficient and then scale it by `x`'s exponent
+    const exp = Math.floor(Math.log2(Math.abs(x)));
+    const coef = Math.abs(x) / Math.pow(2, exp); // being always 1.dddddd...
+
+    let [num, den] = [1, 1]; // result if coef === 1 (i.e. x === 2 ** exp)
+    if (coef !== 1) {
+      // Approximate `coef` using Farey sequences (or just binary search)
+      let [lnum, lden] = [1, 1];
+      let [unum, uden] = [2, 1];
+      let mid = 1.5;
+      while (lden + uden <= precision) {
+        num = lnum + unum;
+        den = lden + uden;
+        mid = num / den;
+        if (coef === mid) {
+          break;
+        } else if (coef < mid) {
+          unum = num;
+          uden = den;
+        } else {
+          lnum = num;
+          lden = den;
+        }
+      }
+
+      if (coef < mid && coef - lnum / lden < mid - coef) {
+        // lower --- coef ------------ mid
+        [num, den] = [lnum, lden];
+      } else if (coef > mid && unum / uden - coef < coef - mid) {
+        // mid ------------ coef --- upper
+        [num, den] = [unum, uden];
+      }
+    }
+
+    // Return (num / den) * (2 ** exp)
+    const sign = x < 0 ? -1n : 1n;
+    const term = 2n ** BigInt(Math.abs(exp));
+    return exp > 0
+      ? new BigAmount(sign * BigInt(num) * term, BigInt(den))
+      : new BigAmount(sign * BigInt(num), BigInt(den) * term);
   }
 
   /** Returns a copy of `this`. */

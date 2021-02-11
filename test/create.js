@@ -2,7 +2,7 @@ const assert = require("assert").strict;
 const { BigAmount } = require("..");
 
 describe("create(x)", () => {
-  it("should create the expected representaion of a fraction", () => {
+  it("should create the expected representaion if int-like arguments are passed", () => {
     const cases = [
       // {{{
       ["1/2", new BigAmount(1n, 2n)],
@@ -17,7 +17,7 @@ describe("create(x)", () => {
 });
 
 describe("create(x, y)", () => {
-  it("should create the expected representaion of a fraction", () => {
+  it("should create the expected representaion if int-like arguments are passed", () => {
     const cases = [
       // {{{
       [1, 2, new BigAmount(1n, 2n)],
