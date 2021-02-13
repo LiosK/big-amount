@@ -46,7 +46,7 @@ export class BigAmount {
       } else if (typeof x === "string") {
         // TODO parse
       }
-      throw new TypeError("unsupported type: " + typeof x);
+      throw new TypeError(`unsupported type: ${typeof x}`);
     } else {
       // `create(x, y)`
       if (typeof x === "bigint" && typeof y === "bigint") {
@@ -82,14 +82,14 @@ export class BigAmount {
         num = lnum + unum;
         den = lden + uden;
         mid = num / den;
-        if (coef === mid) {
-          break;
-        } else if (coef < mid) {
+        if (coef < mid) {
           unum = num;
           uden = den;
-        } else {
+        } else if (coef > mid) {
           lnum = num;
           lden = den;
+        } else {
+          break;
         }
       }
 
@@ -143,6 +143,88 @@ export class BigAmount {
       }
     }
     return this;
+  }
+
+  /**
+   * Changes the denominator of `this` and, accordingly, the numerator. This
+   * method rounds the numerator in the specified rounding mode if it is not
+   * divisible by the new denominator.
+   *
+   * @remarks
+   * `roundingMode` must be one of the following. Note that the rounding
+   * functions apply to the resulting numerator; the outcome of "toward positive
+   * / negative" is determined by the numerator, which may be counterintuitive
+   * especially when the new denominator is negative.
+   *
+   * - `"UP"`: Toward infinity
+   * - `"DOWN"`: Toward zero
+   * - `"CEIL"`: Toward positive
+   * - `"FLOOR"`: Toward negative
+   * - `"HALF_UP"`: Ties toward infinity
+   * - `"HALF_EVEN"`: Ties to even (default)
+   */
+  changeDenominator(
+    newDen: bigint,
+    roundingMode:
+      | "UP"
+      | "DOWN"
+      | "CEIL"
+      | "FLOOR"
+      | "HALF_UP"
+      | "HALF_EVEN" = "HALF_EVEN"
+  ): this {
+    if (this.den < 0n) {
+      this.num = -this.num;
+      this.den = -this.den;
+    }
+
+    const oldDen = this.den;
+    const tmp = this.num * newDen;
+    this.num = tmp / oldDen;
+    this.den = newDen;
+    const unit = tmp < 0n ? -1n : 1n;
+    const rem = (tmp < 0n ? -tmp : tmp) % oldDen;
+
+    if (rem === 0n) {
+      // exact case
+      return this.verify();
+    }
+
+    switch (roundingMode) {
+      case "HALF_EVEN":
+        if (
+          rem * 2n > oldDen ||
+          (rem * 2n === oldDen && (this.num & 1n) === 1n)
+        ) {
+          this.num += unit;
+        }
+        return this.verify();
+      case "HALF_UP":
+        if (rem * 2n >= oldDen) {
+          this.num += unit;
+        }
+        return this.verify();
+      case "UP":
+        this.num += unit;
+        return this.verify();
+      case "DOWN":
+        return this.verify();
+      case "CEIL":
+        if (unit > 0n) {
+          this.num += unit;
+        }
+        return this.verify();
+      case "FLOOR":
+        if (unit < 0n) {
+          this.num += unit;
+        }
+        return this.verify();
+      default:
+        throw new RangeError(
+          `unknown rounding mode ${roundingMode}; choose one of ` +
+            `"UP" | "DOWN" | "CEIL" | "FLOOR" | "HALF_UP" | "HALF_EVEN"`
+        );
+    }
   }
 
   /** Returns true if `this` is an equivalent fraction to `other`. */
