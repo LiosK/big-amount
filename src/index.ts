@@ -1,8 +1,20 @@
 export class BigAmount {
-  /** Creates a `BigAmount` without validating arguments. */
+  /**
+   * Creates a [[BigAmount]] without validating arguments. It is highly
+   * recommended to use [[BigAmount.create]] instead.
+   *
+   * @param num - Numerator.
+   * @param den - Denominator.
+   */
   constructor(public num: bigint, public den: bigint) {}
 
-  /** Creates a `BigAmount`. */
+  /**
+   * Creates a [[BigAmount]].
+   *
+   * @param x - Single value that is convertible to a [[BigAmount]], or a
+   *            numerator if given together with `y`.
+   * @param y - Optional denominator.
+   */
   static create(
     x: BigAmount | bigint | number | string,
     y?: BigAmount | bigint | number | string
@@ -58,8 +70,8 @@ export class BigAmount {
   }
 
   /**
-   * Creates a `BigAmount` from `Number`. Unlike `create()`, this method finds a
-   * rational approximate of non-integer finite number.
+   * Creates a [[BigAmount]] from `Number`. Unlike [[BigAmount.create]], this
+   * method finds a rational approximate of non-integer finite number.
    */
   static fromNumber(x: number, precision = 100_000_000): BigAmount {
     if (Number.isInteger(x)) {
@@ -118,6 +130,8 @@ export class BigAmount {
   /**
    * Asserts that `this` is composed of `BigInt` values and the denominator is
    * non-zero.
+   *
+   * @returns `this`.
    */
   private verify(): this {
     this.num - 0n;
@@ -128,7 +142,11 @@ export class BigAmount {
     return this;
   }
 
-  /** Converts `this` to the simplest form with a positive denominator. */
+  /**
+   * Converts `this` to the simplest form with a positive denominator.
+   *
+   * @returns Mutated `this`; this method operates in-place.
+   */
   reduce(): this {
     this.verify();
     if (this.num === 0n) {
@@ -151,28 +169,20 @@ export class BigAmount {
    * divisible by the new denominator.
    *
    * @remarks
-   * `roundingMode` must be one of the following. Note that the rounding
-   * functions apply to the resulting numerator; the outcome of "toward positive
-   * / negative" is determined by the numerator, which may be counterintuitive
-   * especially when the new denominator is negative.
+   * Note that the [[RoundingMode]] applies to the resulting numerator; the
+   * outcome of "toward positive / negative" is determined by the sign of
+   * numerator, which may be counterintuitive when the new denominator is
+   * negative.
    *
-   * - `"UP"`: Toward infinity
-   * - `"DOWN"`: Toward zero
-   * - `"CEIL"`: Toward positive
-   * - `"FLOOR"`: Toward negative
-   * - `"HALF_UP"`: Ties toward infinity
-   * - `"HALF_EVEN"`: Ties to even (default)
+   * @returns Mutated `this`; this method operates in-place.
    */
   changeDenominator(
     newDen: bigint,
-    roundingMode:
-      | "UP"
-      | "DOWN"
-      | "CEIL"
-      | "FLOOR"
-      | "HALF_UP"
-      | "HALF_EVEN" = "HALF_EVEN"
+    roundingMode: RoundingMode = "HALF_EVEN"
   ): this {
+    if (this.den === newDen) {
+      return this.verify();
+    }
     if (this.den < 0n) {
       this.num = -this.num;
       this.den = -this.den;
@@ -238,17 +248,33 @@ export class BigAmount {
 
   // Arithmetic operations
 
+  /**
+   * Negates `this`.
+   *
+   * @returns Mutated `this`; this method operates in-place.
+   */
   neg(): this {
     this.num = -this.num;
     return this;
   }
 
+  /**
+   * Converts `this` into the unsigned absolute value.
+   *
+   * @returns Mutated `this`; this method operates in-place.
+   */
   abs(): this {
     this.num = BigIntMath.abs(this.num);
     this.den = BigIntMath.abs(this.den);
     return this;
   }
 
+  /**
+   * Converts `this` into the reciprocal (i.e. inverses the numerator and
+   * denominator).
+   *
+   * @returns Mutated `this`; this method operates in-place.
+   */
   inv(): this {
     const tmp = this.num;
     this.num = this.den;
@@ -256,6 +282,11 @@ export class BigAmount {
     return this.verify();
   }
 
+  /**
+   * Adds `other` to `this`.
+   *
+   * @returns Mutated `this`; this method operates in-place.
+   */
   add(other: BigAmount): this {
     if (this.den === other.den) {
       this.num += other.num;
@@ -266,6 +297,11 @@ export class BigAmount {
     return this.verify();
   }
 
+  /**
+   * Subtracts `other` from `this`.
+   *
+   * @returns Mutated `this`; this method operates in-place.
+   */
   sub(other: BigAmount): this {
     if (this.den === other.den) {
       this.num -= other.num;
@@ -276,12 +312,22 @@ export class BigAmount {
     return this.verify();
   }
 
+  /**
+   * Multiplies `this` by `other`.
+   *
+   * @returns Mutated `this`; this method operates in-place.
+   */
   mul(other: BigAmount): this {
     this.num *= other.num;
     this.den *= other.den;
     return this.verify();
   }
 
+  /**
+   * Divides `this` by `other`.
+   *
+   * @returns Mutated `this`; this method operates in-place.
+   */
   div(other: BigAmount): this {
     this.num *= other.den;
     this.den *= other.num;
@@ -289,7 +335,29 @@ export class BigAmount {
   }
 }
 
+/** Shortcut for [[BigAmount.create]] */
 export const Q = BigAmount.create;
+
+/**
+ * Represents rounding modes.
+ *
+ * @remarks
+ * | Value          | Mode                                  |
+ * |----------------|---------------------------------------|
+ * | `"UP"`         | Toward inifinity (away from zero)     |
+ * | `"DOWN"`       | Toward zero                           |
+ * | `"CEIL"`       | Toward positive                       |
+ * | `"FLOOR"`      | Toward negative                       |
+ * | `"HALF_UP"`    | Ties toward infinity (away from zero) |
+ * | `"HALF_EVEN"`  | Ties to even                          |
+ */
+export type RoundingMode =
+  | "UP"
+  | "DOWN"
+  | "CEIL"
+  | "FLOOR"
+  | "HALF_UP"
+  | "HALF_EVEN";
 
 /** Math utilities for BigInt */
 class BigIntMath {
