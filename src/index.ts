@@ -12,7 +12,7 @@ export class BigAmount {
    * Creates a [[BigAmount]].
    *
    * @param x - Single value that is convertible to a [[BigAmount]], or a
-   *            numerator if given together with `y`.
+   *        numerator if given together with `y`.
    * @param y - Optional denominator.
    */
   static create(
@@ -230,6 +230,7 @@ export class BigAmount {
         }
         return this.verify();
       default:
+        // XXX not invoked if this.den === newDen or rem === 0n
         throw new RangeError(
           `unknown rounding mode ${roundingMode}; choose one of ` +
             `"UP" | "DOWN" | "CEIL" | "FLOOR" | "HALF_UP" | "HALF_EVEN"`
@@ -332,6 +333,66 @@ export class BigAmount {
     this.num *= other.den;
     this.den *= other.num;
     return this.verify();
+  }
+
+  toString(): string {
+    return `${this.num}/${this.den}`;
+  }
+
+  toJSON(): string {
+    return `${this.num}/${this.den}`;
+  }
+
+  /**
+   * Formats a [[BigAmount]] using decimal fixed-point notation just like
+   * `Number#toFixed`. This method additionally takes rounding and formatting
+   * options to customize the output.
+   *
+   * @param digits - Number of digits to appear after the decimal separator.
+   * @param decimalSeparator - [Default: `"."`] Character used to separate the
+   *        integer part from the fractional part.
+   * @param groupSeparator - [Default: `""`] Delimiter used to separate the
+   *        groups of thousands (three digits) of the integer part. Grouping is
+   *        disabled by default; give `","`, `"."`, `" "`, or any other
+   *        delimiter to enable grouping. This method does not support other
+   *        grouping rules than the groups of three digits.
+   * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied when
+   *        necessary. See [[RoundingMode]] for possible values.
+   */
+  toFixed(
+    digits = 0,
+    {
+      decimalSeparator = ".",
+      groupSeparator = "",
+      roundingMode = "HALF_EVEN",
+    }: {
+      decimalSeparator?: string;
+      groupSeparator?: string;
+      roundingMode?: RoundingMode;
+    } = {}
+  ): string {
+    const term = 10n ** BigInt(digits);
+    let sign = "";
+    let num = this.clone().changeDenominator(term, roundingMode).num;
+    if (num < 0n) {
+      sign = "-";
+      num = -num;
+    }
+
+    let intPart = (num / term).toString();
+    if (groupSeparator !== "") {
+      const groups = [intPart.slice(-3)];
+      for (let i = -3, len = -intPart.length; i > len; i -= 3) {
+        groups.unshift(intPart.slice(-3 + i, i));
+      }
+      intPart = groups.join(groupSeparator);
+    }
+    if (digits > 0) {
+      const fracPart = (num % term).toString().padStart(digits, "0");
+      return `${sign}${intPart}${decimalSeparator}${fracPart}`;
+    } else {
+      return `${sign}${intPart}`;
+    }
   }
 }
 
