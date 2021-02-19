@@ -28,7 +28,7 @@ export class BigAmount {
     }
 
     // Convert int-like to BigInt
-    const patIntLike = /^\s*(?:0b[01]+|0o[0-7]+|0x[0-9a-f]+|[-+]?[0-9]+)\s*$/i;
+    const patIntLike = /^\s*(?:[-+]?[0-9]+|0x[0-9a-f]+|0o[0-7]+|0b[01]+)\s*$/i;
     if (
       (typeof x === "number" && Number.isInteger(x)) ||
       (typeof x === "string" && patIntLike.test(x))
@@ -56,7 +56,25 @@ export class BigAmount {
             : `unsupported Number value: ${x}`
         );
       } else if (typeof x === "string") {
-        // TODO parse
+        const match = x.match(
+          /^\s*([-+]?)(?:([0-9]*)\.([0-9]+)|([0-9]+))(?:e([-+]?[0-9]+))?\s*$/i
+        );
+        if (match !== null) {
+          const [
+            ,
+            sign,
+            dsInt = "",
+            dsFrac = "",
+            dsIntOnly = "",
+            dsExp = "0",
+          ] = match;
+          const num = BigInt(`${sign}${dsInt}${dsFrac}${dsIntOnly}`);
+          const exp = BigInt(dsExp) - BigInt(dsFrac.length);
+          return exp > 0
+            ? new BigAmount(num * 10n ** exp, 1n)
+            : new BigAmount(num, 10n ** -exp);
+        }
+        throw new SyntaxError(`Cannot convert ${x} to a BigAmount`);
       }
       throw new TypeError(`unsupported type: ${typeof x}`);
     } else {
@@ -171,7 +189,7 @@ export class BigAmount {
    * @remarks
    * Note that the [[RoundingMode]] applies to the resulting numerator; the
    * outcome of "toward positive / negative" is determined by the sign of
-   * numerator, which may be counterintuitive when the new denominator is
+   * numerator, which could be counterintuitive when the new denominator is
    * negative.
    *
    * @returns Mutated `this`; this method operates in-place.
@@ -397,7 +415,7 @@ export class BigAmount {
 }
 
 /** Shortcut for [[BigAmount.create]] */
-export const Q = BigAmount.create;
+export const q = BigAmount.create;
 
 /**
  * Represents rounding modes.
