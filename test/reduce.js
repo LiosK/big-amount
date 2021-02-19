@@ -1,5 +1,5 @@
-const assert = require("assert").strict;
-const { BigAmount } = require("..");
+import { BigAmount } from "../lib/index.js";
+const assert = chai.assert;
 
 const testReduce = (num, den, simplestNum, simplestDen) => {
   const amount = new BigAmount(num, den).reduce();

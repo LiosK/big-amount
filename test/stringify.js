@@ -1,5 +1,5 @@
-const assert = require("assert").strict;
-const { BigAmount } = require("..");
+import { BigAmount } from "../lib/index.js";
+const assert = chai.assert;
 
 describe("#toFixed()", () => {
   it("should agree with `Number#toFixed()`, except -0 and rounding", () => {

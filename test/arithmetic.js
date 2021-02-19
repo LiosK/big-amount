@@ -1,5 +1,5 @@
-const assert = require("assert").strict;
-const { BigAmount } = require("..");
+import { BigAmount } from "../lib/index.js";
+const assert = chai.assert;
 
 const cases = [
   // {{{
@@ -570,7 +570,7 @@ describe("#neg()", () => {
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd) => {
       const expected = new BigAmount(-xn, xd);
-      assert.ok(new BigAmount(xn, xd).neg().eq(expected));
+      assert(new BigAmount(xn, xd).neg().eq(expected));
     };
 
     for (const [xn, xd] of cases) {
@@ -586,7 +586,7 @@ describe("#abs()", () => {
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd) => {
       const expected = new BigAmount(xn < 0n ? -xn : xn, xd < 0n ? -xd : xd);
-      assert.ok(new BigAmount(xn, xd).abs().eq(expected));
+      assert(new BigAmount(xn, xd).abs().eq(expected));
     };
 
     for (const [xn, xd] of cases) {
@@ -603,7 +603,7 @@ describe("#inv()", () => {
     const test = (xn, xd) => {
       if (xn !== 0n) {
         const expected = new BigAmount(xd, xn);
-        assert.ok(new BigAmount(xn, xd).inv().eq(expected));
+        assert(new BigAmount(xn, xd).inv().eq(expected));
       } else {
         assert.throws(() => new BigAmount(xn, xd).inv());
       }
@@ -618,11 +618,13 @@ describe("#inv()", () => {
   });
 });
 
-describe("#add()", () => {
+describe("#add()", function () {
+  this.timeout(8000);
+
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd, yn, yd) => {
       const expected = new BigAmount(xn * yd + yn * xd, xd * yd);
-      assert.ok(new BigAmount(xn, xd).add(new BigAmount(yn, yd)).eq(expected));
+      assert(new BigAmount(xn, xd).add(new BigAmount(yn, yd)).eq(expected));
     };
 
     for (const [xn, xd] of cases) {
@@ -654,11 +656,13 @@ describe("#add()", () => {
   });
 });
 
-describe("#sub()", () => {
+describe("#sub()", function () {
+  this.timeout(8000);
+
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd, yn, yd) => {
       const expected = new BigAmount(xn * yd - yn * xd, xd * yd);
-      assert.ok(new BigAmount(xn, xd).sub(new BigAmount(yn, yd)).eq(expected));
+      assert(new BigAmount(xn, xd).sub(new BigAmount(yn, yd)).eq(expected));
     };
 
     for (const [xn, xd] of cases) {
@@ -690,11 +694,13 @@ describe("#sub()", () => {
   });
 });
 
-describe("#mul()", () => {
+describe("#mul()", function () {
+  this.timeout(8000);
+
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd, yn, yd) => {
       const expected = new BigAmount(xn * yn, xd * yd);
-      assert.ok(new BigAmount(xn, xd).mul(new BigAmount(yn, yd)).eq(expected));
+      assert(new BigAmount(xn, xd).mul(new BigAmount(yn, yd)).eq(expected));
     };
 
     for (const [xn, xd] of cases) {
@@ -708,15 +714,15 @@ describe("#mul()", () => {
   });
 });
 
-describe("#div()", () => {
+describe("#div()", function () {
+  this.timeout(8000);
+
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd, yn, yd) => {
       const den = xd * yn;
       if (den !== 0n) {
         const expected = new BigAmount(xn * yd, den);
-        assert.ok(
-          new BigAmount(xn, xd).div(new BigAmount(yn, yd)).eq(expected)
-        );
+        assert(new BigAmount(xn, xd).div(new BigAmount(yn, yd)).eq(expected));
       } else {
         assert.throws(() => new BigAmount(xn, xd).div(new BigAmount(yn, yd)));
       }

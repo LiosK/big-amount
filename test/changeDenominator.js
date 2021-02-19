@@ -1,5 +1,5 @@
-const assert = require("assert").strict;
-const { BigAmount } = require("..");
+import { BigAmount } from "../lib/index.js";
+const assert = chai.assert;
 
 describe("#changeDenominator()", () => {
   it("should change the denominator", () => {
@@ -39,7 +39,7 @@ describe("#changeDenominator()", () => {
 
     const test = (num, oldDen, newDen) => {
       const original = new BigAmount(num, oldDen);
-      assert.ok(original.clone().changeDenominator(newDen).eq(original));
+      assert(original.clone().changeDenominator(newDen).eq(original));
     };
 
     for (const [num, oldDen, newDen] of cases) {

@@ -1,5 +1,5 @@
-const assert = require("assert").strict;
-const { BigAmount } = require("..");
+import { BigAmount } from "../lib/index.js";
+const assert = chai.assert;
 
 describe("#eq()", () => {
   it("should return true if two instances are equivalent", () => {
@@ -10,15 +10,15 @@ describe("#eq()", () => {
       [43n, 73n, 516n, 876n],
     ];
     for (const [xnum, xden, ynum, yden] of cases) {
-      assert.ok(new BigAmount(xnum, xden).eq(new BigAmount(ynum, yden)));
-      assert.ok(new BigAmount(-xnum, xden).eq(new BigAmount(-ynum, yden)));
-      assert.ok(new BigAmount(xnum, -xden).eq(new BigAmount(ynum, -yden)));
-      assert.ok(new BigAmount(-xnum, -xden).eq(new BigAmount(-ynum, -yden)));
+      assert(new BigAmount(xnum, xden).eq(new BigAmount(ynum, yden)));
+      assert(new BigAmount(-xnum, xden).eq(new BigAmount(-ynum, yden)));
+      assert(new BigAmount(xnum, -xden).eq(new BigAmount(ynum, -yden)));
+      assert(new BigAmount(-xnum, -xden).eq(new BigAmount(-ynum, -yden)));
 
-      assert.ok(new BigAmount(ynum, yden).eq(new BigAmount(xnum, xden)));
-      assert.ok(new BigAmount(-ynum, yden).eq(new BigAmount(-xnum, xden)));
-      assert.ok(new BigAmount(ynum, -yden).eq(new BigAmount(xnum, -xden)));
-      assert.ok(new BigAmount(-ynum, -yden).eq(new BigAmount(-xnum, -xden)));
+      assert(new BigAmount(ynum, yden).eq(new BigAmount(xnum, xden)));
+      assert(new BigAmount(-ynum, yden).eq(new BigAmount(-xnum, xden)));
+      assert(new BigAmount(ynum, -yden).eq(new BigAmount(xnum, -xden)));
+      assert(new BigAmount(-ynum, -yden).eq(new BigAmount(-xnum, -xden)));
     }
   });
 
@@ -30,15 +30,15 @@ describe("#eq()", () => {
       [43n, 73n, 517n, 876n],
     ];
     for (const [xnum, xden, ynum, yden] of cases) {
-      assert.ok(!new BigAmount(xnum, xden).eq(new BigAmount(ynum, yden)));
-      assert.ok(!new BigAmount(-xnum, xden).eq(new BigAmount(-ynum, yden)));
-      assert.ok(!new BigAmount(xnum, -xden).eq(new BigAmount(ynum, -yden)));
-      assert.ok(!new BigAmount(-xnum, -xden).eq(new BigAmount(-ynum, -yden)));
+      assert(!new BigAmount(xnum, xden).eq(new BigAmount(ynum, yden)));
+      assert(!new BigAmount(-xnum, xden).eq(new BigAmount(-ynum, yden)));
+      assert(!new BigAmount(xnum, -xden).eq(new BigAmount(ynum, -yden)));
+      assert(!new BigAmount(-xnum, -xden).eq(new BigAmount(-ynum, -yden)));
 
-      assert.ok(!new BigAmount(ynum, yden).eq(new BigAmount(xnum, xden)));
-      assert.ok(!new BigAmount(-ynum, yden).eq(new BigAmount(-xnum, xden)));
-      assert.ok(!new BigAmount(ynum, -yden).eq(new BigAmount(xnum, -xden)));
-      assert.ok(!new BigAmount(-ynum, -yden).eq(new BigAmount(-xnum, -xden)));
+      assert(!new BigAmount(ynum, yden).eq(new BigAmount(xnum, xden)));
+      assert(!new BigAmount(-ynum, yden).eq(new BigAmount(-xnum, xden)));
+      assert(!new BigAmount(ynum, -yden).eq(new BigAmount(xnum, -xden)));
+      assert(!new BigAmount(-ynum, -yden).eq(new BigAmount(-xnum, -xden)));
     }
   });
 
@@ -657,15 +657,15 @@ describe("#eq()", () => {
     for (const x of cases) {
       for (const y of cases) {
         if (x[0] === y[0]) {
-          assert.ok(x[1].eq(y[1]));
-          assert.ok(x[2].eq(y[2]));
-          assert.ok(x[3].eq(y[3]));
-          assert.ok(x[4].eq(y[4]));
+          assert(x[1].eq(y[1]));
+          assert(x[2].eq(y[2]));
+          assert(x[3].eq(y[3]));
+          assert(x[4].eq(y[4]));
         } else {
-          assert.ok(!x[1].eq(y[1]));
-          assert.ok(!x[2].eq(y[2]));
-          assert.ok(!x[3].eq(y[3]));
-          assert.ok(!x[4].eq(y[4]));
+          assert(!x[1].eq(y[1]));
+          assert(!x[2].eq(y[2]));
+          assert(!x[3].eq(y[3]));
+          assert(!x[4].eq(y[4]));
         }
       }
     }
