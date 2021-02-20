@@ -4,6 +4,10 @@
   "description": "TypeScript BigInt-based rational number library focused on accounting",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
   "type": "module",
   "scripts": {
     "build": "tsc",
