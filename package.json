@@ -1,6 +1,6 @@
 {
   "name": "big-amount",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0-beta.0",
   "description": "TypeScript BigInt-based rational number library focused on accounting",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
