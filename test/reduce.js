@@ -2,17 +2,17 @@ import { BigAmount } from "../lib/index.js";
 const assert = chai.assert;
 
 const testReduce = (num, den, simplestNum, simplestDen) => {
-  const amount = new BigAmount(num, den).reduce();
+  const amount = new BigAmount(num, den).ireduce();
   assert.strictEqual(amount.num, simplestNum);
   assert.strictEqual(amount.den, simplestDen);
 };
 
-describe("#reduce()", () => {
+describe("#ireduce()", () => {
   it("should throw RangeError if den === 0n", () => {
     const cases = [0n, 1n, 16n, 60n, 499n, 4592405566036505920048306074088604n];
     for (const n of cases) {
-      assert.throws(() => new BigAmount(n, 0n).reduce(), RangeError);
-      assert.throws(() => new BigAmount(-n, 0n).reduce(), RangeError);
+      assert.throws(() => new BigAmount(n, 0n).ireduce(), RangeError);
+      assert.throws(() => new BigAmount(-n, 0n).ireduce(), RangeError);
     }
   });
 

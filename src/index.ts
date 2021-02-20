@@ -83,7 +83,7 @@ export class BigAmount {
         // Fast track for `create(x: int-like, y: int-like)`
         return new BigAmount(x, y).verify();
       }
-      return BigAmount.create(x).div(BigAmount.create(y));
+      return BigAmount.create(x).idiv(BigAmount.create(y));
     }
   }
 
@@ -165,7 +165,7 @@ export class BigAmount {
    *
    * @returns Mutated `this`; this method operates in-place.
    */
-  reduce(): this {
+  ireduce(): this {
     this.verify();
     if (this.num === 0n) {
       this.den = 1n;
@@ -194,7 +194,7 @@ export class BigAmount {
    *
    * @returns Mutated `this`; this method operates in-place.
    */
-  changeDenominator(
+  ichangeDenominator(
     newDen: bigint,
     roundingMode: RoundingMode = "HALF_EVEN"
   ): this {
@@ -272,7 +272,7 @@ export class BigAmount {
    *
    * @returns Mutated `this`; this method operates in-place.
    */
-  neg(): this {
+  ineg(): this {
     this.num = -this.num;
     return this;
   }
@@ -282,7 +282,7 @@ export class BigAmount {
    *
    * @returns Mutated `this`; this method operates in-place.
    */
-  abs(): this {
+  iabs(): this {
     this.num = BigIntMath.abs(this.num);
     this.den = BigIntMath.abs(this.den);
     return this;
@@ -294,7 +294,7 @@ export class BigAmount {
    *
    * @returns Mutated `this`; this method operates in-place.
    */
-  inv(): this {
+  iinv(): this {
     const tmp = this.num;
     this.num = this.den;
     this.den = tmp;
@@ -306,7 +306,7 @@ export class BigAmount {
    *
    * @returns Mutated `this`; this method operates in-place.
    */
-  add(other: BigAmount): this {
+  iadd(other: BigAmount): this {
     if (this.den === other.den) {
       this.num += other.num;
     } else {
@@ -321,7 +321,7 @@ export class BigAmount {
    *
    * @returns Mutated `this`; this method operates in-place.
    */
-  sub(other: BigAmount): this {
+  isub(other: BigAmount): this {
     if (this.den === other.den) {
       this.num -= other.num;
     } else {
@@ -336,7 +336,7 @@ export class BigAmount {
    *
    * @returns Mutated `this`; this method operates in-place.
    */
-  mul(other: BigAmount): this {
+  imul(other: BigAmount): this {
     this.num *= other.num;
     this.den *= other.den;
     return this.verify();
@@ -347,7 +347,7 @@ export class BigAmount {
    *
    * @returns Mutated `this`; this method operates in-place.
    */
-  div(other: BigAmount): this {
+  idiv(other: BigAmount): this {
     this.num *= other.den;
     this.den *= other.num;
     return this.verify();
@@ -391,7 +391,7 @@ export class BigAmount {
   ): string {
     const term = 10n ** BigInt(digits);
     let sign = "";
-    let num = this.clone().changeDenominator(term, roundingMode).num;
+    let num = this.clone().ichangeDenominator(term, roundingMode).num;
     if (num < 0n) {
       sign = "-";
       num = -num;
