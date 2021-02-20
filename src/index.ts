@@ -68,7 +68,7 @@ export class BigAmount {
             dsIntOnly = "",
             dsExp = "0",
           ] = match;
-          const num = BigInt(`${sign}${dsInt}${dsFrac}${dsIntOnly}`);
+          const num = BigInt(`${sign}${dsInt}${dsFrac}${dsIntOnly}` || "0");
           const exp = BigInt(dsExp) - BigInt(dsFrac.length);
           return exp > 0
             ? new BigAmount(num * 10n ** exp, 1n)
@@ -162,6 +162,11 @@ export class BigAmount {
 
   /**
    * Converts `this` to the simplest form with a positive denominator.
+   *
+   * @remarks
+   * This method has to be called explicitly to obtain the canonical form of a
+   * fraction because most of the methods in this class do not reduce the result
+   * automatically.
    *
    * @returns Mutated `this`; this method operates in-place.
    */
@@ -283,8 +288,8 @@ export class BigAmount {
    * @returns Mutated `this`; this method operates in-place.
    */
   iabs(): this {
-    this.num = BigIntMath.abs(this.num);
-    this.den = BigIntMath.abs(this.den);
+    this.num = this.num < 0n ? -this.num : this.num;
+    this.den = this.den < 0n ? -this.den : this.den;
     return this;
   }
 
@@ -310,8 +315,13 @@ export class BigAmount {
     if (this.den === other.den) {
       this.num += other.num;
     } else {
-      this.num = this.num * other.den + other.num * this.den;
-      this.den *= other.den;
+      const tmp = other.num * this.den;
+      if (tmp % other.den === 0n) {
+        this.num += tmp / other.den;
+      } else {
+        this.num = this.num * other.den + tmp;
+        this.den *= other.den;
+      }
     }
     return this.verify();
   }
@@ -325,8 +335,13 @@ export class BigAmount {
     if (this.den === other.den) {
       this.num -= other.num;
     } else {
-      this.num = this.num * other.den - other.num * this.den;
-      this.den *= other.den;
+      const tmp = other.num * this.den;
+      if (tmp % other.den === 0n) {
+        this.num -= tmp / other.den;
+      } else {
+        this.num = this.num * other.den - tmp;
+        this.den *= other.den;
+      }
     }
     return this.verify();
   }
@@ -338,7 +353,11 @@ export class BigAmount {
    */
   imul(other: BigAmount): this {
     this.num *= other.num;
-    this.den *= other.den;
+    if (this.num % other.den === 0n) {
+      this.num /= other.den;
+    } else {
+      this.den *= other.den;
+    }
     return this.verify();
   }
 
@@ -349,7 +368,11 @@ export class BigAmount {
    */
   idiv(other: BigAmount): this {
     this.num *= other.den;
-    this.den *= other.num;
+    if (this.num % other.num === 0n) {
+      this.num /= other.num;
+    } else {
+      this.den *= other.num;
+    }
     return this.verify();
   }
 
@@ -440,18 +463,14 @@ export type RoundingMode =
 
 /** Math utilities for BigInt */
 class BigIntMath {
-  static abs(x: bigint): bigint {
-    return x < 0n ? -x : x;
-  }
-
   /**
    * Calculates the greatest common divisor of two integers. The result is
    * always positive.
    */
   static gcd(x: bigint, y: bigint): bigint {
     // Make sure they are positive BigInts
-    x = BigIntMath.abs(x) - 0n;
-    y = BigIntMath.abs(y) - 0n;
+    x = (x < 0n ? -x : x) - 0n;
+    y = (y < 0n ? -y : y) - 0n;
 
     // Euclidean algorithm
     if (x < y) {
