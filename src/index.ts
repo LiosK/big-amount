@@ -261,13 +261,24 @@ export class BigAmount {
     }
   }
 
+  /**
+   * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
+   *
+   * @returns `-1` if `x` is less than `y`, `0` if `x` equals to `y`, or `1` if
+   *          `x` is greater than `y`.
+   */
+  static cmp(x: BigAmount, y: BigAmount): number {
+    x.verify();
+    y.verify();
+    const diff = x.num * y.den - x.den * y.num;
+    return diff === 0n
+      ? 0
+      : (diff < 0n ? -1 : 1) * (x.den < 0n ? -1 : 1) * (y.den < 0n ? -1 : 1);
+  }
+
   /** Returns true if `this` is an equivalent fraction to `other`. */
   eq(other: BigAmount): boolean {
-    this.verify();
-    if (this.den === other.den) {
-      return this.num == other.num;
-    }
-    return this.num * other.den === this.den * other.num;
+    return BigAmount.cmp(this, other) === 0;
   }
 
   // Arithmetic operations
@@ -374,6 +385,22 @@ export class BigAmount {
       this.den *= other.num;
     }
     return this.verify();
+  }
+
+  /**
+   * Returns the sign of `this`.
+   *
+   * @returns `1n` if positive, `-1n` if negative, `0n` if zero.
+   */
+  sign(): bigint {
+    this.verify();
+    if (this.num === 0n) {
+      return 0n;
+    } else if (this.num < 0n) {
+      return this.den < 0n ? 1n : -1n;
+    } else {
+      return this.den < 0n ? -1n : 1n;
+    }
   }
 
   toString(): string {
