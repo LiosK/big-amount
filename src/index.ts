@@ -9,21 +9,21 @@
  * BigAmount class
  *
  * @example
- * ```
+ * ```javascript
  * import { q, BigAmount } from "big-amount";
  *
- * let x = q("1/2")            // Equivalent to BigAmount.create("1/2")
- *   .ineg()                   // Negation
- *   .iabs()                   // Absolute value
- *   .iinv()                   // Reciprocal
- *   .iadd(q("34.5"))          // Addition
- *   .isub(q(".67"))           // Subtraction
- *   .imul(q(-8n, 9n))         // Multiplication
- *   .idiv(q(10))              // Division
- *   .ireduce();               // Reduction to the simplest form
+ * let x = q("1/2") // Equivalent to BigAmount.create("1/2")
+ *   .neg()
+ *   .abs()
+ *   .inv()
+ *   .add(q("34.5"))
+ *   .sub(q(".67"))
+ *   .mul(q(-8n, 9n))
+ *   .div(q(10))
+ *   .reduce(); // Reduction to the simplest form
  *
- * console.log(x.toString());  // "-3583/1125"
- * console.log(x.toFixed(6));  // "-3.184889"
+ * console.log(x.toString()); // "-3583/1125"
+ * console.log(x.toFixed(6)); // "-3.184889"
  * ```
  */
 export class BigAmount {
@@ -34,41 +34,41 @@ export class BigAmount {
    * @param num - Numerator.
    * @param den - Denominator.
    */
-  constructor(public num: bigint, public den: bigint) {}
+  constructor(private num: bigint, private den: bigint) {}
 
   /**
    * Creates a [[BigAmount]] from various arguments. For convenience, this
    * method is also exported as [[q]] and is callable as `q(x)` and `q(x, y)`.
    *
    * @example `BigAmount.create(x)` creates an instance representing _x/1_.
-   * ```
-   * q(123n)          // 123/1
-   * q(123)           // 123/1
-   * q("123")         // 123/1
-   * q("123.45")      // 12345/100
-   * q("123.45e-6")   // 12345/100000000
+   * ```javascript
+   * q(123n);        // 123/1
+   * q(123);         // 123/1
+   * q("123");       // 123/1
+   * q("123.45");    // 12345/100
+   * q("123.45e-6"); // 12345/100000000
    *
-   * q("123/45")      // 123/45
-   * q("12.3/-4.5")   // 1230/-450
+   * q("123/45");    // 123/45
+   * q("12.3/-4.5"); // 1230/-450
    * ```
    *
    * Note that non-integer `number` values have to be passed as `string`.
    *
-   * ```
-   * q(123.45)        // ERROR!
-   * q(123/45)        // ERROR!
+   * ```javascript
+   * q(123.45);   // ERROR!
+   * q(123 / 45); // ERROR!
    * ```
    *
    * @example `BigAmount.create(x, y)` creates an instance representing _x/y_.
-   * ```
-   * q(123n, 45n)     // 123/45
-   * q(123, 45)       // 123/45
+   * ```javascript
+   * q(123n, 45n);    // 123/45
+   * q(123, 45);      // 123/45
    *
-   * q(123, 45n)      // 123/45
-   * q(123n, "4.5")   // 1230/45
+   * q(123, 45n);     // 123/45
+   * q(123n, "4.5");  // 1230/45
    *
-   * q("1/2", "3/4")  // 4/6
-   * q("1/2", "3.4")  // 10/68
+   * q("1/2", "3/4"); // 4/6
+   * q("1/2", "3.4"); // 10/68
    * ```
    *
    * @remarks
@@ -85,6 +85,8 @@ export class BigAmount {
    *    decimal fraction (e.g. `"-1.23"`, `".123"`), scientific (e.g.
    *    `"1.23e-4"`, `"-123e+4"`). The rational notation `q("num/den")` is
    *    equivalent to `q("num", "den")`.
+   *
+   * @category Instance Creation
    */
   static create(
     x: BigAmount | bigint | number | string,
@@ -161,6 +163,8 @@ export class BigAmount {
   /**
    * Creates a [[BigAmount]] from `Number`. Unlike [[BigAmount.create]], this
    * method finds a rational approximate of non-integer finite number.
+   *
+   * @category Instance Creation
    */
   static fromNumber(x: number, precision = 100_000_000): BigAmount {
     if (Number.isInteger(x)) {
@@ -211,9 +215,67 @@ export class BigAmount {
       : new BigAmount(sign * BigInt(num), BigInt(den) * term);
   }
 
-  /** Returns a copy of `this`. */
+  /**
+   * Creates a [[BigAmount]] as the sum of values in a list.
+   *
+   * @example
+   * ```javascript
+   * BigAmount.sum(["123/100", "-456/100", "789/100"]); // 456/100
+   * ```
+   *
+   * @param xs - Array of values that are acceptable by [[BigAmount.create]].
+   * @category Instance Creation
+   */
+  static sum(xs: Array<BigAmount | bigint | number | string>): BigAmount {
+    const acc = BigAmount.create(xs[0] ?? 0n);
+    for (let i = 1, len = xs.length; i < len; i++) {
+      acc.iadd(BigAmount.create(xs[i]));
+    }
+    return acc;
+  }
+
+  /**
+   * Returns a copy of `this`.
+   *
+   * @category Instance Creation
+   */
   clone(): BigAmount {
     return new BigAmount(this.num, this.den);
+  }
+
+  /**
+   * Returns the sign of `this`.
+   *
+   * @returns `1n` if positive, `-1n` if negative, `0n` if zero.
+   * @category Basic
+   */
+  sign(): bigint {
+    this.verify();
+    if (this.num === 0n) {
+      return 0n;
+    } else if (this.num < 0n) {
+      return this.den < 0n ? 1n : -1n;
+    } else {
+      return this.den < 0n ? -1n : 1n;
+    }
+  }
+
+  /**
+   * Returns the numerator of `this`.
+   *
+   * @category Basic
+   */
+  numerator(): bigint {
+    return this.num;
+  }
+
+  /**
+   * Returns the denominator of `this`.
+   *
+   * @category Basic
+   */
+  denominator(): bigint {
+    return this.den;
   }
 
   /**
@@ -221,6 +283,7 @@ export class BigAmount {
    * non-zero.
    *
    * @returns `this`.
+   * @category Basic
    */
   private verify(): this {
     this.num - 0n;
@@ -232,6 +295,31 @@ export class BigAmount {
   }
 
   /**
+   * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
+   *
+   * @returns `-1` if `x` is less than `y`, `0` if `x` equals to `y`, or `1` if
+   *          `x` is greater than `y`.
+   * @category Comparison
+   */
+  static cmp(x: BigAmount, y: BigAmount): number {
+    x.verify();
+    y.verify();
+    const diff = x.num * y.den - x.den * y.num;
+    return diff === 0n
+      ? 0
+      : (diff < 0n ? -1 : 1) * (x.den < 0n ? -1 : 1) * (y.den < 0n ? -1 : 1);
+  }
+
+  /**
+   * Returns true if `this` is an equivalent fraction to `other`.
+   *
+   * @category Comparison
+   */
+  eq(other: BigAmount): boolean {
+    return BigAmount.cmp(this, other) === 0;
+  }
+
+  /**
    * Converts `this` to the simplest form with a positive denominator.
    *
    * @remarks
@@ -240,6 +328,7 @@ export class BigAmount {
    * automatically.
    *
    * @returns Mutated `this`; this method operates _in place_.
+   * @category Arithmetic Operation
    */
   ireduce(): this {
     this.verify();
@@ -258,6 +347,15 @@ export class BigAmount {
   }
 
   /**
+   * Equivalent to `x.clone().ireduce()`.
+   *
+   * @category Arithmetic Operation
+   */
+  reduce(): BigAmount {
+    return this.clone().ireduce();
+  }
+
+  /**
    * Changes the denominator of `this` and, accordingly, the numerator. This
    * method rounds the numerator in the specified rounding mode if it is not
    * divisible by the new denominator.
@@ -269,12 +367,13 @@ export class BigAmount {
    * negative.
    *
    * @example Rounding a repeating decimal to a fixed-digit decimal
-   * ```
+   * ```javascript
    * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
    * x.ichangeDenominator(100n);      // 33/100 = 0.33
    * ```
    *
    * @returns Mutated `this`; this method operates _in place_.
+   * @category Arithmetic Operation
    */
   ichangeDenominator(
     newDen: bigint,
@@ -339,31 +438,22 @@ export class BigAmount {
   }
 
   /**
-   * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
+   * Equivalent to `x.clone().ichangeDenominator(newDen, roundingMode)`.
    *
-   * @returns `-1` if `x` is less than `y`, `0` if `x` equals to `y`, or `1` if
-   *          `x` is greater than `y`.
+   * @category Arithmetic Operation
    */
-  static cmp(x: BigAmount, y: BigAmount): number {
-    x.verify();
-    y.verify();
-    const diff = x.num * y.den - x.den * y.num;
-    return diff === 0n
-      ? 0
-      : (diff < 0n ? -1 : 1) * (x.den < 0n ? -1 : 1) * (y.den < 0n ? -1 : 1);
+  changeDenominator(
+    newDen: bigint,
+    roundingMode: RoundingMode = "HALF_EVEN"
+  ): BigAmount {
+    return this.clone().ichangeDenominator(newDen, roundingMode);
   }
-
-  /** Returns true if `this` is an equivalent fraction to `other`. */
-  eq(other: BigAmount): boolean {
-    return BigAmount.cmp(this, other) === 0;
-  }
-
-  // Arithmetic operations
 
   /**
    * Negates `this`.
    *
    * @returns Mutated `this`; this method operates _in place_.
+   * @category Arithmetic Operation
    */
   ineg(): this {
     this.num = -this.num;
@@ -374,6 +464,7 @@ export class BigAmount {
    * Converts `this` into the unsigned absolute value.
    *
    * @returns Mutated `this`; this method operates _in place_.
+   * @category Arithmetic Operation
    */
   iabs(): this {
     this.num = this.num < 0n ? -this.num : this.num;
@@ -386,6 +477,7 @@ export class BigAmount {
    * denominator).
    *
    * @returns Mutated `this`; this method operates _in place_.
+   * @category Arithmetic Operation
    */
   iinv(): this {
     const tmp = this.num;
@@ -398,6 +490,7 @@ export class BigAmount {
    * Adds `other` to `this`.
    *
    * @returns Mutated `this`; this method operates _in place_.
+   * @category Arithmetic Operation
    */
   iadd(other: BigAmount): this {
     if (this.den === other.den) {
@@ -418,6 +511,7 @@ export class BigAmount {
    * Subtracts `other` from `this`.
    *
    * @returns Mutated `this`; this method operates _in place_.
+   * @category Arithmetic Operation
    */
   isub(other: BigAmount): this {
     if (this.den === other.den) {
@@ -438,6 +532,7 @@ export class BigAmount {
    * Multiplies `this` by `other`.
    *
    * @returns Mutated `this`; this method operates _in place_.
+   * @category Arithmetic Operation
    */
   imul(other: BigAmount): this {
     this.num *= other.num;
@@ -453,6 +548,7 @@ export class BigAmount {
    * Divides `this` by `other`.
    *
    * @returns Mutated `this`; this method operates _in place_.
+   * @category Arithmetic Operation
    */
   idiv(other: BigAmount): this {
     this.num *= other.den;
@@ -465,25 +561,74 @@ export class BigAmount {
   }
 
   /**
-   * Returns the sign of `this`.
+   * Equivalent to `x.clone().ineg()`.
    *
-   * @returns `1n` if positive, `-1n` if negative, `0n` if zero.
+   * @category Arithmetic Operation
    */
-  sign(): bigint {
-    this.verify();
-    if (this.num === 0n) {
-      return 0n;
-    } else if (this.num < 0n) {
-      return this.den < 0n ? 1n : -1n;
-    } else {
-      return this.den < 0n ? -1n : 1n;
-    }
+  neg(): BigAmount {
+    return this.clone().ineg();
   }
 
+  /**
+   * Equivalent to `x.clone().iabs()`.
+   *
+   * @category Arithmetic Operation
+   */
+  abs(): BigAmount {
+    return this.clone().iabs();
+  }
+
+  /**
+   * Equivalent to `x.clone().iinv()`.
+   *
+   * @category Arithmetic Operation
+   */
+  inv(): BigAmount {
+    return this.clone().iinv();
+  }
+
+  /**
+   * Equivalent to `x.clone().iadd(other)`.
+   *
+   * @category Arithmetic Operation
+   */
+  add(other: BigAmount): BigAmount {
+    return this.clone().iadd(other);
+  }
+
+  /**
+   * Equivalent to `x.clone().isub(other)`.
+   *
+   * @category Arithmetic Operation
+   */
+  sub(other: BigAmount): BigAmount {
+    return this.clone().isub(other);
+  }
+
+  /**
+   * Equivalent to `x.clone().imul(other)`.
+   *
+   * @category Arithmetic Operation
+   */
+  mul(other: BigAmount): BigAmount {
+    return this.clone().imul(other);
+  }
+
+  /**
+   * Equivalent to `x.clone().idiv(other)`.
+   *
+   * @category Arithmetic Operation
+   */
+  div(other: BigAmount): BigAmount {
+    return this.clone().idiv(other);
+  }
+
+  /** @category Conversion */
   toString(): string {
     return `${this.num}/${this.den}`;
   }
 
+  /** @category Conversion */
   toJSON(): string {
     return `${this.num}/${this.den}`;
   }
@@ -494,11 +639,11 @@ export class BigAmount {
    * options to customize the output.
    *
    * @example
-   * ```
-   * let x = BigAmount.create("12345678.9");
-   * x.toFixed(2);                              // "12345678.90"
-   * x.toFixed(2, { decimalSeparator: "," });   // "12345678,90"
-   * x.toFixed(2, { groupSeparator: "," });     // "12,345,678.90"
+   * ```javascript
+   * let x = BigAmount.create("123456789/10");
+   * x.toFixed(2);                            // "12345678.90"
+   * x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
+   * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
    * ```
    *
    * @param digits - Number of digits to appear after the decimal separator.
@@ -511,6 +656,7 @@ export class BigAmount {
    *        grouping rules than the groups of three digits.
    * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied when
    *        necessary. See [[RoundingMode]] for possible values.
+   * @category Conversion
    */
   toFixed(
     digits = 0,

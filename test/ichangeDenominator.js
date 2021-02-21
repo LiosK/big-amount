@@ -1,13 +1,13 @@
 import { BigAmount } from "../lib/index.js";
 const assert = chai.assert;
 
-describe("#changeDenominator()", () => {
+describe("#ichangeDenominator()", () => {
   it("should change the denominator", () => {
     const cases = [10n, 25n, 34n, 117n, 429393759437859340759378n];
 
     const test = (num, oldDen, newDen) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).changeDenominator(newDen).denominator(),
+        new BigAmount(num, oldDen).ichangeDenominator(newDen).denominator(),
         newDen
       );
     };
@@ -39,7 +39,7 @@ describe("#changeDenominator()", () => {
 
     const test = (num, oldDen, newDen) => {
       const original = new BigAmount(num, oldDen);
-      assert(original.clone().changeDenominator(newDen).eq(original));
+      assert(original.clone().ichangeDenominator(newDen).eq(original));
     };
 
     for (const [num, oldDen, newDen] of cases) {
@@ -697,7 +697,7 @@ describe("#changeDenominator()", () => {
 
     const test = (num, oldDen, newDen, expected) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).changeDenominator(newDen).numerator(),
+        new BigAmount(num, oldDen).ichangeDenominator(newDen).numerator(),
         expected
       );
     };
@@ -712,7 +712,7 @@ describe("#changeDenominator()", () => {
 
     const testWithMode = (num, oldDen, newDen, mode, expected) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).changeDenominator(newDen, mode).numerator(),
+        new BigAmount(num, oldDen).ichangeDenominator(newDen, mode).numerator(),
         expected
       );
     };
