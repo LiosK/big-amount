@@ -15,6 +15,7 @@
     <script type="module" class="mocha-init">
       mocha.setup("bdd");
       mocha.checkLeaks();
+      mocha.timeout(8000);
     </script>
 
     <script type="module" src="./arithmetic.js"></script>
@@ -25,7 +26,6 @@
     <script type="module" src="./stringify.js"></script>
 
     <script type="module" class="mocha-exec">
-      mocha.timeout(8000);
       mocha.run();
     </script>
   </body>

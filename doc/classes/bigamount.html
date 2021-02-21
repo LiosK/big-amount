@@ -65,6 +65,32 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>BigAmount class</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>example</dt>
+						<dd><pre><code><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">q</span><span style="color: #000000">, </span><span style="color: #001080">BigAmount</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;big-amount&quot;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">x</span><span style="color: #000000"> = </span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;1/2&quot;</span><span style="color: #000000">)            </span><span style="color: #008000">// Equivalent to BigAmount.create(&quot;1/2&quot;)</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">ineg</span><span style="color: #000000">()                   </span><span style="color: #008000">// Negation</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">iabs</span><span style="color: #000000">()                   </span><span style="color: #008000">// Absolute value</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">iinv</span><span style="color: #000000">()                   </span><span style="color: #008000">// Reciprocal</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">iadd</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;34.5&quot;</span><span style="color: #000000">))          </span><span style="color: #008000">// Addition</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">isub</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;.67&quot;</span><span style="color: #000000">))           </span><span style="color: #008000">// Subtraction</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">imul</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(-</span><span style="color: #098658">8</span><span style="color: #0000FF">n</span><span style="color: #000000">, </span><span style="color: #098658">9</span><span style="color: #0000FF">n</span><span style="color: #000000">))         </span><span style="color: #008000">// Multiplication</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">idiv</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">10</span><span style="color: #000000">))              </span><span style="color: #008000">// Division</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">ireduce</span><span style="color: #000000">();               </span><span style="color: #008000">// Reduction to the simplest form</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">());  </span><span style="color: #008000">// &quot;-3583/1125&quot;</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">6</span><span style="color: #000000">));  </span><span style="color: #008000">// &quot;-3.184889&quot;</span>
+</code></pre>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -104,10 +130,12 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="bigamount.html#ineg" class="tsd-kind-icon">ineg</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="bigamount.html#ireduce" class="tsd-kind-icon">ireduce</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="bigamount.html#isub" class="tsd-kind-icon">isub</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="bigamount.html#sign" class="tsd-kind-icon">sign</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="bigamount.html#tofixed" class="tsd-kind-icon">to<wbr>Fixed</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="bigamount.html#tojson" class="tsd-kind-icon">toJSON</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="bigamount.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="bigamount.html#verify" class="tsd-kind-icon">verify</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="bigamount.html#cmp" class="tsd-kind-icon">cmp</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="bigamount.html#create" class="tsd-kind-icon">create</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="bigamount.html#fromnumber" class="tsd-kind-icon">from<wbr>Number</a></li>
 							</ul>
@@ -127,7 +155,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L1">index.ts:1</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L29">index.ts:29</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -185,7 +213,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L144">index.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L215">index.ts:215</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -207,7 +235,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L260">index.ts:260</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L357">index.ts:357</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -235,7 +263,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L285">index.ts:285</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L378">index.ts:378</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -244,7 +272,7 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h4>
-							<p>Mutated <code>this</code>; this method operates in-place.</p>
+							<p>Mutated <code>this</code>; this method operates <em>in place</em>.</p>
 						</li>
 					</ul>
 				</section>
@@ -258,7 +286,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L309">index.ts:309</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L402">index.ts:402</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -273,7 +301,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h4>
-							<p>Mutated <code>this</code>; this method operates in-place.</p>
+							<p>Mutated <code>this</code>; this method operates <em>in place</em>.</p>
 						</li>
 					</ul>
 				</section>
@@ -287,7 +315,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L197">index.ts:197</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L279">index.ts:279</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -303,6 +331,12 @@
 											numerator, which could be counterintuitive when the new denominator is
 										negative.</p>
 									</dd>
+									<dt>example</dt>
+									<dd><p>Rounding a repeating decimal to a fixed-digit decimal</p>
+										<pre><code><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">x</span><span style="color: #000000"> = </span><span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;1/3&quot;</span><span style="color: #000000">); </span><span style="color: #008000">// 1/3 = 0.333333...</span>
+<span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">ichangeDenominator</span><span style="color: #000000">(</span><span style="color: #098658">100</span><span style="color: #0000FF">n</span><span style="color: #000000">);      </span><span style="color: #008000">// 33/100 = 0.33</span>
+</code></pre>
+									</dd>
 								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -315,7 +349,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h4>
-							<p>Mutated <code>this</code>; this method operates in-place.</p>
+							<p>Mutated <code>this</code>; this method operates <em>in place</em>.</p>
 						</li>
 					</ul>
 				</section>
@@ -329,7 +363,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L350">index.ts:350</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L457">index.ts:457</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -344,7 +378,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h4>
-							<p>Mutated <code>this</code>; this method operates in-place.</p>
+							<p>Mutated <code>this</code>; this method operates <em>in place</em>.</p>
 						</li>
 					</ul>
 				</section>
@@ -358,7 +392,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L297">index.ts:297</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L390">index.ts:390</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -368,7 +402,7 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h4>
-							<p>Mutated <code>this</code>; this method operates in-place.</p>
+							<p>Mutated <code>this</code>; this method operates <em>in place</em>.</p>
 						</li>
 					</ul>
 				</section>
@@ -382,7 +416,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L339">index.ts:339</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L442">index.ts:442</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -397,7 +431,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h4>
-							<p>Mutated <code>this</code>; this method operates in-place.</p>
+							<p>Mutated <code>this</code>; this method operates <em>in place</em>.</p>
 						</li>
 					</ul>
 				</section>
@@ -411,7 +445,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L275">index.ts:275</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L368">index.ts:368</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -420,7 +454,7 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h4>
-							<p>Mutated <code>this</code>; this method operates in-place.</p>
+							<p>Mutated <code>this</code>; this method operates <em>in place</em>.</p>
 						</li>
 					</ul>
 				</section>
@@ -434,16 +468,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L168">index.ts:168</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L244">index.ts:244</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Converts <code>this</code> to the simplest form with a positive denominator.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>remarks</dt>
+									<dd><p>This method has to be called explicitly to obtain the canonical form of a
+											fraction because most of the methods in this class do not reduce the result
+										automatically.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h4>
-							<p>Mutated <code>this</code>; this method operates in-place.</p>
+							<p>Mutated <code>this</code>; this method operates <em>in place</em>.</p>
 						</li>
 					</ul>
 				</section>
@@ -457,7 +498,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L324">index.ts:324</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L422">index.ts:422</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -472,7 +513,30 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h4>
-							<p>Mutated <code>this</code>; this method operates in-place.</p>
+							<p>Mutated <code>this</code>; this method operates <em>in place</em>.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="sign" class="tsd-anchor"></a>
+					<h3>sign</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">sign<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">bigint</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L472">index.ts:472</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the sign of <code>this</code>.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">bigint</span></h4>
+							<p><code>1n</code> if positive, <code>-1n</code> if negative, <code>0n</code> if zero.</p>
 						</li>
 					</ul>
 				</section>
@@ -486,7 +550,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L380">index.ts:380</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L515">index.ts:515</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -495,6 +559,15 @@
 										<code>Number#toFixed</code>. This method additionally takes rounding and formatting
 									options to customize the output.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">x</span><span style="color: #000000"> = </span><span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;12345678.9&quot;</span><span style="color: #000000">);</span>
+<span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">);                              </span><span style="color: #008000">// &quot;12345678.90&quot;</span>
+<span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, { </span><span style="color: #001080">decimalSeparator:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;,&quot;</span><span style="color: #000000"> });   </span><span style="color: #008000">// &quot;12345678,90&quot;</span>
+<span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, { </span><span style="color: #001080">groupSeparator:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;,&quot;</span><span style="color: #000000"> });     </span><span style="color: #008000">// &quot;12,345,678.90&quot;</span>
+</code></pre>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -548,7 +621,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L360">index.ts:360</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L487">index.ts:487</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -565,7 +638,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L356">index.ts:356</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L483">index.ts:483</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -582,7 +655,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L154">index.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L225">index.ts:225</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -597,6 +670,39 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="cmp" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> cmp</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">cmp<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a>, y<span class="tsd-signature-symbol">: </span><a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L347">index.ts:347</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Compares two <a href="bigamount.html">BigAmount</a>s. This method coordinates with <code>Array#sort</code>.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x: <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h5>
+								</li>
+								<li>
+									<h5>y: <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<p><code>-1</code> if <code>x</code> is less than <code>y</code>, <code>0</code> if <code>x</code> equals to <code>y</code>, or <code>1</code> if
+							<code>x</code> is greater than <code>y</code>.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="create" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> create</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -606,28 +712,68 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L18">index.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L89">index.ts:89</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a <a href="bigamount.html">BigAmount</a>.</p>
+									<p>Creates a <a href="bigamount.html">BigAmount</a> from various arguments. For convenience, this
+									method is also exported as <a href="../modules.html#q">q</a> and is callable as <code>q(x)</code> and <code>q(x, y)</code>.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>BigAmount.create(x)</code> creates an instance representing <em>x/1</em>.</p>
+										<pre><code><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #0000FF">n</span><span style="color: #000000">)          </span><span style="color: #008000">// 123/1</span>
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #000000">)           </span><span style="color: #008000">// 123/1</span>
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123&quot;</span><span style="color: #000000">)         </span><span style="color: #008000">// 123/1</span>
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123.45&quot;</span><span style="color: #000000">)      </span><span style="color: #008000">// 12345/100</span>
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123.45e-6&quot;</span><span style="color: #000000">)   </span><span style="color: #008000">// 12345/100000000</span>
+
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123/45&quot;</span><span style="color: #000000">)      </span><span style="color: #008000">// 123/45</span>
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;12.3/-4.5&quot;</span><span style="color: #000000">)   </span><span style="color: #008000">// 1230/-450</span>
+</code></pre>
+										<p>Note that non-integer <code>number</code> values have to be passed as <code>string</code>.</p>
+										<pre><code><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123.45</span><span style="color: #000000">)        </span><span style="color: #008000">// ERROR!</span>
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #000000">/</span><span style="color: #098658">45</span><span style="color: #000000">)        </span><span style="color: #008000">// ERROR!</span>
+</code></pre>
+									</dd>
+									<dt>example</dt>
+									<dd><p><code>BigAmount.create(x, y)</code> creates an instance representing <em>x/y</em>.</p>
+										<pre><code><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #0000FF">n</span><span style="color: #000000">, </span><span style="color: #098658">45</span><span style="color: #0000FF">n</span><span style="color: #000000">)     </span><span style="color: #008000">// 123/45</span>
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #000000">, </span><span style="color: #098658">45</span><span style="color: #000000">)       </span><span style="color: #008000">// 123/45</span>
+
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #000000">, </span><span style="color: #098658">45</span><span style="color: #0000FF">n</span><span style="color: #000000">)      </span><span style="color: #008000">// 123/45</span>
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #0000FF">n</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;4.5&quot;</span><span style="color: #000000">)   </span><span style="color: #008000">// 1230/45</span>
+
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;1/2&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;3/4&quot;</span><span style="color: #000000">)  </span><span style="color: #008000">// 4/6</span>
+<span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;1/2&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;3.4&quot;</span><span style="color: #000000">)  </span><span style="color: #008000">// 10/68</span>
+</code></pre>
+									</dd>
+									<dt>remarks</dt>
+									<dd><p>This method accepts the following arguments:</p>
+										<ul>
+											<li> <a href="bigamount.html">BigAmount</a> - Any <a href="bigamount.html">BigAmount</a> value.</li>
+											<li> <code>bigint</code> - Any <code>bigint</code> value.</li>
+											<li><code>number</code> - <em>Integer only.</em> This is because it is often imprecise and
+												computationally expensive to find a rational approximate of a
+												floating-point number. Pass the number as a string (e.g. <code>&quot;1/3&quot;</code>,
+												<code>&quot;1.23&quot;</code>) to create an exact value or use <a href="bigamount.html#fromnumber">BigAmount.fromNumber</a> to
+											find an approximate.</li>
+											<li><code>string</code> - Rational (e.g. <code>&quot;1/23&quot;</code>), integer (e.g. <code>&quot;123&quot;</code>, <code>&quot;0xFF&quot;</code>),
+												decimal fraction (e.g. <code>&quot;-1.23&quot;</code>, <code>&quot;.123&quot;</code>), scientific (e.g.
+												<code>&quot;1.23e-4&quot;</code>, <code>&quot;-123e+4&quot;</code>). The rational notation <code>q(&quot;num/den&quot;)</code> is
+											equivalent to <code>q(&quot;num&quot;, &quot;den&quot;)</code>.</li>
+										</ul>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>x: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">bigint</span><span class="tsd-signature-symbol"> | </span><a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Single value that is convertible to a <a href="bigamount.html">BigAmount</a>, or a
-										numerator if given together with <code>y</code>.</p>
-									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> y: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">bigint</span><span class="tsd-signature-symbol"> | </span><a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Optional denominator.</p>
-									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="bigamount.html" class="tsd-signature-type" data-tsd-kind="Class">BigAmount</a></h4>
@@ -644,7 +790,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-alpha/src/index.ts#L94">index.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.1.0-beta.0/src/index.ts#L165">index.ts:165</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -726,6 +872,9 @@
 								<a href="bigamount.html#isub" class="tsd-kind-icon">isub</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="bigamount.html#sign" class="tsd-kind-icon">sign</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="bigamount.html#tofixed" class="tsd-kind-icon">to<wbr>Fixed</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -736,6 +885,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="bigamount.html#verify" class="tsd-kind-icon">verify</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="bigamount.html#cmp" class="tsd-kind-icon">cmp</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="bigamount.html#create" class="tsd-kind-icon">create</a>
