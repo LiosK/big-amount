@@ -75,23 +75,20 @@ BigAmount.fromNumber(Math.PI); // 3.14159...
 
 ## Arithmetic Operations
 
-| Operation           | Regular      | In-place      |
-| ------------------- | ------------ | ------------- |
-| To irreducible form | `reduce()`   | `ireduce()`   |
-| To negated value    | `neg()`      | `ineg()`      |
-| To absolute value   | `abs()`      | `iabs()`      |
-| To reciprocal       | `inv()`      | `iinv()`      |
-| Addition            | `add(other)` | `iadd(other)` |
-| Subtraction         | `sub(other)` | `isub(other)` |
-| Multiplication      | `mul(other)` | `imul(other)` |
-| Division            | `div(other)` | `idiv(other)` |
+| Methods      | Operation           |
+| ------------ | ------------------- |
+| `reduce()`   | To irreducible form |
+| `neg()`      | To negated value    |
+| `abs()`      | To absolute value   |
+| `inv()`      | To reciprocal       |
+| `add(other)` | Addition            |
+| `sub(other)` | Subtraction         |
+| `mul(other)` | Multiplication      |
+| `div(other)` | Division            |
 
-The regular methods create and return a new object while the in-place methods
-mutate and return `this`.
-
-i/reduce() needs to be called explicitly whenever necessary because the
+`reduce()` needs to be called explicitly whenever necessary because the
 arithmetic operations do not return the canonical form of a resulting fraction.
-It is currently guaranteed that i/add() and i/sub() keep the denominator
+It is currently guaranteed that `add()` and `sub()` keep the denominator
 unchanged if both operands share the same denominator; in all other cases, the
 returned value has an implementation-dependent numerator and denominator.
 

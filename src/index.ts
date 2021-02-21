@@ -33,10 +33,7 @@ export class BigAmount {
   /** Denominator. */
   readonly den: bigint;
 
-  /**
-   * Creates a [[BigAmount]] without validating arguments. It is highly
-   * recommended to use [[BigAmount.create]] instead.
-   */
+  /** Creates a [[BigAmount]] from a pair of integers. */
   constructor(numerator: bigint, denominator: bigint) {
     this.num = numerator;
     this.den = denominator;
@@ -176,8 +173,8 @@ export class BigAmount {
   }
 
   /**
-   * Creates a [[BigAmount]] from `Number`. Unlike [[BigAmount.create]], this
-   * method finds a rational approximate of non-integer finite number.
+   * Creates a [[BigAmount]] from `number`. Unlike [[BigAmount.create]], this
+   * method finds a rational approximate of a non-integer finite number.
    *
    * @category Instance Creation
    */
@@ -242,11 +239,7 @@ export class BigAmount {
    * @category Instance Creation
    */
   static sum(xs: Array<BigAmount | bigint | number | string>): BigAmount {
-    let acc = BigAmount.create(xs[0] ?? 0n);
-    for (let i = 1, len = xs.length; i < len; i++) {
-      acc = acc.add(BigAmount.create(xs[i]));
-    }
-    return acc;
+    return xs.map((x) => BigAmount.create(x)).reduce((acc, x) => acc.add(x));
   }
 
   /**
@@ -297,7 +290,7 @@ export class BigAmount {
   }
 
   /**
-   * Converts `this` to the simplest form with a positive denominator.
+   * Returns the irreducible form of `this` with a positive denominator.
    *
    * @remarks
    * This method has to be called explicitly to obtain the canonical form of a
@@ -318,7 +311,7 @@ export class BigAmount {
   }
 
   /**
-   * Changes the denominator of `this` and, accordingly, the numerator. This
+   * Returns an approximate of `this` that has the specified denominator. This
    * method rounds the numerator in the specified rounding mode if it is not
    * divisible by the new denominator.
    *
@@ -396,7 +389,7 @@ export class BigAmount {
   }
 
   /**
-   * Negates `this`.
+   * Performs the unary `-` operation.
    *
    * @category Arithmetic Operation
    */
@@ -405,7 +398,7 @@ export class BigAmount {
   }
 
   /**
-   * Converts `this` into the unsigned absolute value.
+   * Returns the unsigned absolute value of `this`.
    *
    * @category Arithmetic Operation
    */
@@ -417,8 +410,7 @@ export class BigAmount {
   }
 
   /**
-   * Converts `this` into the reciprocal (i.e. inverses the numerator and
-   * denominator).
+   * Returns the reciprocal of `this`.
    *
    * @category Arithmetic Operation
    */
