@@ -1,3 +1,31 @@
+/**
+ * big-amount: BigInt-based rational number library focused on accounting
+ *
+ * @license Apache-2.0
+ * @copyright 2021 LiosK
+ */
+
+/**
+ * BigAmount class
+ *
+ * @example
+ * ```
+ * import { q, BigAmount } from "big-amount";
+ *
+ * let x = q("1/2")            // Equivalent to BigAmount.create("1/2")
+ *   .ineg()                   // Negation
+ *   .iabs()                   // Absolute value
+ *   .iinv()                   // Reciprocal
+ *   .iadd(q("34.5"))          // Addition
+ *   .isub(q(".67"))           // Subtraction
+ *   .imul(q(-8n, 9n))         // Multiplication
+ *   .idiv(q(10))              // Division
+ *   .ireduce();               // Reduction to the simplest form
+ *
+ * console.log(x.toString());  // "-3583/1125"
+ * console.log(x.toFixed(6));  // "-3.184889"
+ * ```
+ */
 export class BigAmount {
   /**
    * Creates a [[BigAmount]] without validating arguments. It is highly
@@ -9,11 +37,54 @@ export class BigAmount {
   constructor(public num: bigint, public den: bigint) {}
 
   /**
-   * Creates a [[BigAmount]].
+   * Creates a [[BigAmount]] from various arguments. For convenience, this
+   * method is also exported as [[q]] and is callable as `q(x)` and `q(x, y)`.
    *
-   * @param x - Single value that is convertible to a [[BigAmount]], or a
-   *        numerator if given together with `y`.
-   * @param y - Optional denominator.
+   * @example `BigAmount.create(x)` creates an instance representing _x/1_.
+   * ```
+   * q(123n)          // 123/1
+   * q(123)           // 123/1
+   * q("123")         // 123/1
+   * q("123.45")      // 12345/100
+   * q("123.45e-6")   // 12345/100000000
+   *
+   * q("123/45")      // 123/45
+   * q("12.3/-4.5")   // 1230/-450
+   * ```
+   *
+   * Note that non-integer `number` values have to be passed as `string`.
+   *
+   * ```
+   * q(123.45)        // ERROR!
+   * q(123/45)        // ERROR!
+   * ```
+   *
+   * @example `BigAmount.create(x, y)` creates an instance representing _x/y_.
+   * ```
+   * q(123n, 45n)     // 123/45
+   * q(123, 45)       // 123/45
+   *
+   * q(123, 45n)      // 123/45
+   * q(123n, "4.5")   // 1230/45
+   *
+   * q("1/2", "3/4")  // 4/6
+   * q("1/2", "3.4")  // 10/68
+   * ```
+   *
+   * @remarks
+   * This method accepts the following arguments:
+   *
+   * -  [[BigAmount]] - Any [[BigAmount]] value.
+   * -  `bigint` - Any `bigint` value.
+   * -  `number` - _Integer only._ This is because it is often imprecise and
+   *    computationally expensive to find a rational approximate of a
+   *    floating-point number. Pass the number as a string (e.g. `"1/3"`,
+   *    `"1.23"`) to create an exact value or use [[BigAmount.fromNumber]] to
+   *    find an approximate.
+   * -  `string` - Rational (e.g. `"1/23"`), integer (e.g. `"123"`, `"0xFF"`),
+   *    decimal fraction (e.g. `"-1.23"`, `".123"`), scientific (e.g.
+   *    `"1.23e-4"`, `"-123e+4"`). The rational notation `q("num/den")` is
+   *    equivalent to `q("num", "den")`.
    */
   static create(
     x: BigAmount | bigint | number | string,
@@ -168,14 +239,14 @@ export class BigAmount {
    * fraction because most of the methods in this class do not reduce the result
    * automatically.
    *
-   * @returns Mutated `this`; this method operates in-place.
+   * @returns Mutated `this`; this method operates _in place_.
    */
   ireduce(): this {
     this.verify();
     if (this.num === 0n) {
       this.den = 1n;
     } else {
-      const gcd = BigIntMath.gcd(this.num, this.den);
+      const gcd = findGcd(this.num, this.den);
       this.num /= gcd;
       this.den /= gcd;
       if (this.den < 0n) {
@@ -197,7 +268,13 @@ export class BigAmount {
    * numerator, which could be counterintuitive when the new denominator is
    * negative.
    *
-   * @returns Mutated `this`; this method operates in-place.
+   * @example Rounding a repeating decimal to a fixed-digit decimal
+   * ```
+   * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
+   * x.ichangeDenominator(100n);      // 33/100 = 0.33
+   * ```
+   *
+   * @returns Mutated `this`; this method operates _in place_.
    */
   ichangeDenominator(
     newDen: bigint,
@@ -286,7 +363,7 @@ export class BigAmount {
   /**
    * Negates `this`.
    *
-   * @returns Mutated `this`; this method operates in-place.
+   * @returns Mutated `this`; this method operates _in place_.
    */
   ineg(): this {
     this.num = -this.num;
@@ -296,7 +373,7 @@ export class BigAmount {
   /**
    * Converts `this` into the unsigned absolute value.
    *
-   * @returns Mutated `this`; this method operates in-place.
+   * @returns Mutated `this`; this method operates _in place_.
    */
   iabs(): this {
     this.num = this.num < 0n ? -this.num : this.num;
@@ -308,7 +385,7 @@ export class BigAmount {
    * Converts `this` into the reciprocal (i.e. inverses the numerator and
    * denominator).
    *
-   * @returns Mutated `this`; this method operates in-place.
+   * @returns Mutated `this`; this method operates _in place_.
    */
   iinv(): this {
     const tmp = this.num;
@@ -320,7 +397,7 @@ export class BigAmount {
   /**
    * Adds `other` to `this`.
    *
-   * @returns Mutated `this`; this method operates in-place.
+   * @returns Mutated `this`; this method operates _in place_.
    */
   iadd(other: BigAmount): this {
     if (this.den === other.den) {
@@ -340,7 +417,7 @@ export class BigAmount {
   /**
    * Subtracts `other` from `this`.
    *
-   * @returns Mutated `this`; this method operates in-place.
+   * @returns Mutated `this`; this method operates _in place_.
    */
   isub(other: BigAmount): this {
     if (this.den === other.den) {
@@ -360,7 +437,7 @@ export class BigAmount {
   /**
    * Multiplies `this` by `other`.
    *
-   * @returns Mutated `this`; this method operates in-place.
+   * @returns Mutated `this`; this method operates _in place_.
    */
   imul(other: BigAmount): this {
     this.num *= other.num;
@@ -375,7 +452,7 @@ export class BigAmount {
   /**
    * Divides `this` by `other`.
    *
-   * @returns Mutated `this`; this method operates in-place.
+   * @returns Mutated `this`; this method operates _in place_.
    */
   idiv(other: BigAmount): this {
     this.num *= other.den;
@@ -415,6 +492,14 @@ export class BigAmount {
    * Formats a [[BigAmount]] using decimal fixed-point notation just like
    * `Number#toFixed`. This method additionally takes rounding and formatting
    * options to customize the output.
+   *
+   * @example
+   * ```
+   * let x = BigAmount.create("12345678.9");
+   * x.toFixed(2);                              // "12345678.90"
+   * x.toFixed(2, { decimalSeparator: "," });   // "12345678,90"
+   * x.toFixed(2, { groupSeparator: "," });     // "12,345,678.90"
+   * ```
    *
    * @param digits - Number of digits to appear after the decimal separator.
    * @param decimalSeparator - [Default: `"."`] Character used to separate the
@@ -488,28 +573,25 @@ export type RoundingMode =
   | "HALF_UP"
   | "HALF_EVEN";
 
-/** Math utilities for BigInt */
-class BigIntMath {
-  /**
-   * Calculates the greatest common divisor of two integers. The result is
-   * always positive.
-   */
-  static gcd(x: bigint, y: bigint): bigint {
-    // Make sure they are positive BigInts
-    x = (x < 0n ? -x : x) - 0n;
-    y = (y < 0n ? -y : y) - 0n;
+/**
+ * Calculates the greatest common divisor of two integers. The result is always
+ * positive.
+ */
+const findGcd = (x: bigint, y: bigint): bigint => {
+  // Make sure they are positive BigInts
+  x = (x < 0n ? -x : x) - 0n;
+  y = (y < 0n ? -y : y) - 0n;
 
-    // Euclidean algorithm
-    if (x < y) {
-      const tmp = y;
-      y = x;
-      x = tmp;
-    }
-    while (y !== 0n) {
-      const tmp = y;
-      y = x % y;
-      x = tmp;
-    }
-    return x;
+  // Euclidean algorithm
+  if (x < y) {
+    const tmp = y;
+    y = x;
+    x = tmp;
   }
-}
+  while (y !== 0n) {
+    const tmp = y;
+    y = x % y;
+    x = tmp;
+  }
+  return x;
+};

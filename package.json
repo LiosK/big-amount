@@ -1,12 +1,11 @@
 {
   "name": "big-amount",
   "version": "0.1.0-beta.0",
-  "description": "TypeScript BigInt-based rational number library focused on accounting",
+  "description": "BigInt-based rational number library focused on accounting",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "files": [
-    "lib",
-    "src"
+    "lib"
   ],
   "type": "module",
   "scripts": {
@@ -15,7 +14,7 @@
     "doc": "typedoc src/index.ts --out doc --gitRevision \"v$npm_package_version\"",
     "lint": "eslint src test",
     "prepare": "npm run lint && npm run clean && npm run build && npm test && npm run doc",
-    "test": "mocha -p -t 8000 -r test/run_on_node"
+    "test": "mocha -p -t 8000 -r test/load_chai_on_node"
   },
   "repository": {
     "type": "git",
@@ -27,6 +26,7 @@
     "rational",
     "fraction",
     "numeric",
+    "decimal",
     "accounting"
   ],
   "author": "LiosK <contact@mail.liosk.net>",
@@ -41,7 +41,7 @@
     "chai": "^4.3.0",
     "eslint": "^7.20.0",
     "mocha": "^8.3.0",
-    "typedoc": "^0.20.26",
+    "typedoc": "^0.20.27",
     "typescript": "^4.1.5"
   }
 }
