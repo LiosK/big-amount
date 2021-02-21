@@ -640,7 +640,7 @@ export class BigAmount {
    *
    * @example
    * ```javascript
-   * let x = BigAmount.create("12345678.9");
+   * let x = BigAmount.create("123456789/10");
    * x.toFixed(2);                            // "12345678.90"
    * x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
    * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
