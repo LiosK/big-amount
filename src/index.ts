@@ -239,7 +239,10 @@ export class BigAmount {
    * @category Instance Creation
    */
   static sum(xs: Array<BigAmount | bigint | number | string>): BigAmount {
-    return xs.map((x) => BigAmount.create(x)).reduce((acc, x) => acc.add(x));
+    const acc = BigAmount.create(xs[0] ?? 0n);
+    return xs
+      .slice(1)
+      .reduce((acc: BigAmount, x) => acc.add(BigAmount.create(x)), acc);
   }
 
   /**
