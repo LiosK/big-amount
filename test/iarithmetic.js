@@ -566,11 +566,11 @@ const cases = [
   // }}}
 ];
 
-describe("#neg()", () => {
+describe("#ineg()", () => {
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd) => {
       const expected = new BigAmount(-xn, xd);
-      assert(new BigAmount(xn, xd).neg().eq(expected));
+      assert(new BigAmount(xn, xd).ineg().eq(expected));
     };
 
     for (const [xn, xd] of cases) {
@@ -582,11 +582,11 @@ describe("#neg()", () => {
   });
 });
 
-describe("#abs()", () => {
+describe("#iabs()", () => {
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd) => {
       const expected = new BigAmount(xn < 0n ? -xn : xn, xd < 0n ? -xd : xd);
-      assert(new BigAmount(xn, xd).abs().eq(expected));
+      assert(new BigAmount(xn, xd).iabs().eq(expected));
     };
 
     for (const [xn, xd] of cases) {
@@ -598,14 +598,14 @@ describe("#abs()", () => {
   });
 });
 
-describe("#inv()", () => {
+describe("#iinv()", () => {
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd) => {
       if (xn !== 0n) {
         const expected = new BigAmount(xd, xn);
-        assert(new BigAmount(xn, xd).inv().eq(expected));
+        assert(new BigAmount(xn, xd).iinv().eq(expected));
       } else {
-        assert.throws(() => new BigAmount(xn, xd).inv());
+        assert.throws(() => new BigAmount(xn, xd).iinv());
       }
     };
 
@@ -618,11 +618,11 @@ describe("#inv()", () => {
   });
 });
 
-describe("#add()", () => {
+describe("#iadd()", () => {
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd, yn, yd) => {
       const expected = new BigAmount(xn * yd + yn * xd, xd * yd);
-      assert(new BigAmount(xn, xd).add(new BigAmount(yn, yd)).eq(expected));
+      assert(new BigAmount(xn, xd).iadd(new BigAmount(yn, yd)).eq(expected));
     };
 
     for (const [xn, xd] of cases) {
@@ -637,7 +637,7 @@ describe("#add()", () => {
 
   it("should not change the denominator if `other` has the same one", () => {
     const test = (xn, xd, yn, yd) => {
-      const result = new BigAmount(xn, xd).add(new BigAmount(yn, yd));
+      const result = new BigAmount(xn, xd).iadd(new BigAmount(yn, yd));
       assert.strictEqual(result.den, xd);
     };
 
@@ -654,11 +654,11 @@ describe("#add()", () => {
   });
 });
 
-describe("#sub()", () => {
+describe("#isub()", () => {
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd, yn, yd) => {
       const expected = new BigAmount(xn * yd - yn * xd, xd * yd);
-      assert(new BigAmount(xn, xd).sub(new BigAmount(yn, yd)).eq(expected));
+      assert(new BigAmount(xn, xd).isub(new BigAmount(yn, yd)).eq(expected));
     };
 
     for (const [xn, xd] of cases) {
@@ -673,7 +673,7 @@ describe("#sub()", () => {
 
   it("should not change the denominator if `other` has the same one", () => {
     const test = (xn, xd, yn, yd) => {
-      const result = new BigAmount(xn, xd).sub(new BigAmount(yn, yd));
+      const result = new BigAmount(xn, xd).isub(new BigAmount(yn, yd));
       assert.strictEqual(result.den, xd);
     };
 
@@ -690,11 +690,11 @@ describe("#sub()", () => {
   });
 });
 
-describe("#mul()", () => {
+describe("#imul()", () => {
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd, yn, yd) => {
       const expected = new BigAmount(xn * yn, xd * yd);
-      assert(new BigAmount(xn, xd).mul(new BigAmount(yn, yd)).eq(expected));
+      assert(new BigAmount(xn, xd).imul(new BigAmount(yn, yd)).eq(expected));
     };
 
     for (const [xn, xd] of cases) {
@@ -708,15 +708,15 @@ describe("#mul()", () => {
   });
 });
 
-describe("#div()", () => {
+describe("#idiv()", () => {
   it("should produce an equivalent fraction to what the naive algorithm does", () => {
     const test = (xn, xd, yn, yd) => {
       const den = xd * yn;
       if (den !== 0n) {
         const expected = new BigAmount(xn * yd, den);
-        assert(new BigAmount(xn, xd).div(new BigAmount(yn, yd)).eq(expected));
+        assert(new BigAmount(xn, xd).idiv(new BigAmount(yn, yd)).eq(expected));
       } else {
-        assert.throws(() => new BigAmount(xn, xd).div(new BigAmount(yn, yd)));
+        assert.throws(() => new BigAmount(xn, xd).idiv(new BigAmount(yn, yd)));
       }
     };
 
