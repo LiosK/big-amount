@@ -638,7 +638,7 @@ describe("#add()", () => {
   it("should not change the denominator if `other` has the same one", () => {
     const test = (xn, xd, yn, yd) => {
       const result = new BigAmount(xn, xd).add(new BigAmount(yn, yd));
-      assert.strictEqual(result.denominator(), xd);
+      assert.strictEqual(result.den, xd);
     };
 
     for (const [xn, xd] of cases) {
@@ -674,7 +674,7 @@ describe("#sub()", () => {
   it("should not change the denominator if `other` has the same one", () => {
     const test = (xn, xd, yn, yd) => {
       const result = new BigAmount(xn, xd).sub(new BigAmount(yn, yd));
-      assert.strictEqual(result.denominator(), xd);
+      assert.strictEqual(result.den, xd);
     };
 
     for (const [xn, xd] of cases) {

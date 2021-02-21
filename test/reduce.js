@@ -3,8 +3,8 @@ const assert = chai.assert;
 
 const testReduce = (num, den, simplestNum, simplestDen) => {
   const amount = new BigAmount(num, den).reduce();
-  assert.strictEqual(amount.numerator(), simplestNum);
-  assert.strictEqual(amount.denominator(), simplestDen);
+  assert.strictEqual(amount.num, simplestNum);
+  assert.strictEqual(amount.den, simplestDen);
 };
 
 describe("#reduce()", () => {

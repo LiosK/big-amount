@@ -27,14 +27,29 @@
  * ```
  */
 export class BigAmount {
+  /** Numerator. */
+  readonly num: bigint;
+
+  /** Denominator. */
+  readonly den: bigint;
+
   /**
    * Creates a [[BigAmount]] without validating arguments. It is highly
    * recommended to use [[BigAmount.create]] instead.
-   *
-   * @param num - Numerator.
-   * @param den - Denominator.
    */
-  constructor(private num: bigint, private den: bigint) {}
+  constructor(numerator: bigint, denominator: bigint) {
+    this.num = numerator;
+    this.den = denominator;
+    if (typeof numerator !== "bigint") {
+      throw new TypeError("numerator is not a bigint");
+    }
+    if (typeof denominator !== "bigint") {
+      throw new TypeError("denominator is not a bigint");
+    }
+    if (denominator === 0n) {
+      throw new RangeError("denominator is zero");
+    }
+  }
 
   /**
    * Creates a [[BigAmount]] from various arguments. For convenience, this
@@ -118,7 +133,7 @@ export class BigAmount {
     if (y == null) {
       // `create(x)`
       if (x instanceof BigAmount) {
-        return x.clone().verify();
+        return x.clone();
       } else if (typeof x === "bigint") {
         return new BigAmount(x, 1n);
       } else if (typeof x === "number") {
@@ -154,9 +169,9 @@ export class BigAmount {
       // `create(x, y)`
       if (typeof x === "bigint" && typeof y === "bigint") {
         // Fast track for `create(x: int-like, y: int-like)`
-        return new BigAmount(x, y).verify();
+        return new BigAmount(x, y);
       }
-      return BigAmount.create(x).idiv(BigAmount.create(y));
+      return BigAmount.create(x).div(BigAmount.create(y));
     }
   }
 
@@ -227,9 +242,9 @@ export class BigAmount {
    * @category Instance Creation
    */
   static sum(xs: Array<BigAmount | bigint | number | string>): BigAmount {
-    const acc = BigAmount.create(xs[0] ?? 0n);
+    let acc = BigAmount.create(xs[0] ?? 0n);
     for (let i = 1, len = xs.length; i < len; i++) {
-      acc.iadd(BigAmount.create(xs[i]));
+      acc = acc.add(BigAmount.create(xs[i]));
     }
     return acc;
   }
@@ -247,10 +262,8 @@ export class BigAmount {
    * Returns the sign of `this`.
    *
    * @returns `1n` if positive, `-1n` if negative, `0n` if zero.
-   * @category Basic
    */
   sign(): bigint {
-    this.verify();
     if (this.num === 0n) {
       return 0n;
     } else if (this.num < 0n) {
@@ -261,40 +274,6 @@ export class BigAmount {
   }
 
   /**
-   * Returns the numerator of `this`.
-   *
-   * @category Basic
-   */
-  numerator(): bigint {
-    return this.num;
-  }
-
-  /**
-   * Returns the denominator of `this`.
-   *
-   * @category Basic
-   */
-  denominator(): bigint {
-    return this.den;
-  }
-
-  /**
-   * Asserts that `this` is composed of `BigInt` values and the denominator is
-   * non-zero.
-   *
-   * @returns `this`.
-   * @category Basic
-   */
-  private verify(): this {
-    this.num - 0n;
-    this.den - 0n;
-    if (this.den === 0n) {
-      throw new RangeError("denominator is zero");
-    }
-    return this;
-  }
-
-  /**
    * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
    *
    * @returns `-1` if `x` is less than `y`, `0` if `x` equals to `y`, or `1` if
@@ -302,8 +281,6 @@ export class BigAmount {
    * @category Comparison
    */
   static cmp(x: BigAmount, y: BigAmount): number {
-    x.verify();
-    y.verify();
     const diff = x.num * y.den - x.den * y.num;
     return diff === 0n
       ? 0
@@ -327,32 +304,17 @@ export class BigAmount {
    * fraction because most of the methods in this class do not reduce the result
    * automatically.
    *
-   * @returns Mutated `this`; this method operates _in place_.
-   * @category Arithmetic Operation
-   */
-  ireduce(): this {
-    this.verify();
-    if (this.num === 0n) {
-      this.den = 1n;
-    } else {
-      const gcd = findGcd(this.num, this.den);
-      this.num /= gcd;
-      this.den /= gcd;
-      if (this.den < 0n) {
-        this.num = -this.num;
-        this.den = -this.den;
-      }
-    }
-    return this;
-  }
-
-  /**
-   * Equivalent to `x.clone().ireduce()`.
-   *
    * @category Arithmetic Operation
    */
   reduce(): BigAmount {
-    return this.clone().ireduce();
+    if (this.num === 0n) {
+      return new BigAmount(0n, 1n);
+    } else {
+      const gcd = findGcd(this.num, this.den);
+      const num = this.num / gcd;
+      const den = this.den / gcd;
+      return den < 0n ? new BigAmount(-num, -den) : new BigAmount(num, den);
+    }
   }
 
   /**
@@ -369,65 +331,61 @@ export class BigAmount {
    * @example Rounding a repeating decimal to a fixed-digit decimal
    * ```javascript
    * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
-   * x.ichangeDenominator(100n);      // 33/100 = 0.33
+   * x.changeDenominator(100n);       // 33/100 = 0.33
    * ```
    *
-   * @returns Mutated `this`; this method operates _in place_.
    * @category Arithmetic Operation
    */
-  ichangeDenominator(
+  changeDenominator(
     newDen: bigint,
     roundingMode: RoundingMode = "HALF_EVEN"
-  ): this {
+  ): BigAmount {
     if (this.den === newDen) {
-      return this.verify();
-    }
-    if (this.den < 0n) {
-      this.num = -this.num;
-      this.den = -this.den;
+      return this.clone();
     }
 
-    const oldDen = this.den;
-    const tmp = this.num * newDen;
-    this.num = tmp / oldDen;
-    this.den = newDen;
-    const unit = tmp < 0n ? -1n : 1n;
+    const oldNum = this.den < 0n ? -this.num : this.num;
+    const oldDen = this.den < 0n ? -this.den : this.den;
+
+    const tmp = oldNum * newDen;
+    let newNum = tmp / oldDen;
     const rem = (tmp < 0n ? -tmp : tmp) % oldDen;
+    const unit = tmp < 0n ? -1n : 1n;
 
     if (rem === 0n) {
       // exact case
-      return this.verify();
+      return new BigAmount(newNum, newDen);
     }
 
     switch (roundingMode) {
       case "HALF_EVEN":
         if (
           rem * 2n > oldDen ||
-          (rem * 2n === oldDen && (this.num & 1n) === 1n)
+          (rem * 2n === oldDen && (newNum & 1n) === 1n)
         ) {
-          this.num += unit;
+          newNum += unit;
         }
-        return this.verify();
+        return new BigAmount(newNum, newDen);
       case "HALF_UP":
         if (rem * 2n >= oldDen) {
-          this.num += unit;
+          newNum += unit;
         }
-        return this.verify();
+        return new BigAmount(newNum, newDen);
       case "UP":
-        this.num += unit;
-        return this.verify();
+        newNum += unit;
+        return new BigAmount(newNum, newDen);
       case "DOWN":
-        return this.verify();
+        return new BigAmount(newNum, newDen);
       case "CEIL":
         if (unit > 0n) {
-          this.num += unit;
+          newNum += unit;
         }
-        return this.verify();
+        return new BigAmount(newNum, newDen);
       case "FLOOR":
         if (unit < 0n) {
-          this.num += unit;
+          newNum += unit;
         }
-        return this.verify();
+        return new BigAmount(newNum, newDen);
       default:
         // XXX not invoked if this.den === newDen or rem === 0n
         throw new RangeError(
@@ -438,189 +396,80 @@ export class BigAmount {
   }
 
   /**
-   * Equivalent to `x.clone().ichangeDenominator(newDen, roundingMode)`.
-   *
-   * @category Arithmetic Operation
-   */
-  changeDenominator(
-    newDen: bigint,
-    roundingMode: RoundingMode = "HALF_EVEN"
-  ): BigAmount {
-    return this.clone().ichangeDenominator(newDen, roundingMode);
-  }
-
-  /**
    * Negates `this`.
    *
-   * @returns Mutated `this`; this method operates _in place_.
    * @category Arithmetic Operation
    */
-  ineg(): this {
-    this.num = -this.num;
-    return this;
+  neg(): BigAmount {
+    return new BigAmount(-this.num, this.den);
   }
 
   /**
    * Converts `this` into the unsigned absolute value.
    *
-   * @returns Mutated `this`; this method operates _in place_.
    * @category Arithmetic Operation
    */
-  iabs(): this {
-    this.num = this.num < 0n ? -this.num : this.num;
-    this.den = this.den < 0n ? -this.den : this.den;
-    return this;
+  abs(): BigAmount {
+    return new BigAmount(
+      this.num < 0n ? -this.num : this.num,
+      this.den < 0n ? -this.den : this.den
+    );
   }
 
   /**
    * Converts `this` into the reciprocal (i.e. inverses the numerator and
    * denominator).
    *
-   * @returns Mutated `this`; this method operates _in place_.
    * @category Arithmetic Operation
    */
-  iinv(): this {
-    const tmp = this.num;
-    this.num = this.den;
-    this.den = tmp;
-    return this.verify();
+  inv(): BigAmount {
+    return new BigAmount(this.den, this.num);
   }
 
   /**
    * Adds `other` to `this`.
    *
-   * @returns Mutated `this`; this method operates _in place_.
    * @category Arithmetic Operation
    */
-  iadd(other: BigAmount): this {
-    if (this.den === other.den) {
-      this.num += other.num;
-    } else {
-      const tmp = other.num * this.den;
-      if (tmp % other.den === 0n) {
-        this.num += tmp / other.den;
-      } else {
-        this.num = this.num * other.den + tmp;
-        this.den *= other.den;
-      }
-    }
-    return this.verify();
+  add(other: BigAmount): BigAmount {
+    return this.den === other.den
+      ? new BigAmount(this.num + other.num, this.den)
+      : new BigAmount(
+          this.num * other.den + this.den * other.num,
+          this.den * other.den
+        );
   }
 
   /**
    * Subtracts `other` from `this`.
    *
-   * @returns Mutated `this`; this method operates _in place_.
    * @category Arithmetic Operation
    */
-  isub(other: BigAmount): this {
-    if (this.den === other.den) {
-      this.num -= other.num;
-    } else {
-      const tmp = other.num * this.den;
-      if (tmp % other.den === 0n) {
-        this.num -= tmp / other.den;
-      } else {
-        this.num = this.num * other.den - tmp;
-        this.den *= other.den;
-      }
-    }
-    return this.verify();
+  sub(other: BigAmount): BigAmount {
+    return this.den === other.den
+      ? new BigAmount(this.num - other.num, this.den)
+      : new BigAmount(
+          this.num * other.den - this.den * other.num,
+          this.den * other.den
+        );
   }
 
   /**
    * Multiplies `this` by `other`.
    *
-   * @returns Mutated `this`; this method operates _in place_.
    * @category Arithmetic Operation
    */
-  imul(other: BigAmount): this {
-    this.num *= other.num;
-    if (this.num % other.den === 0n) {
-      this.num /= other.den;
-    } else {
-      this.den *= other.den;
-    }
-    return this.verify();
+  mul(other: BigAmount): BigAmount {
+    return new BigAmount(this.num * other.num, this.den * other.den);
   }
 
   /**
    * Divides `this` by `other`.
    *
-   * @returns Mutated `this`; this method operates _in place_.
-   * @category Arithmetic Operation
-   */
-  idiv(other: BigAmount): this {
-    this.num *= other.den;
-    if (this.num % other.num === 0n) {
-      this.num /= other.num;
-    } else {
-      this.den *= other.num;
-    }
-    return this.verify();
-  }
-
-  /**
-   * Equivalent to `x.clone().ineg()`.
-   *
-   * @category Arithmetic Operation
-   */
-  neg(): BigAmount {
-    return this.clone().ineg();
-  }
-
-  /**
-   * Equivalent to `x.clone().iabs()`.
-   *
-   * @category Arithmetic Operation
-   */
-  abs(): BigAmount {
-    return this.clone().iabs();
-  }
-
-  /**
-   * Equivalent to `x.clone().iinv()`.
-   *
-   * @category Arithmetic Operation
-   */
-  inv(): BigAmount {
-    return this.clone().iinv();
-  }
-
-  /**
-   * Equivalent to `x.clone().iadd(other)`.
-   *
-   * @category Arithmetic Operation
-   */
-  add(other: BigAmount): BigAmount {
-    return this.clone().iadd(other);
-  }
-
-  /**
-   * Equivalent to `x.clone().isub(other)`.
-   *
-   * @category Arithmetic Operation
-   */
-  sub(other: BigAmount): BigAmount {
-    return this.clone().isub(other);
-  }
-
-  /**
-   * Equivalent to `x.clone().imul(other)`.
-   *
-   * @category Arithmetic Operation
-   */
-  mul(other: BigAmount): BigAmount {
-    return this.clone().imul(other);
-  }
-
-  /**
-   * Equivalent to `x.clone().idiv(other)`.
-   *
    * @category Arithmetic Operation
    */
   div(other: BigAmount): BigAmount {
-    return this.clone().idiv(other);
+    return new BigAmount(this.num * other.den, this.den * other.num);
   }
 
   /** @category Conversion */
@@ -672,7 +521,7 @@ export class BigAmount {
   ): string {
     const term = 10n ** BigInt(digits);
     let sign = "";
-    let num = this.clone().ichangeDenominator(term, roundingMode).num;
+    let num = this.changeDenominator(term, roundingMode).num;
     if (num < 0n) {
       sign = "-";
       num = -num;
