@@ -74,9 +74,9 @@ export declare class BigAmount {
      *    expensive to find a rational approximate of a floating-point number.
      *    Pass the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact
      *    value or use [[BigAmount.fromNumber]] to find an approximate.
-     * -  `string` - Rational (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
-     *    fraction (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`).
-     *    The rational notation `q("num/den")` is equivalent to `q("num", "den")`.
+     * -  `string` - Fraction (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
+     *    (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`). The
+     *    fractional notation `q("num/den")` is equivalent to `q("num", "den")`.
      *
      * @category Instance Creation
      */
@@ -89,7 +89,7 @@ export declare class BigAmount {
      */
     static fromNumber(x: number, precision?: number): BigAmount;
     /**
-     * Creates a [[BigAmount]] instance of the sum of values in a list.
+     * Creates a [[BigAmount]] instance of the sum of list items.
      *
      * @example
      * ```javascript
@@ -131,32 +131,12 @@ export declare class BigAmount {
      *
      * @remarks
      * This method has to be called explicitly to obtain the canonical form of a
-     * rational number because the methods in this class by design do not return
-     * the irreducible form of the result.
+     * fraction because the methods in this class by design do not return the
+     * irreducible form of the result.
      *
      * @category Arithmetic Operation
      */
     reduce(): BigAmount;
-    /**
-     * Returns an approximate of `this` that has the specified denominator. This
-     * method rounds the numerator in the specified rounding mode if it is not
-     * divisible by the new denominator.
-     *
-     * @example Rounding a repeating decimal to a fixed-digit decimal
-     * ```javascript
-     * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
-     * x.changeDenominator(100n);       // 33/100 = 0.33
-     * ```
-     *
-     * @remarks
-     * Note that the [[RoundingMode]] applies to the resulting numerator; the
-     * outcome of "toward positive / negative" is determined by the sign of
-     * numerator, which could be counterintuitive when the new denominator is
-     * negative.
-     *
-     * @category Arithmetic Operation
-     */
-    changeDenominator(newDen: bigint, roundingMode?: RoundingMode): BigAmount;
     /**
      * Performs the unary `-` operation.
      *
@@ -199,6 +179,26 @@ export declare class BigAmount {
      * @category Arithmetic Operation
      */
     div(other: BigAmount): BigAmount;
+    /**
+     * Returns an approximate of `this` that has the specified denominator. This
+     * method rounds the numerator in the specified rounding mode if it is not
+     * divisible by the new denominator.
+     *
+     * @example Rounding a repeating decimal to a fixed-digit decimal
+     * ```javascript
+     * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
+     * x.quantize(100n);                // 33/100 = 0.33
+     * ```
+     *
+     * @remarks
+     * Note that the [[RoundingMode]] applies to the resulting numerator; the
+     * outcome of "toward positive / negative" is determined by the sign of
+     * numerator, which could be counterintuitive when the new denominator is
+     * negative.
+     *
+     * @category Conversion
+     */
+    quantize(newDen: bigint, roundingMode?: RoundingMode): BigAmount;
     /** @category Conversion */
     toString(): string;
     /** @category Conversion */

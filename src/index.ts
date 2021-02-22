@@ -90,9 +90,9 @@ export class BigAmount {
    *    expensive to find a rational approximate of a floating-point number.
    *    Pass the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact
    *    value or use [[BigAmount.fromNumber]] to find an approximate.
-   * -  `string` - Rational (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
-   *    fraction (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`).
-   *    The rational notation `q("num/den")` is equivalent to `q("num", "den")`.
+   * -  `string` - Fraction (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
+   *    (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`). The
+   *    fractional notation `q("num/den")` is equivalent to `q("num", "den")`.
    *
    * @category Instance Creation
    */
@@ -224,7 +224,7 @@ export class BigAmount {
   }
 
   /**
-   * Creates a [[BigAmount]] instance of the sum of values in a list.
+   * Creates a [[BigAmount]] instance of the sum of list items.
    *
    * @example
    * ```javascript
@@ -299,8 +299,8 @@ export class BigAmount {
    *
    * @remarks
    * This method has to be called explicitly to obtain the canonical form of a
-   * rational number because the methods in this class by design do not return
-   * the irreducible form of the result.
+   * fraction because the methods in this class by design do not return the
+   * irreducible form of the result.
    *
    * @category Arithmetic Operation
    */
@@ -312,84 +312,6 @@ export class BigAmount {
       const num = this.num / gcd;
       const den = this.den / gcd;
       return den < 0n ? new BigAmount(-num, -den) : new BigAmount(num, den);
-    }
-  }
-
-  /**
-   * Returns an approximate of `this` that has the specified denominator. This
-   * method rounds the numerator in the specified rounding mode if it is not
-   * divisible by the new denominator.
-   *
-   * @example Rounding a repeating decimal to a fixed-digit decimal
-   * ```javascript
-   * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
-   * x.changeDenominator(100n);       // 33/100 = 0.33
-   * ```
-   *
-   * @remarks
-   * Note that the [[RoundingMode]] applies to the resulting numerator; the
-   * outcome of "toward positive / negative" is determined by the sign of
-   * numerator, which could be counterintuitive when the new denominator is
-   * negative.
-   *
-   * @category Arithmetic Operation
-   */
-  changeDenominator(
-    newDen: bigint,
-    roundingMode: RoundingMode = "HALF_EVEN"
-  ): BigAmount {
-    if (this.den === newDen) {
-      return this.clone();
-    }
-
-    const oldNum = this.den < 0n ? -this.num : this.num;
-    const oldDen = this.den < 0n ? -this.den : this.den;
-
-    const tmp = oldNum * newDen;
-    let newNum = tmp / oldDen;
-    const rem = (tmp < 0n ? -tmp : tmp) % oldDen;
-    const unit = tmp < 0n ? -1n : 1n;
-
-    if (rem === 0n) {
-      // exact case
-      return new BigAmount(newNum, newDen);
-    }
-
-    switch (roundingMode) {
-      case "HALF_EVEN":
-        if (
-          rem * 2n > oldDen ||
-          (rem * 2n === oldDen && (newNum & 1n) === 1n)
-        ) {
-          newNum += unit;
-        }
-        return new BigAmount(newNum, newDen);
-      case "HALF_UP":
-        if (rem * 2n >= oldDen) {
-          newNum += unit;
-        }
-        return new BigAmount(newNum, newDen);
-      case "UP":
-        newNum += unit;
-        return new BigAmount(newNum, newDen);
-      case "DOWN":
-        return new BigAmount(newNum, newDen);
-      case "CEIL":
-        if (unit > 0n) {
-          newNum += unit;
-        }
-        return new BigAmount(newNum, newDen);
-      case "FLOOR":
-        if (unit < 0n) {
-          newNum += unit;
-        }
-        return new BigAmount(newNum, newDen);
-      default:
-        // XXX not invoked if this.den === newDen or rem === 0n
-        throw new RangeError(
-          `unknown rounding mode ${roundingMode}; choose one of ` +
-            `"UP" | "DOWN" | "CEIL" | "FLOOR" | "HALF_UP" | "HALF_EVEN"`
-        );
     }
   }
 
@@ -469,6 +391,84 @@ export class BigAmount {
     return new BigAmount(this.num * other.den, this.den * other.num);
   }
 
+  /**
+   * Returns an approximate of `this` that has the specified denominator. This
+   * method rounds the numerator in the specified rounding mode if it is not
+   * divisible by the new denominator.
+   *
+   * @example Rounding a repeating decimal to a fixed-digit decimal
+   * ```javascript
+   * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
+   * x.quantize(100n);                // 33/100 = 0.33
+   * ```
+   *
+   * @remarks
+   * Note that the [[RoundingMode]] applies to the resulting numerator; the
+   * outcome of "toward positive / negative" is determined by the sign of
+   * numerator, which could be counterintuitive when the new denominator is
+   * negative.
+   *
+   * @category Conversion
+   */
+  quantize(
+    newDen: bigint,
+    roundingMode: RoundingMode = "HALF_EVEN"
+  ): BigAmount {
+    if (this.den === newDen) {
+      return this.clone();
+    }
+
+    const oldNum = this.den < 0n ? -this.num : this.num;
+    const oldDen = this.den < 0n ? -this.den : this.den;
+
+    const tmp = oldNum * newDen;
+    let newNum = tmp / oldDen;
+    const rem = (tmp < 0n ? -tmp : tmp) % oldDen;
+    const unit = tmp < 0n ? -1n : 1n;
+
+    if (rem === 0n) {
+      // exact case
+      return new BigAmount(newNum, newDen);
+    }
+
+    switch (roundingMode) {
+      case "HALF_EVEN":
+        if (
+          rem * 2n > oldDen ||
+          (rem * 2n === oldDen && (newNum & 1n) === 1n)
+        ) {
+          newNum += unit;
+        }
+        return new BigAmount(newNum, newDen);
+      case "HALF_UP":
+        if (rem * 2n >= oldDen) {
+          newNum += unit;
+        }
+        return new BigAmount(newNum, newDen);
+      case "UP":
+        newNum += unit;
+        return new BigAmount(newNum, newDen);
+      case "DOWN":
+        return new BigAmount(newNum, newDen);
+      case "CEIL":
+        if (unit > 0n) {
+          newNum += unit;
+        }
+        return new BigAmount(newNum, newDen);
+      case "FLOOR":
+        if (unit < 0n) {
+          newNum += unit;
+        }
+        return new BigAmount(newNum, newDen);
+      default:
+        // XXX not invoked if this.den === newDen or rem === 0n
+        throw new RangeError(
+          `unknown rounding mode ${roundingMode}; choose one of ` +
+            `"UP" | "DOWN" | "CEIL" | "FLOOR" | "HALF_UP" | "HALF_EVEN"`
+        );
+    }
+  }
+
   /** @category Conversion */
   toString(): string {
     return `${this.num}/${this.den}`;
@@ -518,7 +518,7 @@ export class BigAmount {
   ): string {
     const term = 10n ** BigInt(digits);
     let sign = "";
-    let num = this.changeDenominator(term, roundingMode).num;
+    let num = this.quantize(term, roundingMode).num;
     if (num < 0n) {
       sign = "-";
       num = -num;

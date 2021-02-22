@@ -65,7 +65,7 @@
 				<ul>
 					<li>Stores amount as ratio of two <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt">BigInt</a>s, allowing precise calculation of
 					arbitrarily large rational numbers</li>
-					<li>Optimized for additions of numbers that share same denominator; little
+					<li>Optimized for addition of fractions that share same denominator; little
 					overhead on aggregating many cents (1/100)</li>
 					<li>Supports rounding and formatting as decimal</li>
 				</ul>
@@ -169,7 +169,7 @@
 					arithmetic operations do not return the canonical form of a resulting fraction.
 					It is currently guaranteed that <code>add()</code> and <code>sub()</code> keep the denominator
 					unchanged if both operands share the same denominator; in all other cases, the
-				returned value will have implementation-dependent numerator and denominator.</p>
+				returned object will have implementation-dependent numerator and denominator.</p>
 				<a href="#string-conversion" id="string-conversion" style="color: inherit; text-decoration: none;">
 					<h2>String Conversion</h2>
 				</a>
@@ -178,7 +178,7 @@
 				<pre><code class="language-javascript"><span style="color: #267F99">String</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #0000FF">n</span><span style="color: #000000">, </span><span style="color: #098658">45</span><span style="color: #0000FF">n</span><span style="color: #000000">));        </span><span style="color: #008000">// &quot;123/45&quot;</span>
 <span style="color: #267F99">JSON</span><span style="color: #000000">.</span><span style="color: #795E26">stringify</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;12.345&quot;</span><span style="color: #000000">)); </span><span style="color: #008000">// &#039;&quot;12345/1000&quot;&#039;</span>
 </code></pre>
-				<p>Use <a href="https://liosk.github.io/big-amount/doc/classes/bigamount.html#tofixed">BigAmount#toFixed</a> to format a value as decimal. This method takes a few
+				<p>Use <a href="https://liosk.github.io/big-amount/doc/classes/bigamount.html#tofixed">BigAmount#toFixed</a> to format a fraction as decimal. This method takes a few
 				formatting options to customize the output.</p>
 				<pre><code class="language-javascript"><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">x</span><span style="color: #000000"> = </span><span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123456789/10&quot;</span><span style="color: #000000">);</span>
 <span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">);                            </span><span style="color: #008000">// &quot;12345678.90&quot;</span>
