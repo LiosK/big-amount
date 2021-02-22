@@ -2,23 +2,27 @@
 
 BigInt-based rational number library focused on accounting
 
-## Usage
+- Stores amount as ratio of two `BigInt`s, allowing precise calculation of
+  arbitrarily large rational numbers
+- Optimized for additions of numbers that share same denominator; little
+  overhead on aggregating many cents (1/100)
+- Supports rounding and formatting as decimal
 
 ```javascript
 import { q, BigAmount } from "big-amount";
 
-let x = q("1/2") // Equivalent to BigAmount.create("1/2")
-  .neg()
-  .abs()
-  .inv()
-  .add(q("34.5"))
-  .sub(q(".67"))
-  .mul(q(-8n, 9n))
-  .div(q(10))
-  .reduce(); // Reduction to the simplest form
+let x = q("1/2")           // Same as `BigAmount.create("1/2")`
+  .neg()                   // Unary `-`
+  .inv()                   // Inverse (`1 / x`)
+  .add(q("34.5"))          // `+`
+  .sub(q(".67"))           // `-`
+  .mul(q(-8n, 9n))         // `*`
+  .div(q(10))              // `/`
+  .abs()                   // To absolute value
+  .reduce();               // To irreducible form
 
-console.log(x.toString()); // "-3583/1125"
-console.log(x.toFixed(6)); // "-3.184889"
+console.log(x.toString()); // "1061/375"
+console.log(x.toFixed(6)); // "2.829333"
 ```
 
 ## Instance Creation
@@ -27,7 +31,7 @@ console.log(x.toFixed(6)); // "-3.184889"
 
 Use [BigAmount.create] or the equivalent shortcut `q` to create an instance.
 
-`BigAmount.create(x)` creates an instance representing _x/1_.
+`BigAmount.create(x)` creates an instance representing _x / 1_.
 
 ```javascript
 q(123n);        // 123/1
@@ -40,7 +44,7 @@ q("123/45");    // 123/45
 q("12.3/-4.5"); // 1230/-450
 ```
 
-`BigAmount.create(x, y)` creates an instance representing _x/y_.
+`BigAmount.create(x, y)` creates an instance representing _x / y_.
 
 ```javascript
 q(123n, 45n);    // 123/45
@@ -75,35 +79,35 @@ BigAmount.fromNumber(Math.PI); // 3.14159...
 
 ## Arithmetic Operations
 
-| Methods      | Operation           |
-| ------------ | ------------------- |
-| `reduce()`   | To irreducible form |
-| `neg()`      | To negated value    |
-| `abs()`      | To absolute value   |
-| `inv()`      | To reciprocal       |
-| `add(other)` | Addition            |
-| `sub(other)` | Subtraction         |
-| `mul(other)` | Multiplication      |
-| `div(other)` | Division            |
+| Methods      | Operation                       |
+| ------------ | ------------------------------- |
+| `neg()`      | Negation (unary `-`)            |
+| `add(other)` | Addition (`this + other`)       |
+| `sub(other)` | Subtraction(`this - other`)     |
+| `mul(other)` | Multiplication (`this * other`) |
+| `div(other)` | Division (`this / other`)       |
+| `inv()`      | Inverse (`1 / this`)            |
+| `abs()`      | To absolute value               |
+| `reduce()`   | To irreducible form             |
 
 `reduce()` needs to be called explicitly whenever necessary because the
 arithmetic operations do not return the canonical form of a resulting fraction.
 It is currently guaranteed that `add()` and `sub()` keep the denominator
 unchanged if both operands share the same denominator; in all other cases, the
-returned value has an implementation-dependent numerator and denominator.
+returned value will have implementation-dependent numerator and denominator.
 
 ## String Conversion
 
-`toString()` and `toJSON()` generate the preferred seriarization form as a
-rational number.
+`toString()` and `toJSON()` generate the preferred form to seriarize a rational
+number.
 
 ```javascript
 String(q(123n, 45n));        // "123/45"
 JSON.stringify(q("12.345")); // '"12345/1000"'
 ```
 
-Use [BigAmount#toFixed] to format a value as a decimal string. This method takes
-a few formatting options to customize the output.
+Use [BigAmount#toFixed] to format a value as decimal. This method takes a few
+formatting options to customize the output.
 
 ```javascript
 let x = BigAmount.create("123456789/10");
@@ -112,7 +116,8 @@ x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
 x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
 ```
 
-[BigAmount#toFixed] rounds ties to the nearest even by default.
+[BigAmount#toFixed] by default rounds ties to the nearest even (i.e. bankers'
+rounding).
 
 ```javascript
 q("1.15").toFixed(1) // "1.2"

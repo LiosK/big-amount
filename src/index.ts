@@ -6,24 +6,22 @@
  */
 
 /**
- * BigAmount class
- *
  * @example
  * ```javascript
  * import { q, BigAmount } from "big-amount";
  *
- * let x = q("1/2") // Equivalent to BigAmount.create("1/2")
- *   .neg()
- *   .abs()
- *   .inv()
- *   .add(q("34.5"))
- *   .sub(q(".67"))
- *   .mul(q(-8n, 9n))
- *   .div(q(10))
- *   .reduce(); // Reduction to the simplest form
+ * let x = q("1/2")           // Same as `BigAmount.create("1/2")`
+ *   .neg()                   // Unary `-`
+ *   .inv()                   // Inverse (`1 / x`)
+ *   .add(q("34.5"))          // `+`
+ *   .sub(q(".67"))           // `-`
+ *   .mul(q(-8n, 9n))         // `*`
+ *   .div(q(10))              // `/`
+ *   .abs()                   // To absolute value
+ *   .reduce();               // To irreducible form
  *
- * console.log(x.toString()); // "-3583/1125"
- * console.log(x.toFixed(6)); // "-3.184889"
+ * console.log(x.toString()); // "1061/375"
+ * console.log(x.toFixed(6)); // "2.829333"
  * ```
  */
 export class BigAmount {
@@ -52,7 +50,7 @@ export class BigAmount {
    * Creates a [[BigAmount]] from various arguments. For convenience, this
    * method is also exported as [[q]] and is callable as `q(x)` and `q(x, y)`.
    *
-   * @example `BigAmount.create(x)` creates an instance representing _x/1_.
+   * @example `BigAmount.create(x)` creates an instance representing _x / 1_.
    * ```javascript
    * q(123n);        // 123/1
    * q(123);         // 123/1
@@ -71,7 +69,7 @@ export class BigAmount {
    * q(123 / 45); // ERROR!
    * ```
    *
-   * @example `BigAmount.create(x, y)` creates an instance representing _x/y_.
+   * @example `BigAmount.create(x, y)` creates an instance representing _x / y_.
    * ```javascript
    * q(123n, 45n);    // 123/45
    * q(123, 45);      // 123/45
@@ -89,14 +87,12 @@ export class BigAmount {
    * -  [[BigAmount]] - Any [[BigAmount]] value.
    * -  `bigint` - Any `bigint` value.
    * -  `number` - _Integer only._ This is because it is often imprecise and
-   *    computationally expensive to find a rational approximate of a
-   *    floating-point number. Pass the number as a string (e.g. `"1/3"`,
-   *    `"1.23"`) to create an exact value or use [[BigAmount.fromNumber]] to
-   *    find an approximate.
-   * -  `string` - Rational (e.g. `"1/23"`), integer (e.g. `"123"`, `"0xFF"`),
-   *    decimal fraction (e.g. `"-1.23"`, `".123"`), scientific (e.g.
-   *    `"1.23e-4"`, `"-123e+4"`). The rational notation `q("num/den")` is
-   *    equivalent to `q("num", "den")`.
+   *    expensive to find a rational approximate of a floating-point number.
+   *    Pass the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact
+   *    value or use [[BigAmount.fromNumber]] to find an approximate.
+   * -  `string` - Rational (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
+   *    fraction (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`).
+   *    The rational notation `q("num/den")` is equivalent to `q("num", "den")`.
    *
    * @category Instance Creation
    */
@@ -228,7 +224,7 @@ export class BigAmount {
   }
 
   /**
-   * Creates a [[BigAmount]] as the sum of values in a list.
+   * Creates a [[BigAmount]] instance of the sum of values in a list.
    *
    * @example
    * ```javascript
@@ -239,10 +235,16 @@ export class BigAmount {
    * @category Instance Creation
    */
   static sum(xs: Array<BigAmount | bigint | number | string>): BigAmount {
-    const acc = BigAmount.create(xs[0] ?? 0n);
-    return xs
-      .slice(1)
-      .reduce((acc: BigAmount, x) => acc.add(BigAmount.create(x)), acc);
+    const groups: { [den: string]: BigAmount } = {};
+    for (const x of xs) {
+      const f = BigAmount.create(x);
+      const den = String(f.den);
+      groups[den] = den in groups ? groups[den].add(f) : f;
+    }
+
+    return xs.length === 0
+      ? new BigAmount(0n, 1n)
+      : Object.values(groups).reduce((acc, f) => acc.add(f));
   }
 
   /**
@@ -297,8 +299,8 @@ export class BigAmount {
    *
    * @remarks
    * This method has to be called explicitly to obtain the canonical form of a
-   * fraction because most of the methods in this class do not reduce the result
-   * automatically.
+   * rational number because the methods in this class by design do not return
+   * the irreducible form of the result.
    *
    * @category Arithmetic Operation
    */
@@ -318,17 +320,17 @@ export class BigAmount {
    * method rounds the numerator in the specified rounding mode if it is not
    * divisible by the new denominator.
    *
-   * @remarks
-   * Note that the [[RoundingMode]] applies to the resulting numerator; the
-   * outcome of "toward positive / negative" is determined by the sign of
-   * numerator, which could be counterintuitive when the new denominator is
-   * negative.
-   *
    * @example Rounding a repeating decimal to a fixed-digit decimal
    * ```javascript
    * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
    * x.changeDenominator(100n);       // 33/100 = 0.33
    * ```
+   *
+   * @remarks
+   * Note that the [[RoundingMode]] applies to the resulting numerator; the
+   * outcome of "toward positive / negative" is determined by the sign of
+   * numerator, which could be counterintuitive when the new denominator is
+   * negative.
    *
    * @category Arithmetic Operation
    */
@@ -546,14 +548,14 @@ export const q = BigAmount.create;
  * Represents rounding modes.
  *
  * @remarks
- * | Value          | Mode                                  |
- * |----------------|---------------------------------------|
- * | `"UP"`         | Toward inifinity (away from zero)     |
- * | `"DOWN"`       | Toward zero                           |
- * | `"CEIL"`       | Toward positive                       |
- * | `"FLOOR"`      | Toward negative                       |
- * | `"HALF_UP"`    | Ties toward infinity (away from zero) |
- * | `"HALF_EVEN"`  | Ties to even                          |
+ * | Value         | Mode                                  |
+ * | ------------- | ------------------------------------- |
+ * | `"UP"`        | Toward inifinity (away from zero)     |
+ * | `"DOWN"`      | Toward zero                           |
+ * | `"CEIL"`      | Toward positive                       |
+ * | `"FLOOR"`     | Toward negative                       |
+ * | `"HALF_UP"`   | Ties toward infinity (away from zero) |
+ * | `"HALF_EVEN"` | Ties to even                          |
  */
 export type RoundingMode =
   | "UP"

@@ -12,7 +12,7 @@
     "build": "tsc",
     "clean": "rm -rf doc lib",
     "doc": "typedoc src/index.ts --out doc --gitRevision \"v$npm_package_version\"",
-    "lint": "prettier -w README.md src test && eslint src test",
+    "lint": "prettier -c README.md src test && eslint src test",
     "prepare": "npm run lint && npm run clean && npm run build && npm test && npm run doc",
     "test": "mocha -p -t 8000 -r test/load_chai_on_node"
   },
