@@ -5,42 +5,36 @@
  * @copyright 2021 LiosK
  */
 /**
- * BigAmount class
- *
  * @example
  * ```javascript
  * import { q, BigAmount } from "big-amount";
  *
- * let x = q("1/2") // Equivalent to BigAmount.create("1/2")
- *   .neg()
- *   .abs()
- *   .inv()
- *   .add(q("34.5"))
- *   .sub(q(".67"))
- *   .mul(q(-8n, 9n))
- *   .div(q(10))
- *   .reduce(); // Reduction to the simplest form
+ * let x = q("1/2")           // Same as `BigAmount.create("1/2")`
+ *   .neg()                   // Unary `-`
+ *   .inv()                   // Inverse (`1 / x`)
+ *   .add(q("34.5"))          // `+`
+ *   .sub(q(".67"))           // `-`
+ *   .mul(q(-8n, 9n))         // `*`
+ *   .div(q(10))              // `/`
+ *   .abs()                   // To absolute value
+ *   .reduce();               // To irreducible form
  *
- * console.log(x.toString()); // "-3583/1125"
- * console.log(x.toFixed(6)); // "-3.184889"
+ * console.log(x.toString()); // "1061/375"
+ * console.log(x.toFixed(6)); // "2.829333"
  * ```
  */
 export declare class BigAmount {
-    private num;
-    private den;
-    /**
-     * Creates a [[BigAmount]] without validating arguments. It is highly
-     * recommended to use [[BigAmount.create]] instead.
-     *
-     * @param num - Numerator.
-     * @param den - Denominator.
-     */
-    constructor(num: bigint, den: bigint);
+    /** Numerator. */
+    readonly num: bigint;
+    /** Denominator. */
+    readonly den: bigint;
+    /** Creates a [[BigAmount]] from a pair of integers. */
+    constructor(numerator: bigint, denominator: bigint);
     /**
      * Creates a [[BigAmount]] from various arguments. For convenience, this
      * method is also exported as [[q]] and is callable as `q(x)` and `q(x, y)`.
      *
-     * @example `BigAmount.create(x)` creates an instance representing _x/1_.
+     * @example `BigAmount.create(x)` creates an instance representing _x / 1_.
      * ```javascript
      * q(123n);        // 123/1
      * q(123);         // 123/1
@@ -59,7 +53,7 @@ export declare class BigAmount {
      * q(123 / 45); // ERROR!
      * ```
      *
-     * @example `BigAmount.create(x, y)` creates an instance representing _x/y_.
+     * @example `BigAmount.create(x, y)` creates an instance representing _x / y_.
      * ```javascript
      * q(123n, 45n);    // 123/45
      * q(123, 45);      // 123/45
@@ -77,27 +71,25 @@ export declare class BigAmount {
      * -  [[BigAmount]] - Any [[BigAmount]] value.
      * -  `bigint` - Any `bigint` value.
      * -  `number` - _Integer only._ This is because it is often imprecise and
-     *    computationally expensive to find a rational approximate of a
-     *    floating-point number. Pass the number as a string (e.g. `"1/3"`,
-     *    `"1.23"`) to create an exact value or use [[BigAmount.fromNumber]] to
-     *    find an approximate.
-     * -  `string` - Rational (e.g. `"1/23"`), integer (e.g. `"123"`, `"0xFF"`),
-     *    decimal fraction (e.g. `"-1.23"`, `".123"`), scientific (e.g.
-     *    `"1.23e-4"`, `"-123e+4"`). The rational notation `q("num/den")` is
-     *    equivalent to `q("num", "den")`.
+     *    expensive to find a rational approximate of a floating-point number.
+     *    Pass the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact
+     *    value or use [[BigAmount.fromNumber]] to find an approximate.
+     * -  `string` - Rational (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
+     *    fraction (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`).
+     *    The rational notation `q("num/den")` is equivalent to `q("num", "den")`.
      *
      * @category Instance Creation
      */
     static create(x: BigAmount | bigint | number | string, y?: BigAmount | bigint | number | string): BigAmount;
     /**
-     * Creates a [[BigAmount]] from `Number`. Unlike [[BigAmount.create]], this
-     * method finds a rational approximate of non-integer finite number.
+     * Creates a [[BigAmount]] from `number`. Unlike [[BigAmount.create]], this
+     * method finds a rational approximate of a non-integer finite number.
      *
      * @category Instance Creation
      */
     static fromNumber(x: number, precision?: number): BigAmount;
     /**
-     * Creates a [[BigAmount]] as the sum of values in a list.
+     * Creates a [[BigAmount]] instance of the sum of values in a list.
      *
      * @example
      * ```javascript
@@ -118,29 +110,8 @@ export declare class BigAmount {
      * Returns the sign of `this`.
      *
      * @returns `1n` if positive, `-1n` if negative, `0n` if zero.
-     * @category Basic
      */
     sign(): bigint;
-    /**
-     * Returns the numerator of `this`.
-     *
-     * @category Basic
-     */
-    numerator(): bigint;
-    /**
-     * Returns the denominator of `this`.
-     *
-     * @category Basic
-     */
-    denominator(): bigint;
-    /**
-     * Asserts that `this` is composed of `BigInt` values and the denominator is
-     * non-zero.
-     *
-     * @returns `this`.
-     * @category Basic
-     */
-    private verify;
     /**
      * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
      *
@@ -156,27 +127,26 @@ export declare class BigAmount {
      */
     eq(other: BigAmount): boolean;
     /**
-     * Converts `this` to the simplest form with a positive denominator.
+     * Returns the irreducible form of `this` with a positive denominator.
      *
      * @remarks
      * This method has to be called explicitly to obtain the canonical form of a
-     * fraction because most of the methods in this class do not reduce the result
-     * automatically.
-     *
-     * @returns Mutated `this`; this method operates _in place_.
-     * @category Arithmetic Operation
-     */
-    ireduce(): this;
-    /**
-     * Equivalent to `x.clone().ireduce()`.
+     * rational number because the methods in this class by design do not return
+     * the irreducible form of the result.
      *
      * @category Arithmetic Operation
      */
     reduce(): BigAmount;
     /**
-     * Changes the denominator of `this` and, accordingly, the numerator. This
+     * Returns an approximate of `this` that has the specified denominator. This
      * method rounds the numerator in the specified rounding mode if it is not
      * divisible by the new denominator.
+     *
+     * @example Rounding a repeating decimal to a fixed-digit decimal
+     * ```javascript
+     * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
+     * x.changeDenominator(100n);       // 33/100 = 0.33
+     * ```
      *
      * @remarks
      * Note that the [[RoundingMode]] applies to the resulting numerator; the
@@ -184,110 +154,47 @@ export declare class BigAmount {
      * numerator, which could be counterintuitive when the new denominator is
      * negative.
      *
-     * @example Rounding a repeating decimal to a fixed-digit decimal
-     * ```javascript
-     * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
-     * x.ichangeDenominator(100n);      // 33/100 = 0.33
-     * ```
-     *
-     * @returns Mutated `this`; this method operates _in place_.
-     * @category Arithmetic Operation
-     */
-    ichangeDenominator(newDen: bigint, roundingMode?: RoundingMode): this;
-    /**
-     * Equivalent to `x.clone().ichangeDenominator(newDen, roundingMode)`.
-     *
      * @category Arithmetic Operation
      */
     changeDenominator(newDen: bigint, roundingMode?: RoundingMode): BigAmount;
     /**
-     * Negates `this`.
-     *
-     * @returns Mutated `this`; this method operates _in place_.
-     * @category Arithmetic Operation
-     */
-    ineg(): this;
-    /**
-     * Converts `this` into the unsigned absolute value.
-     *
-     * @returns Mutated `this`; this method operates _in place_.
-     * @category Arithmetic Operation
-     */
-    iabs(): this;
-    /**
-     * Converts `this` into the reciprocal (i.e. inverses the numerator and
-     * denominator).
-     *
-     * @returns Mutated `this`; this method operates _in place_.
-     * @category Arithmetic Operation
-     */
-    iinv(): this;
-    /**
-     * Adds `other` to `this`.
-     *
-     * @returns Mutated `this`; this method operates _in place_.
-     * @category Arithmetic Operation
-     */
-    iadd(other: BigAmount): this;
-    /**
-     * Subtracts `other` from `this`.
-     *
-     * @returns Mutated `this`; this method operates _in place_.
-     * @category Arithmetic Operation
-     */
-    isub(other: BigAmount): this;
-    /**
-     * Multiplies `this` by `other`.
-     *
-     * @returns Mutated `this`; this method operates _in place_.
-     * @category Arithmetic Operation
-     */
-    imul(other: BigAmount): this;
-    /**
-     * Divides `this` by `other`.
-     *
-     * @returns Mutated `this`; this method operates _in place_.
-     * @category Arithmetic Operation
-     */
-    idiv(other: BigAmount): this;
-    /**
-     * Equivalent to `x.clone().ineg()`.
+     * Performs the unary `-` operation.
      *
      * @category Arithmetic Operation
      */
     neg(): BigAmount;
     /**
-     * Equivalent to `x.clone().iabs()`.
+     * Returns the unsigned absolute value of `this`.
      *
      * @category Arithmetic Operation
      */
     abs(): BigAmount;
     /**
-     * Equivalent to `x.clone().iinv()`.
+     * Returns the reciprocal of `this`.
      *
      * @category Arithmetic Operation
      */
     inv(): BigAmount;
     /**
-     * Equivalent to `x.clone().iadd(other)`.
+     * Adds `other` to `this`.
      *
      * @category Arithmetic Operation
      */
     add(other: BigAmount): BigAmount;
     /**
-     * Equivalent to `x.clone().isub(other)`.
+     * Subtracts `other` from `this`.
      *
      * @category Arithmetic Operation
      */
     sub(other: BigAmount): BigAmount;
     /**
-     * Equivalent to `x.clone().imul(other)`.
+     * Multiplies `this` by `other`.
      *
      * @category Arithmetic Operation
      */
     mul(other: BigAmount): BigAmount;
     /**
-     * Equivalent to `x.clone().idiv(other)`.
+     * Divides `this` by `other`.
      *
      * @category Arithmetic Operation
      */
@@ -333,13 +240,13 @@ export declare const q: typeof BigAmount.create;
  * Represents rounding modes.
  *
  * @remarks
- * | Value          | Mode                                  |
- * |----------------|---------------------------------------|
- * | `"UP"`         | Toward inifinity (away from zero)     |
- * | `"DOWN"`       | Toward zero                           |
- * | `"CEIL"`       | Toward positive                       |
- * | `"FLOOR"`      | Toward negative                       |
- * | `"HALF_UP"`    | Ties toward infinity (away from zero) |
- * | `"HALF_EVEN"`  | Ties to even                          |
+ * | Value         | Mode                                  |
+ * | ------------- | ------------------------------------- |
+ * | `"UP"`        | Toward inifinity (away from zero)     |
+ * | `"DOWN"`      | Toward zero                           |
+ * | `"CEIL"`      | Toward positive                       |
+ * | `"FLOOR"`     | Toward negative                       |
+ * | `"HALF_UP"`   | Ties toward infinity (away from zero) |
+ * | `"HALF_EVEN"` | Ties to even                          |
  */
 export declare type RoundingMode = "UP" | "DOWN" | "CEIL" | "FLOOR" | "HALF_UP" | "HALF_EVEN";

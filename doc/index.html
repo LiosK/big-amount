@@ -62,23 +62,27 @@
 					<h1>big-amount</h1>
 				</a>
 				<p>BigInt-based rational number library focused on accounting</p>
-				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
-					<h2>Usage</h2>
-				</a>
+				<ul>
+					<li>Stores amount as ratio of two <code>BigInt</code>s, allowing precise calculation of
+					arbitrarily large rational numbers</li>
+					<li>Optimized for additions of numbers that share same denominator; little
+					overhead on aggregating many cents (1/100)</li>
+					<li>Supports rounding and formatting as decimal</li>
+				</ul>
 				<pre><code class="language-javascript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">q</span><span style="color: #000000">, </span><span style="color: #001080">BigAmount</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;big-amount&quot;</span><span style="color: #000000">;</span>
 
-<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">x</span><span style="color: #000000"> = </span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;1/2&quot;</span><span style="color: #000000">) </span><span style="color: #008000">// Equivalent to BigAmount.create(&quot;1/2&quot;)</span>
-<span style="color: #000000">  .</span><span style="color: #795E26">neg</span><span style="color: #000000">()</span>
-<span style="color: #000000">  .</span><span style="color: #795E26">abs</span><span style="color: #000000">()</span>
-<span style="color: #000000">  .</span><span style="color: #795E26">inv</span><span style="color: #000000">()</span>
-<span style="color: #000000">  .</span><span style="color: #795E26">add</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;34.5&quot;</span><span style="color: #000000">))</span>
-<span style="color: #000000">  .</span><span style="color: #795E26">sub</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;.67&quot;</span><span style="color: #000000">))</span>
-<span style="color: #000000">  .</span><span style="color: #795E26">mul</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(-</span><span style="color: #098658">8</span><span style="color: #0000FF">n</span><span style="color: #000000">, </span><span style="color: #098658">9</span><span style="color: #0000FF">n</span><span style="color: #000000">))</span>
-<span style="color: #000000">  .</span><span style="color: #795E26">div</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">10</span><span style="color: #000000">))</span>
-<span style="color: #000000">  .</span><span style="color: #795E26">reduce</span><span style="color: #000000">(); </span><span style="color: #008000">// Reduction to the simplest form</span>
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">x</span><span style="color: #000000"> = </span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;1/2&quot;</span><span style="color: #000000">)           </span><span style="color: #008000">// Same as `BigAmount.create(&quot;1/2&quot;)`</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">neg</span><span style="color: #000000">()                   </span><span style="color: #008000">// Unary `-`</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">inv</span><span style="color: #000000">()                   </span><span style="color: #008000">// Inverse (`1 / x`)</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">add</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;34.5&quot;</span><span style="color: #000000">))          </span><span style="color: #008000">// `+`</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">sub</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;.67&quot;</span><span style="color: #000000">))           </span><span style="color: #008000">// `-`</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">mul</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(-</span><span style="color: #098658">8</span><span style="color: #0000FF">n</span><span style="color: #000000">, </span><span style="color: #098658">9</span><span style="color: #0000FF">n</span><span style="color: #000000">))         </span><span style="color: #008000">// `*`</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">div</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">10</span><span style="color: #000000">))              </span><span style="color: #008000">// `/`</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">abs</span><span style="color: #000000">()                   </span><span style="color: #008000">// To absolute value</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">reduce</span><span style="color: #000000">();               </span><span style="color: #008000">// To irreducible form</span>
 
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">()); </span><span style="color: #008000">// &quot;-3583/1125&quot;</span>
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">6</span><span style="color: #000000">)); </span><span style="color: #008000">// &quot;-3.184889&quot;</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">()); </span><span style="color: #008000">// &quot;1061/375&quot;</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">6</span><span style="color: #000000">)); </span><span style="color: #008000">// &quot;2.829333&quot;</span>
 </code></pre>
 				<a href="#instance-creation" id="instance-creation" style="color: inherit; text-decoration: none;">
 					<h2>Instance Creation</h2>
@@ -87,7 +91,7 @@
 					<h3><code>q</code> and BigAmount.create</h3>
 				</a>
 				<p>Use <a href="https://liosk.github.io/big-amount/doc/classes/bigamount.html#create">BigAmount.create</a> or the equivalent shortcut <code>q</code> to create an instance.</p>
-				<p><code>BigAmount.create(x)</code> creates an instance representing <em>x/1</em>.</p>
+				<p><code>BigAmount.create(x)</code> creates an instance representing <em>x / 1</em>.</p>
 				<pre><code class="language-javascript"><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #0000FF">n</span><span style="color: #000000">);        </span><span style="color: #008000">// 123/1</span>
 <span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #000000">);         </span><span style="color: #008000">// 123/1</span>
 <span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123&quot;</span><span style="color: #000000">);       </span><span style="color: #008000">// 123/1</span>
@@ -97,7 +101,7 @@
 <span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123/45&quot;</span><span style="color: #000000">);    </span><span style="color: #008000">// 123/45</span>
 <span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;12.3/-4.5&quot;</span><span style="color: #000000">); </span><span style="color: #008000">// 1230/-450</span>
 </code></pre>
-				<p><code>BigAmount.create(x, y)</code> creates an instance representing <em>x/y</em>.</p>
+				<p><code>BigAmount.create(x, y)</code> creates an instance representing <em>x / y</em>.</p>
 				<pre><code class="language-javascript"><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #0000FF">n</span><span style="color: #000000">, </span><span style="color: #098658">45</span><span style="color: #0000FF">n</span><span style="color: #000000">);    </span><span style="color: #008000">// 123/45</span>
 <span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #000000">, </span><span style="color: #098658">45</span><span style="color: #000000">);      </span><span style="color: #008000">// 123/45</span>
 
@@ -124,75 +128,65 @@
 				<table>
 					<thead>
 						<tr>
+							<th>Methods</th>
 							<th>Operation</th>
-							<th>Regular</th>
-							<th>In-place</th>
 						</tr>
 					</thead>
 					<tbody><tr>
-							<td>To irreducible form</td>
-							<td><code>reduce()</code></td>
-							<td><code>ireduce()</code></td>
-						</tr>
-						<tr>
-							<td>To negated value</td>
 							<td><code>neg()</code></td>
-							<td><code>ineg()</code></td>
+							<td>Negation (unary <code>-</code>)</td>
 						</tr>
 						<tr>
-							<td>To absolute value</td>
-							<td><code>abs()</code></td>
-							<td><code>iabs()</code></td>
-						</tr>
-						<tr>
-							<td>To reciprocal</td>
-							<td><code>inv()</code></td>
-							<td><code>iinv()</code></td>
-						</tr>
-						<tr>
-							<td>Addition</td>
 							<td><code>add(other)</code></td>
-							<td><code>iadd(other)</code></td>
+							<td>Addition (<code>this + other</code>)</td>
 						</tr>
 						<tr>
-							<td>Subtraction</td>
 							<td><code>sub(other)</code></td>
-							<td><code>isub(other)</code></td>
+							<td>Subtraction(<code>this - other</code>)</td>
 						</tr>
 						<tr>
-							<td>Multiplication</td>
 							<td><code>mul(other)</code></td>
-							<td><code>imul(other)</code></td>
+							<td>Multiplication (<code>this * other</code>)</td>
 						</tr>
 						<tr>
-							<td>Division</td>
 							<td><code>div(other)</code></td>
-							<td><code>idiv(other)</code></td>
+							<td>Division (<code>this / other</code>)</td>
+						</tr>
+						<tr>
+							<td><code>inv()</code></td>
+							<td>Inverse (<code>1 / this</code>)</td>
+						</tr>
+						<tr>
+							<td><code>abs()</code></td>
+							<td>To absolute value</td>
+						</tr>
+						<tr>
+							<td><code>reduce()</code></td>
+							<td>To irreducible form</td>
 						</tr>
 				</tbody></table>
-				<p>The regular methods create and return a new object while the in-place methods
-				mutate and return <code>this</code>.</p>
-				<p>i/reduce() needs to be called explicitly whenever necessary because the
+				<p><code>reduce()</code> needs to be called explicitly whenever necessary because the
 					arithmetic operations do not return the canonical form of a resulting fraction.
-					It is currently guaranteed that i/add() and i/sub() keep the denominator
+					It is currently guaranteed that <code>add()</code> and <code>sub()</code> keep the denominator
 					unchanged if both operands share the same denominator; in all other cases, the
-				returned value has an implementation-dependent numerator and denominator.</p>
+				returned value will have implementation-dependent numerator and denominator.</p>
 				<a href="#string-conversion" id="string-conversion" style="color: inherit; text-decoration: none;">
 					<h2>String Conversion</h2>
 				</a>
-				<p><code>toString()</code> and <code>toJSON()</code> generate the preferred seriarization form as a
-				rational number.</p>
+				<p><code>toString()</code> and <code>toJSON()</code> generate the preferred form to seriarize a rational
+				number.</p>
 				<pre><code class="language-javascript"><span style="color: #267F99">String</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #0000FF">n</span><span style="color: #000000">, </span><span style="color: #098658">45</span><span style="color: #0000FF">n</span><span style="color: #000000">));        </span><span style="color: #008000">// &quot;123/45&quot;</span>
 <span style="color: #267F99">JSON</span><span style="color: #000000">.</span><span style="color: #795E26">stringify</span><span style="color: #000000">(</span><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;12.345&quot;</span><span style="color: #000000">)); </span><span style="color: #008000">// &#039;&quot;12345/1000&quot;&#039;</span>
 </code></pre>
-				<p>Use <a href="https://liosk.github.io/big-amount/doc/classes/bigamount.html#tofixed">BigAmount#toFixed</a> to format a value as a decimal string. This method takes
-				a few formatting options to customize the output.</p>
+				<p>Use <a href="https://liosk.github.io/big-amount/doc/classes/bigamount.html#tofixed">BigAmount#toFixed</a> to format a value as decimal. This method takes a few
+				formatting options to customize the output.</p>
 				<pre><code class="language-javascript"><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">x</span><span style="color: #000000"> = </span><span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123456789/10&quot;</span><span style="color: #000000">);</span>
 <span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">);                            </span><span style="color: #008000">// &quot;12345678.90&quot;</span>
 <span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, { </span><span style="color: #001080">decimalSeparator:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;,&quot;</span><span style="color: #000000"> }); </span><span style="color: #008000">// &quot;12345678,90&quot;</span>
 <span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, { </span><span style="color: #001080">groupSeparator:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;,&quot;</span><span style="color: #000000"> });   </span><span style="color: #008000">// &quot;12,345,678.90&quot;</span>
 </code></pre>
-				<p><a href="https://liosk.github.io/big-amount/doc/classes/bigamount.html#tofixed">BigAmount#toFixed</a> rounds ties to the nearest even by default.</p>
+				<p><a href="https://liosk.github.io/big-amount/doc/classes/bigamount.html#tofixed">BigAmount#toFixed</a> by default rounds ties to the nearest even (i.e. bankers&#39;
+				rounding).</p>
 				<pre><code class="language-javascript"><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;1.15&quot;</span><span style="color: #000000">).</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">) </span><span style="color: #008000">// &quot;1.2&quot;</span>
 <span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;1.25&quot;</span><span style="color: #000000">).</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">) </span><span style="color: #008000">// &quot;1.2&quot;</span>
 </code></pre>
@@ -249,10 +243,8 @@
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>

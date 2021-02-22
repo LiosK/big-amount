@@ -7,7 +7,7 @@ describe("#changeDenominator()", () => {
 
     const test = (num, oldDen, newDen) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).changeDenominator(newDen).denominator(),
+        new BigAmount(num, oldDen).changeDenominator(newDen).den,
         newDen
       );
     };
@@ -697,7 +697,7 @@ describe("#changeDenominator()", () => {
 
     const test = (num, oldDen, newDen, expected) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).changeDenominator(newDen).numerator(),
+        new BigAmount(num, oldDen).changeDenominator(newDen).num,
         expected
       );
     };
@@ -712,7 +712,7 @@ describe("#changeDenominator()", () => {
 
     const testWithMode = (num, oldDen, newDen, mode, expected) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).changeDenominator(newDen, mode).numerator(),
+        new BigAmount(num, oldDen).changeDenominator(newDen, mode).num,
         expected
       );
     };
