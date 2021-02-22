@@ -4,7 +4,7 @@ BigInt-based rational number library focused on accounting
 
 - Stores amount as ratio of two [BigInt]s, allowing precise calculation of
   arbitrarily large rational numbers
-- Optimized for additions of numbers that share same denominator; little
+- Optimized for addition of fractions that share same denominator; little
   overhead on aggregating many cents (1/100)
 - Supports rounding and formatting as decimal
 
@@ -96,7 +96,7 @@ BigAmount.fromNumber(Math.PI); // 3.14159...
 arithmetic operations do not return the canonical form of a resulting fraction.
 It is currently guaranteed that `add()` and `sub()` keep the denominator
 unchanged if both operands share the same denominator; in all other cases, the
-returned value will have implementation-dependent numerator and denominator.
+returned object will have implementation-dependent numerator and denominator.
 
 ## String Conversion
 
@@ -108,7 +108,7 @@ String(q(123n, 45n));        // "123/45"
 JSON.stringify(q("12.345")); // '"12345/1000"'
 ```
 
-Use [BigAmount#toFixed] to format a value as decimal. This method takes a few
+Use [BigAmount#toFixed] to format a fraction as decimal. This method takes a few
 formatting options to customize the output.
 
 ```javascript

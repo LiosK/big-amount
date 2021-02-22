@@ -2,13 +2,13 @@ import { BigAmount } from "../lib/index.js";
 import { reduced, rounded } from "./util/cases.js";
 const assert = chai.assert;
 
-describe("#changeDenominator()", () => {
+describe("#quantize()", () => {
   it("should change the denominator", () => {
     const cases = [10n, 25n, 34n, 117n, 429393759437859340759378n];
 
     const test = (num, oldDen, newDen) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).changeDenominator(newDen).den,
+        new BigAmount(num, oldDen).quantize(newDen).den,
         newDen
       );
     };
@@ -45,7 +45,7 @@ describe("#changeDenominator()", () => {
 
     const test = (num, oldDen, newDen) => {
       const original = new BigAmount(num, oldDen);
-      assert(original.changeDenominator(newDen).eq(original));
+      assert(original.quantize(newDen).eq(original));
     };
 
     for (const [num, oldDen, newDen] of cases) {
@@ -66,7 +66,7 @@ describe("#changeDenominator()", () => {
 
     const test = (num, oldDen, newDen, expected) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).changeDenominator(newDen).num,
+        new BigAmount(num, oldDen).quantize(newDen).num,
         expected
       );
     };
@@ -81,7 +81,7 @@ describe("#changeDenominator()", () => {
 
     const testWithMode = (num, oldDen, newDen, mode, expected) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).changeDenominator(newDen, mode).num,
+        new BigAmount(num, oldDen).quantize(newDen, mode).num,
         expected
       );
     };
@@ -97,5 +97,3 @@ describe("#changeDenominator()", () => {
     }
   });
 });
-
-// vim: fdm=marker fmr&
