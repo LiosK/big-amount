@@ -1,6 +1,6 @@
 {
   "name": "big-amount",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "BigInt-based rational number library focused on accounting",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -14,7 +14,7 @@
     "doc": "typedoc src/index.ts --out doc --gitRevision \"v$npm_package_version\"",
     "lint": "prettier -c README.md src test && eslint src test",
     "prepare": "npm run lint && npm run clean && npm run build && npm test && npm run doc",
-    "test": "mocha -p -t 8000 -r test/load_chai_on_node"
+    "test": "mocha -p -t 8000 -r test/util/load_chai.cjs"
   },
   "repository": {
     "type": "git",

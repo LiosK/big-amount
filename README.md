@@ -2,7 +2,7 @@
 
 BigInt-based rational number library focused on accounting
 
-- Stores amount as ratio of two `BigInt`s, allowing precise calculation of
+- Stores amount as ratio of two [BigInt]s, allowing precise calculation of
   arbitrarily large rational numbers
 - Optimized for additions of numbers that share same denominator; little
   overhead on aggregating many cents (1/100)
@@ -24,6 +24,8 @@ let x = q("1/2")           // Same as `BigAmount.create("1/2")`
 console.log(x.toString()); // "1061/375"
 console.log(x.toFixed(6)); // "2.829333"
 ```
+
+[bigint]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
 
 ## Instance Creation
 

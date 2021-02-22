@@ -11,5 +11,3 @@ describe("#sign()", () => {
     assert.strictEqual(new BigAmount(-1n, -2n).sign(), 1n);
   });
 });
-
-// vim: fdm=marker fmr&
