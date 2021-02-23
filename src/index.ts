@@ -408,6 +408,7 @@ export class BigAmount {
    * numerator, which could be counterintuitive when the new denominator is
    * negative.
    *
+   * @param roundingMode - See [[RoundingMode]] for rounding mode options.
    * @category Conversion
    */
   quantize(
@@ -423,9 +424,32 @@ export class BigAmount {
   }
 
   /**
-   * Returns an integral approximate of `this`, rounding ties to even by
-   * default. See [[RoundingMode]] for other rounding mode options.
+   * Returns a fractional approximate of `this` that is rounded to the multiple
+   * of `1 / (10 ** digits)`, just like Python's built-in `round()`. This method
+   * rounds ties to even by default.
    *
+   * @param digits - Number of digits after the decimal separator.
+   * @param roundingMode - See [[RoundingMode]] for rounding mode options.
+   * @category Conversion
+   */
+  round(digits = 0, roundingMode: RoundingMode = "HALF_EVEN"): BigAmount {
+    if (!Number.isInteger(digits)) {
+      throw new RangeError("digits is not an integer");
+    }
+    const term = 10n ** BigInt(Math.abs(digits));
+    if (digits < 0) {
+      const div = new BigAmount(this.num, this.den * term);
+      return new BigAmount(div.roundToInt(roundingMode) * term, 1n);
+    } else {
+      return this.quantize(term, roundingMode);
+    }
+  }
+
+  /**
+   * Returns an integral approximate of `this`, rounding ties to even by
+   * default.
+   *
+   * @param roundingMode - See [[RoundingMode]] for rounding mode options.
    * @category Conversion
    */
   roundToInt(roundingMode: RoundingMode = "HALF_EVEN"): bigint {

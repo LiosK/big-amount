@@ -60,7 +60,7 @@ describe("#quantize()", () => {
     }
   });
 
-  it("should round the numerator as expected (test [-50, 50])", () => {
+  it("should round the numerator as expected (test [-5.0, 5.0])", () => {
     const { input, expected } = rounded;
     const len = input.length;
 

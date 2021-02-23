@@ -3,7 +3,7 @@ import { rounded } from "./util/cases.js";
 const assert = chai.assert;
 
 describe("#roundToInt()", () => {
-  it("should round the fraction as expected (test [-50/10, 50/10])", () => {
+  it("should round the fraction as expected (test [-5.0, 5.0])", () => {
     const { input, expected } = rounded;
     for (let i = 0; i < input.length; i++) {
       assert.strictEqual(
@@ -15,7 +15,7 @@ describe("#roundToInt()", () => {
 });
 
 describe("#roundToInt(roundingMode)", () => {
-  it("should round the fraction as expected (test [-50/10, 50/10])", () => {
+  it("should round the fraction as expected (test [-5.0, 5.0])", () => {
     const { input, expected } = rounded;
     for (const mode of Object.keys(expected)) {
       for (let i = 0; i < input.length; i++) {
