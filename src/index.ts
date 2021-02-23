@@ -525,10 +525,11 @@ export class BigAmount {
    * @param groupSeparator - [Default: `""`] Delimiter used to separate the
    *        groups of thousands (three digits) of the integer part. Grouping is
    *        disabled by default; give `","`, `"."`, `" "`, or any other
-   *        delimiter to enable grouping. This method does not support other
-   *        grouping rules than the groups of three digits.
+   *        delimiter to enable grouping.
    * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied to the
    *        last digit. See [[RoundingMode]] for rounding mode options.
+   * @param template - [Default: `"{}"`] _Experimental._
+   * @param experimentalUseLakhCrore - [Default: `false`] _Experimental._
    * @category Conversion
    */
   toFixed(
@@ -537,10 +538,14 @@ export class BigAmount {
       decimalSeparator = ".",
       groupSeparator = "",
       roundingMode = "HALF_EVEN",
+      template = "{}",
+      experimentalUseLakhCrore = false,
     }: {
       decimalSeparator?: string;
       groupSeparator?: string;
       roundingMode?: RoundingMode;
+      template?: string | [string, string];
+      experimentalUseLakhCrore?: boolean;
     } = {}
   ): string {
     if (ndigits < 0) {
@@ -556,10 +561,11 @@ export class BigAmount {
       buffer.push(intPart);
     } else {
       const groups = [intPart.slice(-3)];
-      for (let i = -3, len = -intPart.length; i > len; i -= 3) {
-        groups.unshift(intPart.slice(-3 + i, i));
+      const n = experimentalUseLakhCrore ? 2 : 3;
+      for (let i = -3, len = -intPart.length; i > len; i -= n) {
+        groups.unshift(intPart.slice(-n + i, i), groupSeparator);
       }
-      buffer.push(groups.join(groupSeparator));
+      buffer.push(...groups);
     }
 
     // fractional part
@@ -570,12 +576,17 @@ export class BigAmount {
       );
     }
 
-    // sign
-    if (decimal.num < 0n) {
-      buffer.unshift("-");
+    // format
+    if (typeof template === "string") {
+      template = decimal.num < 0n ? "-" + template : template;
+    } else {
+      template = decimal.num < 0n ? template[1] : template[0];
     }
-
-    return buffer.join("");
+    const result = template.replace("{}", buffer.join(""));
+    if (result.includes("{}")) {
+      throw new SyntaxError("template includes multiple {}");
+    }
+    return result;
   }
 }
 
