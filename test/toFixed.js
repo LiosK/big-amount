@@ -74,7 +74,7 @@ describe("#toFixed()", () => {
     assert.strictEqual(f(-1000000000n, 9), "-0{ds}012345678");
   });
 
-  it("handles `template` option properly");
+  it("handles `templates` option properly");
 
   it("handles `experimentalUseLakhCrore` option properly", () => {
     const f = (den, ds) =>

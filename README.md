@@ -23,6 +23,16 @@ let x = q("1/2")           // Same as `BigAmount.create("1/2")`
 
 console.log(x.toString()); // "1061/375"
 console.log(x.toFixed(6)); // "2.829333"
+
+BigAmount.sum([
+  "2200811.80",
+  "5954398.60",
+  "-6217732.25",
+  "-9336803.50",
+]).toFixed(2, {
+  groupSeparator: ",",
+  templates: ["${}", "(${})"],
+}); // "($7,399,325.35)"
 ```
 
 [bigint]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
@@ -117,6 +127,11 @@ let x = BigAmount.create("123456789/10");
 x.toFixed(2);                            // "12345678.90"
 x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
 x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
+
+const opts = { templates: ["${}", "(${})", "-"] };
+BigAmount.create("123.45").toFixed(2, opts);  // "$123.45"
+BigAmount.create("-678.90").toFixed(2, opts); // "($678.90)"
+BigAmount.create("0").toFixed(2, opts);       // "-"
 ```
 
 [BigAmount#toFixed] rounds ties to the nearest even (i.e. bankers' rounding).

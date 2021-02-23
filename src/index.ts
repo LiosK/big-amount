@@ -22,6 +22,16 @@
  *
  * console.log(x.toString()); // "1061/375"
  * console.log(x.toFixed(6)); // "2.829333"
+ *
+ * BigAmount.sum([
+ *   "2200811.80",
+ *   "5954398.60",
+ *   "-6217732.25",
+ *   "-9336803.50",
+ * ]).toFixed(2, {
+ *   groupSeparator: ",",
+ *   templates: ["${}", "(${})"],
+ * }); // "($7,399,325.35)"
  * ```
  */
 export class BigAmount {
@@ -517,6 +527,11 @@ export class BigAmount {
    * x.toFixed(2);                            // "12345678.90"
    * x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
    * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
+   *
+   * const opts = { templates: ["${}", "(${})", "-"] };
+   * BigAmount.create("123.45").toFixed(2, opts);  // "$123.45"
+   * BigAmount.create("-678.90").toFixed(2, opts); // "($678.90)"
+   * BigAmount.create("0").toFixed(2, opts);       // "-"
    * ```
    *
    * @param ndigits - Number of digits to appear after the decimal separator.
@@ -526,8 +541,17 @@ export class BigAmount {
    *        groups of thousands (three digits) of the integer part. Grouping is
    *        disabled by default; give `","`, `"."`, `" "`, or any other
    *        delimiter to enable grouping.
-   * @param template - [Default: `"{}"`] _Experimental._
-   * @param experimentalUseLakhCrore - [Default: `false`] _Experimental._
+   * @param templates - [Default: `["{}"]`] Tuple of template strings used to
+   *        format `[positive numbers, negative numbers, zero]`, respectively.
+   *        `{}` in a template string is replaced with the resulting string.
+   *        The template for zero defaults to the template for positive numbers
+   *        and the template for negative numbers defaults to the template for
+   *        positive numbers with the prefix "-", if omitted. This option is
+   *        convenient to decorate the resulting string with a currency symbol
+   *        and/or negative parenstheses. See the above example for usage.
+   * @param experimentalUseLakhCrore - [Default: `false`] _Experimental_. Use
+   *        Indian _2,2,3_ digit grouping rule (e.g. `"1,00,00,000"`) instead of
+   *        the three digit system.
    * @category Conversion
    */
   toFixed(
@@ -535,12 +559,12 @@ export class BigAmount {
     {
       decimalSeparator = ".",
       groupSeparator = "",
-      template = "{}",
+      templates = ["{}"],
       experimentalUseLakhCrore = false,
     }: {
       decimalSeparator?: string;
       groupSeparator?: string;
-      template?: string | [string, string];
+      templates?: [string] | [string, string] | [string, string, string];
       experimentalUseLakhCrore?: boolean;
     } = {}
   ): string {
@@ -573,14 +597,16 @@ export class BigAmount {
     }
 
     // format
-    if (typeof template === "string") {
-      template = decimal.num < 0n ? "-" + template : template;
-    } else {
-      template = decimal.num < 0n ? template[1] : template[0];
+    const [tplPositive, tplNegative, tplZero] = templates;
+    let tplToUse = tplPositive;
+    if (decimal.num < 0n) {
+      tplToUse = tplNegative ?? `-${tplPositive}`;
+    } else if (decimal.num === 0n) {
+      tplToUse = tplZero ?? tplPositive;
     }
-    const result = template.replace("{}", buffer.join(""));
+    const result = tplToUse.replace("{}", buffer.join(""));
     if (result.includes("{}")) {
-      throw new SyntaxError("template includes multiple {}");
+      throw new SyntaxError("template string includes multiple {}");
     }
     return result;
   }
