@@ -24,9 +24,9 @@
  * ```
  */
 export declare class BigAmount {
-    /** Numerator. */
+    /** Raw numerator. */
     readonly num: bigint;
-    /** Denominator. */
+    /** Raw denominator. */
     readonly den: bigint;
     /** Creates a [[BigAmount]] from a pair of integers. */
     constructor(numerator: bigint, denominator: bigint);
@@ -46,7 +46,7 @@ export declare class BigAmount {
      * q("12.3/-4.5"); // 1230/-450
      * ```
      *
-     * Note that non-integer `number` values have to be passed as `string`.
+     * Note that non-integral `number` values have to be passed as `string`.
      *
      * ```javascript
      * q(123.45);   // ERROR!
@@ -71,7 +71,7 @@ export declare class BigAmount {
      * -  [[BigAmount]] - Any [[BigAmount]] value.
      * -  `bigint` - Any `bigint` value.
      * -  `number` - _Integer only._ This is because it is often imprecise and
-     *    expensive to find a rational approximate of a floating-point number.
+     *    expensive to find a rational approximate of a non-integral number.
      *    Pass the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact
      *    value or use [[BigAmount.fromNumber]] to find an approximate.
      * -  `string` - Fraction (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
@@ -83,7 +83,7 @@ export declare class BigAmount {
     static create(x: BigAmount | bigint | number | string, y?: BigAmount | bigint | number | string): BigAmount;
     /**
      * Creates a [[BigAmount]] from `number`. Unlike [[BigAmount.create]], this
-     * method finds a rational approximate of a non-integer finite number.
+     * method finds a rational approximate of a non-integral number.
      *
      * @category Instance Creation
      */
@@ -180,9 +180,9 @@ export declare class BigAmount {
      */
     div(other: BigAmount): BigAmount;
     /**
-     * Returns an approximate of `this` that has the specified denominator. This
-     * method rounds the numerator in the specified rounding mode if it is not
-     * divisible by the new denominator.
+     * Returns a fractional approximate of `this` that has the specified
+     * denominator. This method rounds the numerator using the specified rounding
+     * mode if it is not divisible by the new denominator.
      *
      * @example Rounding a repeating decimal to a fixed-digit decimal
      * ```javascript
@@ -196,9 +196,28 @@ export declare class BigAmount {
      * numerator, which could be counterintuitive when the new denominator is
      * negative.
      *
+     * @param roundingMode - See [[RoundingMode]] for rounding mode options.
      * @category Conversion
      */
     quantize(newDen: bigint, roundingMode?: RoundingMode): BigAmount;
+    /**
+     * Returns a fractional approximate of `this` that is rounded to the multiple
+     * of `1 / (10 ** ndigits)`, just like Python's built-in `round()`. This
+     * method rounds ties to even by default.
+     *
+     * @param ndigits - Number of digits after the decimal separator.
+     * @param roundingMode - See [[RoundingMode]] for rounding mode options.
+     * @category Conversion
+     */
+    round(ndigits?: number, roundingMode?: RoundingMode): BigAmount;
+    /**
+     * Returns an integral approximate of `this`, rounding ties to even by
+     * default.
+     *
+     * @param roundingMode - See [[RoundingMode]] for rounding mode options.
+     * @category Conversion
+     */
+    roundToInt(roundingMode?: RoundingMode): bigint;
     /** @category Conversion */
     toString(): string;
     /** @category Conversion */
@@ -216,7 +235,7 @@ export declare class BigAmount {
      * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
      * ```
      *
-     * @param digits - Number of digits to appear after the decimal separator.
+     * @param ndigits - Number of digits to appear after the decimal separator.
      * @param decimalSeparator - [Default: `"."`] Character used to separate the
      *        integer part from the fractional part.
      * @param groupSeparator - [Default: `""`] Delimiter used to separate the
@@ -224,11 +243,11 @@ export declare class BigAmount {
      *        disabled by default; give `","`, `"."`, `" "`, or any other
      *        delimiter to enable grouping. This method does not support other
      *        grouping rules than the groups of three digits.
-     * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied when
-     *        necessary. See [[RoundingMode]] for possible values.
+     * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied to the
+     *        last digit. See [[RoundingMode]] for rounding mode options.
      * @category Conversion
      */
-    toFixed(digits?: number, { decimalSeparator, groupSeparator, roundingMode, }?: {
+    toFixed(ndigits?: number, { decimalSeparator, groupSeparator, roundingMode, }?: {
         decimalSeparator?: string;
         groupSeparator?: string;
         roundingMode?: RoundingMode;

@@ -111,14 +111,14 @@
 <span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;1/2&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;3/4&quot;</span><span style="color: #000000">); </span><span style="color: #008000">// 4/6</span>
 <span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;1/2&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;3.4&quot;</span><span style="color: #000000">); </span><span style="color: #008000">// 10/68</span>
 </code></pre>
-				<p>Note that non-integer <code>number</code> values have to be passed as <code>string</code>.</p>
+				<p>Note that non-integral <code>number</code> values have to be passed as <code>string</code>.</p>
 				<pre><code class="language-javascript"><span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123.45</span><span style="color: #000000">);   </span><span style="color: #008000">// ERROR!</span>
 <span style="color: #795E26">q</span><span style="color: #000000">(</span><span style="color: #098658">123</span><span style="color: #000000"> / </span><span style="color: #098658">45</span><span style="color: #000000">); </span><span style="color: #008000">// ERROR!</span>
 </code></pre>
 				<a href="#bigamountfromnumber" id="bigamountfromnumber" style="color: inherit; text-decoration: none;">
 					<h3>BigAmount.fromNumber</h3>
 				</a>
-				<p>Use <a href="https://liosk.github.io/big-amount/doc/classes/bigamount.html#fromnumber">BigAmount.fromNumber</a> to create an instance from a non-integer <code>number</code>
+				<p>Use <a href="https://liosk.github.io/big-amount/doc/classes/bigamount.html#fromnumber">BigAmount.fromNumber</a> to create an instance from a non-integral <code>number</code>
 				value.</p>
 				<pre><code class="language-javascript"><span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">fromNumber</span><span style="color: #000000">(</span><span style="color: #267F99">Math</span><span style="color: #000000">.PI); </span><span style="color: #008000">// 3.14159...</span>
 </code></pre>
@@ -165,11 +165,12 @@
 							<td>To irreducible form</td>
 						</tr>
 				</tbody></table>
-				<p><code>reduce()</code> needs to be called explicitly whenever necessary because the
-					arithmetic operations do not return the canonical form of a resulting fraction.
-					It is currently guaranteed that <code>add()</code> and <code>sub()</code> keep the denominator
-					unchanged if both operands share the same denominator; in all other cases, the
-				returned object will have implementation-dependent numerator and denominator.</p>
+				<p><code>reduce()</code> needs to be called explicitly when an irreducible fraction is
+					necessary, because the arithmetic operations do not return the canonical form of
+					a resulting fraction. It is currently guaranteed that <code>add()</code> and <code>sub()</code> keep
+					the denominator unchanged if both operands share the same denominator; in all
+					other cases, the returned object will have implementation-dependent numerator
+				and denominator.</p>
 				<a href="#string-conversion" id="string-conversion" style="color: inherit; text-decoration: none;">
 					<h2>String Conversion</h2>
 				</a>

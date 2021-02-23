@@ -59,7 +59,7 @@ q("1/2", "3/4"); // 4/6
 q("1/2", "3.4"); // 10/68
 ```
 
-Note that non-integer `number` values have to be passed as `string`.
+Note that non-integral `number` values have to be passed as `string`.
 
 ```javascript
 q(123.45);   // ERROR!
@@ -70,7 +70,7 @@ q(123 / 45); // ERROR!
 
 ### BigAmount.fromNumber
 
-Use [BigAmount.fromNumber] to create an instance from a non-integer `number`
+Use [BigAmount.fromNumber] to create an instance from a non-integral `number`
 value.
 
 ```javascript
@@ -92,11 +92,12 @@ BigAmount.fromNumber(Math.PI); // 3.14159...
 | `abs()`      | To absolute value               |
 | `reduce()`   | To irreducible form             |
 
-`reduce()` needs to be called explicitly whenever necessary because the
-arithmetic operations do not return the canonical form of a resulting fraction.
-It is currently guaranteed that `add()` and `sub()` keep the denominator
-unchanged if both operands share the same denominator; in all other cases, the
-returned object will have implementation-dependent numerator and denominator.
+`reduce()` needs to be called explicitly when an irreducible fraction is
+necessary, because the arithmetic operations do not return the canonical form of
+a resulting fraction. It is currently guaranteed that `add()` and `sub()` keep
+the denominator unchanged if both operands share the same denominator; in all
+other cases, the returned object will have implementation-dependent numerator
+and denominator.
 
 ## String Conversion
 

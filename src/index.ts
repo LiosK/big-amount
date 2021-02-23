@@ -25,10 +25,10 @@
  * ```
  */
 export class BigAmount {
-  /** Numerator. */
+  /** Raw numerator. */
   readonly num: bigint;
 
-  /** Denominator. */
+  /** Raw denominator. */
   readonly den: bigint;
 
   /** Creates a [[BigAmount]] from a pair of integers. */
@@ -62,7 +62,7 @@ export class BigAmount {
    * q("12.3/-4.5"); // 1230/-450
    * ```
    *
-   * Note that non-integer `number` values have to be passed as `string`.
+   * Note that non-integral `number` values have to be passed as `string`.
    *
    * ```javascript
    * q(123.45);   // ERROR!
@@ -87,7 +87,7 @@ export class BigAmount {
    * -  [[BigAmount]] - Any [[BigAmount]] value.
    * -  `bigint` - Any `bigint` value.
    * -  `number` - _Integer only._ This is because it is often imprecise and
-   *    expensive to find a rational approximate of a floating-point number.
+   *    expensive to find a rational approximate of a non-integral number.
    *    Pass the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact
    *    value or use [[BigAmount.fromNumber]] to find an approximate.
    * -  `string` - Fraction (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
@@ -132,7 +132,7 @@ export class BigAmount {
       } else if (typeof x === "number") {
         throw new RangeError(
           Number.isFinite(x)
-            ? `non-integer Number value: ${x}` +
+            ? `non-integral Number value: ${x}` +
               "; pass it as a string or use `fromNumber()` instead"
             : `unsupported Number value: ${x}`
         );
@@ -170,7 +170,7 @@ export class BigAmount {
 
   /**
    * Creates a [[BigAmount]] from `number`. Unlike [[BigAmount.create]], this
-   * method finds a rational approximate of a non-integer finite number.
+   * method finds a rational approximate of a non-integral number.
    *
    * @category Instance Creation
    */
@@ -392,9 +392,9 @@ export class BigAmount {
   }
 
   /**
-   * Returns an approximate of `this` that has the specified denominator. This
-   * method rounds the numerator in the specified rounding mode if it is not
-   * divisible by the new denominator.
+   * Returns a fractional approximate of `this` that has the specified
+   * denominator. This method rounds the numerator using the specified rounding
+   * mode if it is not divisible by the new denominator.
    *
    * @example Rounding a repeating decimal to a fixed-digit decimal
    * ```javascript
@@ -408,60 +408,89 @@ export class BigAmount {
    * numerator, which could be counterintuitive when the new denominator is
    * negative.
    *
+   * @param roundingMode - See [[RoundingMode]] for rounding mode options.
    * @category Conversion
    */
   quantize(
     newDen: bigint,
     roundingMode: RoundingMode = "HALF_EVEN"
   ): BigAmount {
-    if (this.den === newDen) {
-      return this.clone();
+    return this.den === newDen
+      ? this.clone()
+      : new BigAmount(
+          new BigAmount(this.num * newDen, this.den).roundToInt(roundingMode),
+          newDen
+        );
+  }
+
+  /**
+   * Returns a fractional approximate of `this` that is rounded to the multiple
+   * of `1 / (10 ** ndigits)`, just like Python's built-in `round()`. This
+   * method rounds ties to even by default.
+   *
+   * @param ndigits - Number of digits after the decimal separator.
+   * @param roundingMode - See [[RoundingMode]] for rounding mode options.
+   * @category Conversion
+   */
+  round(ndigits = 0, roundingMode: RoundingMode = "HALF_EVEN"): BigAmount {
+    if (!Number.isInteger(ndigits)) {
+      throw new RangeError("ndigits is not an integer");
     }
+    const term = 10n ** BigInt(Math.abs(ndigits));
+    if (ndigits < 0) {
+      const div = new BigAmount(this.num, this.den * term);
+      return new BigAmount(div.roundToInt(roundingMode) * term, 1n);
+    } else {
+      return this.quantize(term, roundingMode);
+    }
+  }
 
-    const oldNum = this.den < 0n ? -this.num : this.num;
-    const oldDen = this.den < 0n ? -this.den : this.den;
+  /**
+   * Returns an integral approximate of `this`, rounding ties to even by
+   * default.
+   *
+   * @param roundingMode - See [[RoundingMode]] for rounding mode options.
+   * @category Conversion
+   */
+  roundToInt(roundingMode: RoundingMode = "HALF_EVEN"): bigint {
+    const num = this.den < 0n ? -this.num : this.num;
+    const den = this.den < 0n ? -this.den : this.den;
 
-    const tmp = oldNum * newDen;
-    let newNum = tmp / oldDen;
-    const rem = (tmp < 0n ? -tmp : tmp) % oldDen;
-    const unit = tmp < 0n ? -1n : 1n;
-
+    let quot = num / den;
+    const rem = (num < 0n ? -num : num) % den;
+    const unit = num < 0n ? -1n : 1n;
     if (rem === 0n) {
-      // exact case
-      return new BigAmount(newNum, newDen);
+      return quot;
     }
 
     switch (roundingMode) {
       case "HALF_EVEN":
-        if (
-          rem * 2n > oldDen ||
-          (rem * 2n === oldDen && (newNum & 1n) === 1n)
-        ) {
-          newNum += unit;
+        if (rem * 2n > den || (rem * 2n === den && (quot & 1n) === 1n)) {
+          quot += unit;
         }
-        return new BigAmount(newNum, newDen);
+        return quot;
       case "HALF_UP":
-        if (rem * 2n >= oldDen) {
-          newNum += unit;
+        if (rem * 2n >= den) {
+          quot += unit;
         }
-        return new BigAmount(newNum, newDen);
+        return quot;
       case "UP":
-        newNum += unit;
-        return new BigAmount(newNum, newDen);
+        quot += unit;
+        return quot;
       case "DOWN":
-        return new BigAmount(newNum, newDen);
+        return quot;
       case "CEIL":
         if (unit > 0n) {
-          newNum += unit;
+          quot += unit;
         }
-        return new BigAmount(newNum, newDen);
+        return quot;
       case "FLOOR":
         if (unit < 0n) {
-          newNum += unit;
+          quot += unit;
         }
-        return new BigAmount(newNum, newDen);
+        return quot;
       default:
-        // XXX not invoked if this.den === newDen or rem === 0n
+        // XXX not invoked if rem === 0n
         throw new RangeError(
           `unknown rounding mode ${roundingMode}; choose one of ` +
             `"UP" | "DOWN" | "CEIL" | "FLOOR" | "HALF_UP" | "HALF_EVEN"`
@@ -492,7 +521,7 @@ export class BigAmount {
    * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
    * ```
    *
-   * @param digits - Number of digits to appear after the decimal separator.
+   * @param ndigits - Number of digits to appear after the decimal separator.
    * @param decimalSeparator - [Default: `"."`] Character used to separate the
    *        integer part from the fractional part.
    * @param groupSeparator - [Default: `""`] Delimiter used to separate the
@@ -500,12 +529,12 @@ export class BigAmount {
    *        disabled by default; give `","`, `"."`, `" "`, or any other
    *        delimiter to enable grouping. This method does not support other
    *        grouping rules than the groups of three digits.
-   * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied when
-   *        necessary. See [[RoundingMode]] for possible values.
+   * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied to the
+   *        last digit. See [[RoundingMode]] for rounding mode options.
    * @category Conversion
    */
   toFixed(
-    digits = 0,
+    ndigits = 0,
     {
       decimalSeparator = ".",
       groupSeparator = "",
@@ -516,28 +545,39 @@ export class BigAmount {
       roundingMode?: RoundingMode;
     } = {}
   ): string {
-    const term = 10n ** BigInt(digits);
-    let sign = "";
-    let num = this.quantize(term, roundingMode).num;
-    if (num < 0n) {
-      sign = "-";
-      num = -num;
+    if (ndigits < 0) {
+      throw new RangeError("ndigits is negative");
     }
+    const buffer: string[] = [];
+    const decimal = this.round(ndigits, roundingMode);
+    const absNum = decimal.num < 0n ? -decimal.num : decimal.num;
 
-    let intPart = (num / term).toString();
-    if (groupSeparator !== "") {
+    // integer part
+    const intPart = String(absNum / decimal.den);
+    if (groupSeparator === "") {
+      buffer.push(intPart);
+    } else {
       const groups = [intPart.slice(-3)];
       for (let i = -3, len = -intPart.length; i > len; i -= 3) {
         groups.unshift(intPart.slice(-3 + i, i));
       }
-      intPart = groups.join(groupSeparator);
+      buffer.push(groups.join(groupSeparator));
     }
-    if (digits > 0) {
-      const fracPart = (num % term).toString().padStart(digits, "0");
-      return `${sign}${intPart}${decimalSeparator}${fracPart}`;
-    } else {
-      return `${sign}${intPart}`;
+
+    // fractional part
+    if (ndigits > 0) {
+      buffer.push(
+        decimalSeparator,
+        String(absNum % decimal.den).padStart(ndigits, "0")
+      );
     }
+
+    // sign
+    if (decimal.num < 0n) {
+      buffer.unshift("-");
+    }
+
+    return buffer.join("");
   }
 }
 

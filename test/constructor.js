@@ -12,11 +12,17 @@ describe("constructor()", () => {
     });
   });
 
-  it("should throw error if denominator is zero", () => {
-    assert.throws(() => new BigAmount(0n, 0n));
-    assert.throws(() => new BigAmount(1n, 0n));
-    assert.throws(() => new BigAmount(-1n, 0n));
-    assert.throws(() => new BigAmount(7392820129741293712731290n, 0n));
-    assert.throws(() => new BigAmount(-7392820129741293712731290n, 0n));
+  it("should throw RangeError if den === 0n", () => {
+    assert.throws(() => new BigAmount(0n, 0n), RangeError);
+    assert.throws(() => new BigAmount(1n, 0n), RangeError);
+    assert.throws(() => new BigAmount(-1n, 0n), RangeError);
+    assert.throws(
+      () => new BigAmount(7392820129741293712731290n, 0n),
+      RangeError
+    );
+    assert.throws(
+      () => new BigAmount(-7392820129741293712731290n, 0n),
+      RangeError
+    );
   });
 });
