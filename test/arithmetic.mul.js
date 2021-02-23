@@ -3,7 +3,7 @@ import { runTestOnPairs } from "./util/cases.js";
 const assert = chai.assert;
 
 describe("#mul()", () => {
-  it("should produce an equivalent fraction to what the naive algorithm does", () => {
+  it("produces an equivalent fraction to what the naive algorithm does", () => {
     runTestOnPairs((xn, xd) => {
       const left = new BigAmount(xn, xd);
       runTestOnPairs((yn, yd) => {

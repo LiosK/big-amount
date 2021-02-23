@@ -490,11 +490,9 @@ export class BigAmount {
         }
         return quot;
       default:
+        // TypeScript never reaches this line.
         // XXX not invoked if rem === 0n
-        throw new RangeError(
-          `unknown rounding mode ${roundingMode}; choose one of ` +
-            `"UP" | "DOWN" | "CEIL" | "FLOOR" | "HALF_UP" | "HALF_EVEN"`
-        );
+        throw new RangeError(`unknown roundingMode: ${roundingMode}`);
     }
   }
 

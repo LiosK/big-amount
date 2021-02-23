@@ -3,7 +3,7 @@ import { reduced, rounded } from "./util/cases.js";
 const assert = chai.assert;
 
 describe("#quantize()", () => {
-  it("should change the denominator", () => {
+  it("changes the denominator", () => {
     const cases = [10n, 25n, 34n, 117n, 429393759437859340759378n];
 
     const test = (num, oldDen, newDen) => {
@@ -29,7 +29,7 @@ describe("#quantize()", () => {
     }
   });
 
-  it("should return an equivalent fraction if no rounding is necessary", () => {
+  it("returns an equivalent fraction if no rounding is necessary", () => {
     const cases = [
       [0n, 1n, 100n],
       [12n, 24n, 1440n],
@@ -60,7 +60,7 @@ describe("#quantize()", () => {
     }
   });
 
-  it("should round the numerator as expected (test [-5.0, 5.0])", () => {
+  it("rounds the numerator as expected (test [-5.0, 5.0])", () => {
     const { input, expected } = rounded;
     const len = input.length;
 

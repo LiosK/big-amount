@@ -3,7 +3,7 @@ import { rounded } from "./util/cases.js";
 const assert = chai.assert;
 
 describe("#toFixed()", () => {
-  it("should agree with `Number#toFixed()`, except -0 and rounding", () => {
+  it("agrees with `Number#toFixed()`, except -0 and rounding", () => {
     const patNegZero = /^-(0(?:\.0+)?)$/;
     const cases = [0, 1, -1, 12345678, -12345678];
     for (const e of cases) {
@@ -23,7 +23,7 @@ describe("#toFixed()", () => {
     }
   });
 
-  it("should format fractions with arbitrary denominators", () => {
+  it("formats fractions with arbitrary denominators", () => {
     const cases = [
       Math.E,
       Math.LN2,
@@ -43,7 +43,7 @@ describe("#toFixed()", () => {
     }
   });
 
-  it("should handle `decimalSeparator` and `groupSeparator` options properly", () => {
+  it("handles `decimalSeparator` and `groupSeparator` options properly", () => {
     const f = (den, ds) =>
       new BigAmount(12345678n, den).toFixed(ds, {
         decimalSeparator: "{ds}",
@@ -75,7 +75,7 @@ describe("#toFixed()", () => {
     assert.strictEqual(f(-1000000000n, 9), "-0{ds}012345678");
   });
 
-  it("should handle `roundingMode` option properly", () => {
+  it("handles `roundingMode` option properly", () => {
     const { input, expected } = rounded;
 
     for (let i = 0; i < input.length; i++) {

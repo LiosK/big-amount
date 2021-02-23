@@ -9,7 +9,7 @@ const testReduce = (num, den, simplestNum, simplestDen) => {
 };
 
 describe("#reduce()", () => {
-  it("should throw RangeError if den === 0n", () => {
+  it("throws RangeError if den === 0n", () => {
     const cases = [0n, 1n, 16n, 60n, 499n, 4592405566036505920048306074088604n];
     for (const n of cases) {
       assert.throws(() => new BigAmount(n, 0n).reduce(), RangeError);
@@ -17,7 +17,7 @@ describe("#reduce()", () => {
     }
   });
 
-  it("should normalize zero to 0/1", () => {
+  it("normalizes zero to 0/1", () => {
     const cases = [1n, 16n, 60n, 499n, 4592405566036505920048306074088604n];
     for (const n of cases) {
       testReduce(0n, n, 0n, 1n);
@@ -25,7 +25,7 @@ describe("#reduce()", () => {
     }
   });
 
-  it("should produce the correct irreducible representation", () => {
+  it("produces the correct irreducible representation", () => {
     for (const [x, y, simplestX, simplestY] of reduced) {
       testReduce(x, y, simplestX, simplestY);
       testReduce(x, -y, -simplestX, simplestY);
