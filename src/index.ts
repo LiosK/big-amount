@@ -425,19 +425,19 @@ export class BigAmount {
 
   /**
    * Returns a fractional approximate of `this` that is rounded to the multiple
-   * of `1 / (10 ** digits)`, just like Python's built-in `round()`. This method
-   * rounds ties to even by default.
+   * of `1 / (10 ** ndigits)`, just like Python's built-in `round()`. This
+   * method rounds ties to even by default.
    *
-   * @param digits - Number of digits after the decimal separator.
+   * @param ndigits - Number of digits after the decimal separator.
    * @param roundingMode - See [[RoundingMode]] for rounding mode options.
    * @category Conversion
    */
-  round(digits = 0, roundingMode: RoundingMode = "HALF_EVEN"): BigAmount {
-    if (!Number.isInteger(digits)) {
-      throw new RangeError("digits is not an integer");
+  round(ndigits = 0, roundingMode: RoundingMode = "HALF_EVEN"): BigAmount {
+    if (!Number.isInteger(ndigits)) {
+      throw new RangeError("ndigits is not an integer");
     }
-    const term = 10n ** BigInt(Math.abs(digits));
-    if (digits < 0) {
+    const term = 10n ** BigInt(Math.abs(ndigits));
+    if (ndigits < 0) {
       const div = new BigAmount(this.num, this.den * term);
       return new BigAmount(div.roundToInt(roundingMode) * term, 1n);
     } else {
@@ -521,7 +521,7 @@ export class BigAmount {
    * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
    * ```
    *
-   * @param digits - Number of digits to appear after the decimal separator.
+   * @param ndigits - Number of digits to appear after the decimal separator.
    * @param decimalSeparator - [Default: `"."`] Character used to separate the
    *        integer part from the fractional part.
    * @param groupSeparator - [Default: `""`] Delimiter used to separate the
@@ -534,7 +534,7 @@ export class BigAmount {
    * @category Conversion
    */
   toFixed(
-    digits = 0,
+    ndigits = 0,
     {
       decimalSeparator = ".",
       groupSeparator = "",
@@ -545,31 +545,39 @@ export class BigAmount {
       roundingMode?: RoundingMode;
     } = {}
   ): string {
-    const term = 10n ** BigInt(digits);
-    let sign = "";
-    let num =
-      this.den === term
-        ? this.num
-        : new BigAmount(this.num * term, this.den).roundToInt(roundingMode);
-    if (num < 0n) {
-      sign = "-";
-      num = -num;
+    if (ndigits < 0) {
+      throw new RangeError("ndigits is negative");
     }
+    const buffer: string[] = [];
+    const decimal = this.round(ndigits, roundingMode);
+    const absNum = decimal.num < 0n ? -decimal.num : decimal.num;
 
-    let intPart = (num / term).toString();
-    if (groupSeparator !== "") {
+    // integer part
+    const intPart = String(absNum / decimal.den);
+    if (groupSeparator === "") {
+      buffer.push(intPart);
+    } else {
       const groups = [intPart.slice(-3)];
       for (let i = -3, len = -intPart.length; i > len; i -= 3) {
         groups.unshift(intPart.slice(-3 + i, i));
       }
-      intPart = groups.join(groupSeparator);
+      buffer.push(groups.join(groupSeparator));
     }
-    if (digits > 0) {
-      const fracPart = (num % term).toString().padStart(digits, "0");
-      return `${sign}${intPart}${decimalSeparator}${fracPart}`;
-    } else {
-      return `${sign}${intPart}`;
+
+    // fractional part
+    if (ndigits > 0) {
+      buffer.push(
+        decimalSeparator,
+        String(absNum % decimal.den).padStart(ndigits, "0")
+      );
     }
+
+    // sign
+    if (decimal.num < 0n) {
+      buffer.unshift("-");
+    }
+
+    return buffer.join("");
   }
 }
 

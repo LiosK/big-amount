@@ -11,13 +11,13 @@ describe("#toFixed()", () => {
       for (let den = 1; den < 100_000_000_000; den *= 10) {
         const n = e / den;
         const f = new BigAmount(b, BigInt(den));
-        for (let digits = 0; digits < 10; digits++) {
-          let expected = n.toFixed(digits);
+        for (let ndigits = 0; ndigits < 10; ndigits++) {
+          let expected = n.toFixed(ndigits);
           const match = expected.match(patNegZero);
           if (match) {
             expected = match[1];
           }
-          assert.strictEqual(f.toFixed(digits), expected);
+          assert.strictEqual(f.toFixed(ndigits), expected);
         }
       }
     }
@@ -37,8 +37,8 @@ describe("#toFixed()", () => {
 
     for (const e of cases) {
       const f = BigAmount.fromNumber(e);
-      for (let digits = 0; digits < 10; digits++) {
-        assert.strictEqual(f.toFixed(digits), e.toFixed(digits));
+      for (let ndigits = 0; ndigits < 10; ndigits++) {
+        assert.strictEqual(f.toFixed(ndigits), e.toFixed(ndigits));
       }
     }
   });
