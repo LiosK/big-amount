@@ -508,8 +508,8 @@ export class BigAmount {
 
   /**
    * Formats a [[BigAmount]] using decimal fixed-point notation just like
-   * `Number#toFixed`. This method additionally takes rounding and formatting
-   * options to customize the output.
+   * `Number#toFixed`. This method takes some format options to customize the
+   * output.
    *
    * @example
    * ```javascript
@@ -526,8 +526,6 @@ export class BigAmount {
    *        groups of thousands (three digits) of the integer part. Grouping is
    *        disabled by default; give `","`, `"."`, `" "`, or any other
    *        delimiter to enable grouping.
-   * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied to the
-   *        last digit. See [[RoundingMode]] for rounding mode options.
    * @param template - [Default: `"{}"`] _Experimental._
    * @param experimentalUseLakhCrore - [Default: `false`] _Experimental._
    * @category Conversion
@@ -537,13 +535,11 @@ export class BigAmount {
     {
       decimalSeparator = ".",
       groupSeparator = "",
-      roundingMode = "HALF_EVEN",
       template = "{}",
       experimentalUseLakhCrore = false,
     }: {
       decimalSeparator?: string;
       groupSeparator?: string;
-      roundingMode?: RoundingMode;
       template?: string | [string, string];
       experimentalUseLakhCrore?: boolean;
     } = {}
@@ -552,7 +548,7 @@ export class BigAmount {
       throw new RangeError("ndigits is negative");
     }
     const buffer: string[] = [];
-    const decimal = this.round(ndigits, roundingMode);
+    const decimal = this.round(ndigits);
     const absNum = decimal.num < 0n ? -decimal.num : decimal.num;
 
     // integer part

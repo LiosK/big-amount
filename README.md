@@ -119,8 +119,7 @@ x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
 x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
 ```
 
-[BigAmount#toFixed] by default rounds ties to the nearest even (i.e. bankers'
-rounding).
+[BigAmount#toFixed] rounds ties to the nearest even (i.e. bankers' rounding).
 
 ```javascript
 q("1.15").toFixed(1) // "1.2"

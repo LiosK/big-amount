@@ -1,5 +1,4 @@
 import { BigAmount } from "../lib/index.js";
-import { rounded } from "./util/cases.js";
 const assert = chai.assert;
 
 describe("#toFixed()", () => {
@@ -73,26 +72,6 @@ describe("#toFixed()", () => {
     assert.strictEqual(f(-10000000n, 9), "-1{ds}234567800");
     assert.strictEqual(f(-100000000n, 9), "-0{ds}123456780");
     assert.strictEqual(f(-1000000000n, 9), "-0{ds}012345678");
-  });
-
-  it("handles `roundingMode` option properly", () => {
-    const { input, expected } = rounded;
-
-    for (let i = 0; i < input.length; i++) {
-      assert.strictEqual(
-        new BigAmount(input[i], 10n).toFixed(0),
-        String(expected["HALF_EVEN"][i])
-      );
-    }
-
-    for (const mode of Object.keys(expected)) {
-      for (let i = 0; i < input.length; i++) {
-        assert.strictEqual(
-          new BigAmount(input[i], 10n).toFixed(0, { roundingMode: mode }),
-          String(expected[mode][i])
-        );
-      }
-    }
   });
 
   it("handles `template` option properly");
