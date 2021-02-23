@@ -25,10 +25,10 @@
  * ```
  */
 export class BigAmount {
-  /** Numerator. */
+  /** Raw numerator. */
   readonly num: bigint;
 
-  /** Denominator. */
+  /** Raw denominator. */
   readonly den: bigint;
 
   /** Creates a [[BigAmount]] from a pair of integers. */
@@ -62,7 +62,7 @@ export class BigAmount {
    * q("12.3/-4.5"); // 1230/-450
    * ```
    *
-   * Note that non-integer `number` values have to be passed as `string`.
+   * Note that non-integral `number` values have to be passed as `string`.
    *
    * ```javascript
    * q(123.45);   // ERROR!
@@ -87,7 +87,7 @@ export class BigAmount {
    * -  [[BigAmount]] - Any [[BigAmount]] value.
    * -  `bigint` - Any `bigint` value.
    * -  `number` - _Integer only._ This is because it is often imprecise and
-   *    expensive to find a rational approximate of a floating-point number.
+   *    expensive to find a rational approximate of a non-integral number.
    *    Pass the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact
    *    value or use [[BigAmount.fromNumber]] to find an approximate.
    * -  `string` - Fraction (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
@@ -132,7 +132,7 @@ export class BigAmount {
       } else if (typeof x === "number") {
         throw new RangeError(
           Number.isFinite(x)
-            ? `non-integer Number value: ${x}` +
+            ? `non-integral Number value: ${x}` +
               "; pass it as a string or use `fromNumber()` instead"
             : `unsupported Number value: ${x}`
         );
@@ -170,7 +170,7 @@ export class BigAmount {
 
   /**
    * Creates a [[BigAmount]] from `number`. Unlike [[BigAmount.create]], this
-   * method finds a rational approximate of a non-integer finite number.
+   * method finds a rational approximate of a non-integral number.
    *
    * @category Instance Creation
    */
@@ -392,9 +392,9 @@ export class BigAmount {
   }
 
   /**
-   * Returns an approximate of `this` that has the specified denominator. This
-   * method rounds the numerator in the specified rounding mode if it is not
-   * divisible by the new denominator.
+   * Returns a fractional approximate of `this` that has the specified
+   * denominator. This method rounds the numerator using the specified rounding
+   * mode if it is not divisible by the new denominator.
    *
    * @example Rounding a repeating decimal to a fixed-digit decimal
    * ```javascript
@@ -414,54 +414,59 @@ export class BigAmount {
     newDen: bigint,
     roundingMode: RoundingMode = "HALF_EVEN"
   ): BigAmount {
-    if (this.den === newDen) {
-      return this.clone();
-    }
+    return this.den === newDen
+      ? this.clone()
+      : new BigAmount(
+          new BigAmount(this.num * newDen, this.den).roundToInt(roundingMode),
+          newDen
+        );
+  }
 
-    const oldNum = this.den < 0n ? -this.num : this.num;
-    const oldDen = this.den < 0n ? -this.den : this.den;
+  /**
+   * Returns an integral approximate of `this`, rounding ties to even by
+   * default. See [[RoundingMode]] for other rounding mode options.
+   *
+   * @category Conversion
+   */
+  roundToInt(roundingMode: RoundingMode = "HALF_EVEN"): bigint {
+    const num = this.den < 0n ? -this.num : this.num;
+    const den = this.den < 0n ? -this.den : this.den;
 
-    const tmp = oldNum * newDen;
-    let newNum = tmp / oldDen;
-    const rem = (tmp < 0n ? -tmp : tmp) % oldDen;
-    const unit = tmp < 0n ? -1n : 1n;
-
+    let quot = num / den;
+    const rem = (num < 0n ? -num : num) % den;
+    const unit = num < 0n ? -1n : 1n;
     if (rem === 0n) {
-      // exact case
-      return new BigAmount(newNum, newDen);
+      return quot;
     }
 
     switch (roundingMode) {
       case "HALF_EVEN":
-        if (
-          rem * 2n > oldDen ||
-          (rem * 2n === oldDen && (newNum & 1n) === 1n)
-        ) {
-          newNum += unit;
+        if (rem * 2n > den || (rem * 2n === den && (quot & 1n) === 1n)) {
+          quot += unit;
         }
-        return new BigAmount(newNum, newDen);
+        return quot;
       case "HALF_UP":
-        if (rem * 2n >= oldDen) {
-          newNum += unit;
+        if (rem * 2n >= den) {
+          quot += unit;
         }
-        return new BigAmount(newNum, newDen);
+        return quot;
       case "UP":
-        newNum += unit;
-        return new BigAmount(newNum, newDen);
+        quot += unit;
+        return quot;
       case "DOWN":
-        return new BigAmount(newNum, newDen);
+        return quot;
       case "CEIL":
         if (unit > 0n) {
-          newNum += unit;
+          quot += unit;
         }
-        return new BigAmount(newNum, newDen);
+        return quot;
       case "FLOOR":
         if (unit < 0n) {
-          newNum += unit;
+          quot += unit;
         }
-        return new BigAmount(newNum, newDen);
+        return quot;
       default:
-        // XXX not invoked if this.den === newDen or rem === 0n
+        // XXX not invoked if rem === 0n
         throw new RangeError(
           `unknown rounding mode ${roundingMode}; choose one of ` +
             `"UP" | "DOWN" | "CEIL" | "FLOOR" | "HALF_UP" | "HALF_EVEN"`
@@ -500,8 +505,8 @@ export class BigAmount {
    *        disabled by default; give `","`, `"."`, `" "`, or any other
    *        delimiter to enable grouping. This method does not support other
    *        grouping rules than the groups of three digits.
-   * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied when
-   *        necessary. See [[RoundingMode]] for possible values.
+   * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied to the
+   *        last digit. See [[RoundingMode]] for rounding mode options.
    * @category Conversion
    */
   toFixed(
@@ -518,7 +523,10 @@ export class BigAmount {
   ): string {
     const term = 10n ** BigInt(digits);
     let sign = "";
-    let num = this.quantize(term, roundingMode).num;
+    let num =
+      this.den === term
+        ? this.num
+        : new BigAmount(this.num * term, this.den).roundToInt(roundingMode);
     if (num < 0n) {
       sign = "-";
       num = -num;
