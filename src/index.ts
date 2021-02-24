@@ -20,7 +20,7 @@
  *   .abs()                   // To absolute value
  *   .reduce();               // To irreducible form
  *
- * console.log(x.toString()); // "1061/375"
+ * console.log(x.toJSON());   // "1061/375"
  * console.log(x.toFixed(6)); // "2.829333"
  *
  * BigAmount.sum([

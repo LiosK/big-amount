@@ -21,7 +21,7 @@ let x = q("1/2")           // Same as `BigAmount.create("1/2")`
   .abs()                   // To absolute value
   .reduce();               // To irreducible form
 
-console.log(x.toString()); // "1061/375"
+console.log(x.toJSON());   // "1061/375"
 console.log(x.toFixed(6)); // "2.829333"
 
 BigAmount.sum([
@@ -111,11 +111,9 @@ and denominator.
 
 ## String Conversion
 
-`toString()` and `toJSON()` generate the preferred form to seriarize a rational
-number.
+`toJSON()` generates the preferred form to seriarize a rational number.
 
 ```javascript
-String(q(123n, 45n));        // "123/45"
 JSON.stringify(q("12.345")); // '"12345/1000"'
 ```
 
