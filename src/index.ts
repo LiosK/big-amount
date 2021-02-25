@@ -24,14 +24,14 @@
  * console.log(x.toFixed(6)); // "2.829333"
  *
  * BigAmount.sum([
- *   "2200811.80",
- *   "5954398.60",
+ *   "2200811.81",
+ *   "5954398.62",
  *   "-6217732.25",
  *   "-9336803.50",
  * ]).toFixed(2, {
  *   groupSeparator: ",",
  *   templates: ["${}", "(${})"],
- * }); // "($7,399,325.35)"
+ * }); // "($7,399,325.32)"
  * ```
  */
 export class BigAmount {
@@ -45,11 +45,8 @@ export class BigAmount {
   constructor(numerator: bigint, denominator: bigint) {
     this.num = numerator;
     this.den = denominator;
-    if (typeof numerator !== "bigint") {
-      throw new TypeError("numerator is not a bigint");
-    }
-    if (typeof denominator !== "bigint") {
-      throw new TypeError("denominator is not a bigint");
+    if (typeof numerator !== "bigint" || typeof denominator !== "bigint") {
+      throw new TypeError("numerator or denominator is not a bigint");
     }
     if (denominator === 0n) {
       throw new RangeError("denominator is zero");
@@ -529,9 +526,9 @@ export class BigAmount {
    * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
    *
    * const opts = { templates: ["${}", "(${})", "-"] };
-   * BigAmount.create("123.45").toFixed(2, opts);  // "$123.45"
-   * BigAmount.create("-678.90").toFixed(2, opts); // "($678.90)"
-   * BigAmount.create("0").toFixed(2, opts);       // "-"
+   * BigAmount.create("123.45").toFixed(2, opts); // "$123.45"
+   * BigAmount.create("-678.9").toFixed(2, opts); // "($678.90)"
+   * BigAmount.create("0").toFixed(2, opts);      // "-"
    * ```
    *
    * @param ndigits - Number of digits to appear after the decimal separator.
@@ -641,11 +638,13 @@ export type RoundingMode =
  * positive.
  */
 const findGcd = (x: bigint, y: bigint): bigint => {
-  // Make sure they are positive BigInts
-  x = (x < 0n ? -x : x) - 0n;
-  y = (y < 0n ? -y : y) - 0n;
+  if (typeof x !== "bigint" || typeof y !== "bigint") {
+    throw new TypeError("x or y is not a bigint");
+  }
 
   // Euclidean algorithm
+  x = x < 0n ? -x : x;
+  y = y < 0n ? -y : y;
   if (x < y) {
     const tmp = y;
     y = x;
