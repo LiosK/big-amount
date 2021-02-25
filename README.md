@@ -125,6 +125,11 @@ let x = BigAmount.create("123456789/10");
 x.toFixed(2);                            // "12345678.90"
 x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
 x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
+x.neg().toFixed(2, {
+  decimalSeparator: ",",
+  groupSeparator: " ",
+  templates: ["{} €"],
+});                                      // "-12 345 678,90 €"
 
 const opts = { templates: ["${}", "(${})", "-"] };
 BigAmount.create("123.45").toFixed(2, opts); // "$123.45"

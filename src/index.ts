@@ -515,59 +515,23 @@ export class BigAmount {
 
   /**
    * Formats a [[BigAmount]] using decimal fixed-point notation just like
-   * `Number#toFixed`. This method takes some format options to customize the
-   * output.
-   *
-   * @example
-   * ```javascript
-   * let x = BigAmount.create("123456789/10");
-   * x.toFixed(2);                            // "12345678.90"
-   * x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
-   * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
-   *
-   * const opts = { templates: ["${}", "(${})", "-"] };
-   * BigAmount.create("123.45").toFixed(2, opts); // "$123.45"
-   * BigAmount.create("-678.9").toFixed(2, opts); // "($678.90)"
-   * BigAmount.create("0").toFixed(2, opts);      // "-"
-   * ```
+   * `Number#toFixed`. In addition, this method takes format options to
+   * customize the output. See [[FormatOptions]] for options and examples.
    *
    * @param ndigits - Number of digits to appear after the decimal separator.
-   * @param decimalSeparator - [Default: `"."`] Character used to separate the
-   *        integer part from the fractional part.
-   * @param groupSeparator - [Default: `""`] Delimiter used to separate the
-   *        groups of thousands (three digits) of the integer part. Grouping is
-   *        disabled by default; give `","`, `"."`, `" "`, or any other
-   *        delimiter to enable grouping.
-   * @param templates - [Default: `["{}"]`] Tuple of template strings used to
-   *        format `[positive numbers, negative numbers, zero]`, respectively.
-   *        `{}` in a template string is replaced with the resulting string.
-   *        The template for zero defaults to the template for positive numbers
-   *        and the template for negative numbers defaults to the template for
-   *        positive numbers with the prefix "-", if omitted. This option is
-   *        convenient to decorate the resulting string with a currency symbol
-   *        and/or negative parenstheses. See the above example for usage.
-   * @param experimentalUseLakhCrore - [Default: `false`] _Experimental_. Use
-   *        Indian _2,2,3_ digit grouping rule (e.g. `"1,00,00,000"`) instead of
-   *        the three digit system.
    * @category Conversion
    */
-  toFixed(
-    ndigits = 0,
-    {
+  toFixed(ndigits = 0, formatOptions?: FormatOptions): string {
+    const {
       decimalSeparator = ".",
       groupSeparator = "",
       templates = ["{}"],
       experimentalUseLakhCrore = false,
-    }: {
-      decimalSeparator?: string;
-      groupSeparator?: string;
-      templates?: [string] | [string, string] | [string, string, string];
-      experimentalUseLakhCrore?: boolean;
-    } = {}
-  ): string {
+    } = formatOptions ?? {};
     if (ndigits < 0) {
       throw new RangeError("ndigits is negative");
     }
+
     const buffer: string[] = [];
     const decimal = this.round(ndigits);
     const absNum = decimal.num < 0n ? -decimal.num : decimal.num;
@@ -632,6 +596,61 @@ export type RoundingMode =
   | "FLOOR"
   | "HALF_UP"
   | "HALF_EVEN";
+
+/**
+ * Options used by [[BigAmount.toFixed]] to format a [[BigAmount]] as decimal.
+ *
+ * @example
+ * ```javascript
+ * let x = BigAmount.create("123456789/10");
+ * x.toFixed(2);                            // "12345678.90"
+ * x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
+ * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
+ * x.neg().toFixed(2, {
+ *   decimalSeparator: ",",
+ *   groupSeparator: " ",
+ *   templates: ["{} €"],
+ * });                                      // "-12 345 678,90 €"
+ *
+ * const opts = { templates: ["${}", "(${})", "-"] };
+ * BigAmount.create("123.45").toFixed(2, opts); // "$123.45"
+ * BigAmount.create("-678.9").toFixed(2, opts); // "($678.90)"
+ * BigAmount.create("0").toFixed(2, opts);      // "-"
+ * ```
+ */
+export interface FormatOptions {
+  /**
+   * [Default: `"."`] Character used to separate the integer part from the
+   * fractional part.
+   */
+  decimalSeparator?: string;
+
+  /**
+   * [Default: `""`] Delimiter used to separate the groups of thousands (three
+   * digits) of the integer part. Grouping is disabled by default; give `","`,
+   * `"."`, `" "`, or any other delimiter to enable grouping.
+   */
+
+  groupSeparator?: string;
+  /**
+   * [Default: `["{}"]`] Tuple of template strings used to format `[positive
+   * numbers, negative numbers, zero]`, respectively. `"{}"` in a template
+   * string is replaced with the resulting string. The template for zero
+   * defaults to the template for positive numbers and the template for negative
+   * numbers defaults to the template for positive numbers with the prefix `"-"`,
+   * if omitted. This option is convenient to decorate the resulting string with
+   * a currency symbol and/or negative parenstheses. See the above example for
+   * usage.
+   */
+  templates?: [string, string?, string?];
+
+  /**
+   * [Default: `false`] _Experimental_. Use Indian _2,2,3_ digit grouping rule
+   * (e.g. `"1,00,00,000"`) instead of the three digit system. This option has
+   * to be used in conjunction with the `groupSeparator` option.
+   */
+  experimentalUseLakhCrore?: boolean;
+}
 
 /**
  * Calculates the greatest common divisor of two integers. The result is always
