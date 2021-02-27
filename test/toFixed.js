@@ -74,7 +74,55 @@ describe("#toFixed()", () => {
     assert.strictEqual(f(-1000000000n, 9), "-0{ds}012345678");
   });
 
-  it("handles `templates` option as expected");
+  it("handles `templates` option as expected", () => {
+    const p = new BigAmount(12345n, 100n);
+    const n = new BigAmount(-12345n, 100n);
+    const z = new BigAmount(0n, 100n);
+
+    let templates = ["__PP__{}__PS__"];
+    assert.strictEqual(p.toFixed(2, { templates }), "__PP__123.45__PS__");
+    assert.strictEqual(n.toFixed(2, { templates }), "-__PP__123.45__PS__");
+    assert.strictEqual(z.toFixed(2, { templates }), "__PP__0.00__PS__");
+
+    templates.push("__NP__{}__NS__");
+    assert.strictEqual(p.toFixed(2, { templates }), "__PP__123.45__PS__");
+    assert.strictEqual(n.toFixed(2, { templates }), "__NP__123.45__NS__");
+    assert.strictEqual(z.toFixed(2, { templates }), "__PP__0.00__PS__");
+
+    templates.push("__ZP__{}__ZS__");
+    assert.strictEqual(p.toFixed(2, { templates }), "__PP__123.45__PS__");
+    assert.strictEqual(n.toFixed(2, { templates }), "__NP__123.45__NS__");
+    assert.strictEqual(z.toFixed(2, { templates }), "__ZP__0.00__ZS__");
+
+    templates = ["__POSITIVE__"];
+    assert.strictEqual(p.toFixed(2, { templates }), "__POSITIVE__");
+    assert.strictEqual(n.toFixed(2, { templates }), "-__POSITIVE__");
+    assert.strictEqual(z.toFixed(2, { templates }), "__POSITIVE__");
+
+    templates.push("__NEGATIVE__");
+    assert.strictEqual(p.toFixed(2, { templates }), "__POSITIVE__");
+    assert.strictEqual(n.toFixed(2, { templates }), "__NEGATIVE__");
+    assert.strictEqual(z.toFixed(2, { templates }), "__POSITIVE__");
+
+    templates.push("__ZERO__");
+    assert.strictEqual(p.toFixed(2, { templates }), "__POSITIVE__");
+    assert.strictEqual(n.toFixed(2, { templates }), "__NEGATIVE__");
+    assert.strictEqual(z.toFixed(2, { templates }), "__ZERO__");
+  });
+
+  it('throws SyntaxError if template includes multiple "{}"', () => {
+    assert.throws(() => {
+      new BigAmount(12345n, 100n).toFixed(2, { templates: ["{} {}"] });
+    }, SyntaxError);
+
+    assert.throws(() => {
+      new BigAmount(-12345n, 100n).toFixed(2, { templates: ["{}", "{} {}"] });
+    }, SyntaxError);
+
+    assert.throws(() => {
+      new BigAmount(0n, 100n).toFixed(2, { templates: ["{}", "-{}", "{} {}"] });
+    }, SyntaxError);
+  });
 
   it("handles `experimentalUseLakhCrore` option as expected", () => {
     const f = (den, ds) =>

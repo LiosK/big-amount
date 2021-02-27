@@ -117,8 +117,8 @@ and denominator.
 JSON.stringify(q("12.345")); // '"12345/1000"'
 ```
 
-Use [BigAmount#toFixed] to format a fraction as decimal. This method takes a few
-formatting options to customize the output.
+Use `toFixed()` to format a fraction as decimal. This method takes some
+[formatting options] to customize the output.
 
 ```javascript
 let x = BigAmount.create("123456789/10");
@@ -137,14 +137,14 @@ BigAmount.create("-678.9").toFixed(2, opts); // "($678.90)"
 BigAmount.create("0").toFixed(2, opts);      // "-"
 ```
 
-[BigAmount#toFixed] rounds ties to the nearest even (i.e. bankers' rounding).
+BigAmount#toFixed rounds ties to the nearest even (i.e. bankers' rounding).
 
 ```javascript
 q("1.15").toFixed(1) // "1.2"
 q("1.25").toFixed(1) // "1.2"
 ```
 
-[bigamount#tofixed]: https://liosk.github.io/big-amount/doc/classes/bigamount.html#tofixed
+[formatting options]: https://liosk.github.io/big-amount/doc/interfaces/formatoptions.html
 
 ## License
 

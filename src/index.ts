@@ -567,6 +567,7 @@ export class BigAmount {
     }
     const result = tplToUse.replace("{}", buffer.join(""));
     if (result.includes("{}")) {
+      // refuse multiple {} for future expansion
       throw new SyntaxError("template string includes multiple {}");
     }
     return result;
