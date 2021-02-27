@@ -3,7 +3,7 @@ import { runTestOnPairs } from "./util/cases.js";
 const assert = chai.assert;
 
 describe("#add()", () => {
-  it("should produce an equivalent fraction to what the naive algorithm does", () => {
+  it("produces an equivalent fraction to what the naive algorithm does", () => {
     runTestOnPairs((xn, xd) => {
       const left = new BigAmount(xn, xd);
       runTestOnPairs((yn, yd) => {
@@ -13,7 +13,7 @@ describe("#add()", () => {
     });
   });
 
-  it("should not change the denominator if `other` has the same one", () => {
+  it("does not change the denominator if `other` has the same one", () => {
     runTestOnPairs((xn, xd) => {
       const left = new BigAmount(xn, xd);
       runTestOnPairs((yn, yd) => {

@@ -3,7 +3,7 @@ import { reduced } from "./util/cases.js";
 const assert = chai.assert;
 
 describe("#eq()", () => {
-  it("should return true if two instances are equivalent", () => {
+  it("returns true if two instances are equivalent", () => {
     const cases = [
       [0n, 1n, 0n, 100n],
       [10n, 10n, 200n, 200n],
@@ -23,7 +23,7 @@ describe("#eq()", () => {
     }
   });
 
-  it("should return false if two instances are not equivalent", () => {
+  it("returns false if two instances are not equivalent", () => {
     const cases = [
       [0n, 1n, 1n, 100n],
       [10n, 10n, 201n, 200n],
@@ -43,7 +43,7 @@ describe("#eq()", () => {
     }
   });
 
-  it("should return true if reduced forms are the same; otherwise, return false", () => {
+  it("returns true if reduced forms are the same; otherwise, return false", () => {
     const cases = reduced.map(([num, den, simplestNum, simplestDen]) => [
       `${simplestNum}/${simplestDen}`,
       new BigAmount(num, den),
@@ -71,7 +71,7 @@ describe("#eq()", () => {
 });
 
 describe("cmp()", () => {
-  it("should compare manually prepared cases properly", () => {
+  it("compares manually prepared cases properly", () => {
     const cases = [
       // {{{
       [1n, 2n, 2n, 4n, 0],

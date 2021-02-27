@@ -20,8 +20,18 @@
  *   .abs()                   // To absolute value
  *   .reduce();               // To irreducible form
  *
- * console.log(x.toString()); // "1061/375"
+ * console.log(x.toJSON());   // "1061/375"
  * console.log(x.toFixed(6)); // "2.829333"
+ *
+ * BigAmount.sum([
+ *   "2200811.81",
+ *   "5954398.62",
+ *   "-6217732.25",
+ *   "-9336803.50",
+ * ]).toFixed(2, {
+ *   groupSeparator: ",",
+ *   templates: ["${}", "(${})"],
+ * }); // "($7,399,325.32)"
  * ```
  */
 export class BigAmount {
@@ -35,11 +45,8 @@ export class BigAmount {
   constructor(numerator: bigint, denominator: bigint) {
     this.num = numerator;
     this.den = denominator;
-    if (typeof numerator !== "bigint") {
-      throw new TypeError("numerator is not a bigint");
-    }
-    if (typeof denominator !== "bigint") {
-      throw new TypeError("denominator is not a bigint");
+    if (typeof numerator !== "bigint" || typeof denominator !== "bigint") {
+      throw new TypeError("numerator or denominator is not a bigint");
     }
     if (denominator === 0n) {
       throw new RangeError("denominator is zero");
@@ -490,11 +497,9 @@ export class BigAmount {
         }
         return quot;
       default:
+        // TypeScript never reaches this line.
         // XXX not invoked if rem === 0n
-        throw new RangeError(
-          `unknown rounding mode ${roundingMode}; choose one of ` +
-            `"UP" | "DOWN" | "CEIL" | "FLOOR" | "HALF_UP" | "HALF_EVEN"`
-        );
+        throw new RangeError(`unknown roundingMode: ${roundingMode}`);
     }
   }
 
@@ -510,46 +515,25 @@ export class BigAmount {
 
   /**
    * Formats a [[BigAmount]] using decimal fixed-point notation just like
-   * `Number#toFixed`. This method additionally takes rounding and formatting
-   * options to customize the output.
-   *
-   * @example
-   * ```javascript
-   * let x = BigAmount.create("123456789/10");
-   * x.toFixed(2);                            // "12345678.90"
-   * x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
-   * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
-   * ```
+   * `Number#toFixed`. In addition, this method takes format options to
+   * customize the output. See [[FormatOptions]] for options and examples.
    *
    * @param ndigits - Number of digits to appear after the decimal separator.
-   * @param decimalSeparator - [Default: `"."`] Character used to separate the
-   *        integer part from the fractional part.
-   * @param groupSeparator - [Default: `""`] Delimiter used to separate the
-   *        groups of thousands (three digits) of the integer part. Grouping is
-   *        disabled by default; give `","`, `"."`, `" "`, or any other
-   *        delimiter to enable grouping. This method does not support other
-   *        grouping rules than the groups of three digits.
-   * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied to the
-   *        last digit. See [[RoundingMode]] for rounding mode options.
    * @category Conversion
    */
-  toFixed(
-    ndigits = 0,
-    {
+  toFixed(ndigits = 0, formatOptions?: FormatOptions): string {
+    const {
       decimalSeparator = ".",
       groupSeparator = "",
-      roundingMode = "HALF_EVEN",
-    }: {
-      decimalSeparator?: string;
-      groupSeparator?: string;
-      roundingMode?: RoundingMode;
-    } = {}
-  ): string {
+      templates = ["{}"],
+      experimentalUseLakhCrore = false,
+    } = formatOptions ?? {};
     if (ndigits < 0) {
       throw new RangeError("ndigits is negative");
     }
+
     const buffer: string[] = [];
-    const decimal = this.round(ndigits, roundingMode);
+    const decimal = this.round(ndigits);
     const absNum = decimal.num < 0n ? -decimal.num : decimal.num;
 
     // integer part
@@ -558,10 +542,11 @@ export class BigAmount {
       buffer.push(intPart);
     } else {
       const groups = [intPart.slice(-3)];
-      for (let i = -3, len = -intPart.length; i > len; i -= 3) {
-        groups.unshift(intPart.slice(-3 + i, i));
+      const n = experimentalUseLakhCrore ? 2 : 3;
+      for (let i = -3, len = -intPart.length; i > len; i -= n) {
+        groups.unshift(intPart.slice(-n + i, i), groupSeparator);
       }
-      buffer.push(groups.join(groupSeparator));
+      buffer.push(...groups);
     }
 
     // fractional part
@@ -572,12 +557,20 @@ export class BigAmount {
       );
     }
 
-    // sign
+    // format
+    const [tplPositive, tplNegative, tplZero] = templates;
+    let tplToUse = tplPositive;
     if (decimal.num < 0n) {
-      buffer.unshift("-");
+      tplToUse = tplNegative ?? `-${tplPositive}`;
+    } else if (decimal.num === 0n) {
+      tplToUse = tplZero ?? tplPositive;
     }
-
-    return buffer.join("");
+    const result = tplToUse.replace("{}", buffer.join(""));
+    if (result.includes("{}")) {
+      // refuse multiple {} for future expansion
+      throw new SyntaxError("template string includes multiple {}");
+    }
+    return result;
   }
 }
 
@@ -606,15 +599,72 @@ export type RoundingMode =
   | "HALF_EVEN";
 
 /**
+ * Options used by [[BigAmount.toFixed]] to format a [[BigAmount]] as decimal.
+ *
+ * @example
+ * ```javascript
+ * let x = BigAmount.create("123456789/10");
+ * x.toFixed(2);                            // "12345678.90"
+ * x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
+ * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
+ * x.neg().toFixed(2, {
+ *   decimalSeparator: ",",
+ *   groupSeparator: " ",
+ *   templates: ["{} €"],
+ * });                                      // "-12 345 678,90 €"
+ *
+ * const opts = { templates: ["${}", "(${})", "-"] };
+ * BigAmount.create("123.45").toFixed(2, opts); // "$123.45"
+ * BigAmount.create("-678.9").toFixed(2, opts); // "($678.90)"
+ * BigAmount.create("0").toFixed(2, opts);      // "-"
+ * ```
+ */
+export interface FormatOptions {
+  /**
+   * [Default: `"."`] Character used to separate the integer part from the
+   * fractional part.
+   */
+  decimalSeparator?: string;
+
+  /**
+   * [Default: `""`] Delimiter used to separate the groups of thousands (three
+   * digits) of the integer part. Grouping is disabled by default; give `","`,
+   * `"."`, `" "`, or any other delimiter to enable grouping.
+   */
+
+  groupSeparator?: string;
+  /**
+   * [Default: `["{}"]`] Tuple of template strings used to format `[positive
+   * numbers, negative numbers, zero]`, respectively. `"{}"` in a template
+   * string is replaced with the resulting string. The template for zero
+   * defaults to the template for positive numbers and the template for negative
+   * numbers defaults to the template for positive numbers with the prefix `"-"`,
+   * if omitted. This option is convenient to decorate the resulting string with
+   * a currency symbol and/or negative parenstheses. See the above example for
+   * usage.
+   */
+  templates?: [string, string?, string?];
+
+  /**
+   * [Default: `false`] _Experimental_. Use Indian _2,2,3_ digit grouping rule
+   * (e.g. `"1,00,00,000"`) instead of the three digit system. This option has
+   * to be used in conjunction with the `groupSeparator` option.
+   */
+  experimentalUseLakhCrore?: boolean;
+}
+
+/**
  * Calculates the greatest common divisor of two integers. The result is always
  * positive.
  */
 const findGcd = (x: bigint, y: bigint): bigint => {
-  // Make sure they are positive BigInts
-  x = (x < 0n ? -x : x) - 0n;
-  y = (y < 0n ? -y : y) - 0n;
+  if (typeof x !== "bigint" || typeof y !== "bigint") {
+    throw new TypeError("x or y is not a bigint");
+  }
 
   // Euclidean algorithm
+  x = x < 0n ? -x : x;
+  y = y < 0n ? -y : y;
   if (x < y) {
     const tmp = y;
     y = x;

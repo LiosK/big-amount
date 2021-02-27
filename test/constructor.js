@@ -3,7 +3,7 @@ import { runTestOnPairs } from "./util/cases.js";
 const assert = chai.assert;
 
 describe("constructor()", () => {
-  it("should create a BigAmount with num and den fields", () => {
+  it("creates a BigAmount with num and den fields", () => {
     runTestOnPairs((p, q) => {
       const x = new BigAmount(p, q);
       assert(x instanceof BigAmount);
@@ -12,7 +12,7 @@ describe("constructor()", () => {
     });
   });
 
-  it("should throw RangeError if den === 0n", () => {
+  it("throws RangeError if den === 0n", () => {
     assert.throws(() => new BigAmount(0n, 0n), RangeError);
     assert.throws(() => new BigAmount(1n, 0n), RangeError);
     assert.throws(() => new BigAmount(-1n, 0n), RangeError);

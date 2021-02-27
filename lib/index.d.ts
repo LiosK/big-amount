@@ -19,8 +19,18 @@
  *   .abs()                   // To absolute value
  *   .reduce();               // To irreducible form
  *
- * console.log(x.toString()); // "1061/375"
+ * console.log(x.toJSON());   // "1061/375"
  * console.log(x.toFixed(6)); // "2.829333"
+ *
+ * BigAmount.sum([
+ *   "2200811.81",
+ *   "5954398.62",
+ *   "-6217732.25",
+ *   "-9336803.50",
+ * ]).toFixed(2, {
+ *   groupSeparator: ",",
+ *   templates: ["${}", "(${})"],
+ * }); // "($7,399,325.32)"
  * ```
  */
 export declare class BigAmount {
@@ -224,34 +234,13 @@ export declare class BigAmount {
     toJSON(): string;
     /**
      * Formats a [[BigAmount]] using decimal fixed-point notation just like
-     * `Number#toFixed`. This method additionally takes rounding and formatting
-     * options to customize the output.
-     *
-     * @example
-     * ```javascript
-     * let x = BigAmount.create("123456789/10");
-     * x.toFixed(2);                            // "12345678.90"
-     * x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
-     * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
-     * ```
+     * `Number#toFixed`. In addition, this method takes format options to
+     * customize the output. See [[FormatOptions]] for options and examples.
      *
      * @param ndigits - Number of digits to appear after the decimal separator.
-     * @param decimalSeparator - [Default: `"."`] Character used to separate the
-     *        integer part from the fractional part.
-     * @param groupSeparator - [Default: `""`] Delimiter used to separate the
-     *        groups of thousands (three digits) of the integer part. Grouping is
-     *        disabled by default; give `","`, `"."`, `" "`, or any other
-     *        delimiter to enable grouping. This method does not support other
-     *        grouping rules than the groups of three digits.
-     * @param roundingMode - [Default: `"HALF_EVEN"`] Rounding mode applied to the
-     *        last digit. See [[RoundingMode]] for rounding mode options.
      * @category Conversion
      */
-    toFixed(ndigits?: number, { decimalSeparator, groupSeparator, roundingMode, }?: {
-        decimalSeparator?: string;
-        groupSeparator?: string;
-        roundingMode?: RoundingMode;
-    }): string;
+    toFixed(ndigits?: number, formatOptions?: FormatOptions): string;
 }
 /** Shortcut for [[BigAmount.create]] */
 export declare const q: typeof BigAmount.create;
@@ -269,3 +258,54 @@ export declare const q: typeof BigAmount.create;
  * | `"HALF_EVEN"` | Ties to even                          |
  */
 export declare type RoundingMode = "UP" | "DOWN" | "CEIL" | "FLOOR" | "HALF_UP" | "HALF_EVEN";
+/**
+ * Options used by [[BigAmount.toFixed]] to format a [[BigAmount]] as decimal.
+ *
+ * @example
+ * ```javascript
+ * let x = BigAmount.create("123456789/10");
+ * x.toFixed(2);                            // "12345678.90"
+ * x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
+ * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
+ * x.neg().toFixed(2, {
+ *   decimalSeparator: ",",
+ *   groupSeparator: " ",
+ *   templates: ["{} €"],
+ * });                                      // "-12 345 678,90 €"
+ *
+ * const opts = { templates: ["${}", "(${})", "-"] };
+ * BigAmount.create("123.45").toFixed(2, opts); // "$123.45"
+ * BigAmount.create("-678.9").toFixed(2, opts); // "($678.90)"
+ * BigAmount.create("0").toFixed(2, opts);      // "-"
+ * ```
+ */
+export interface FormatOptions {
+    /**
+     * [Default: `"."`] Character used to separate the integer part from the
+     * fractional part.
+     */
+    decimalSeparator?: string;
+    /**
+     * [Default: `""`] Delimiter used to separate the groups of thousands (three
+     * digits) of the integer part. Grouping is disabled by default; give `","`,
+     * `"."`, `" "`, or any other delimiter to enable grouping.
+     */
+    groupSeparator?: string;
+    /**
+     * [Default: `["{}"]`] Tuple of template strings used to format `[positive
+     * numbers, negative numbers, zero]`, respectively. `"{}"` in a template
+     * string is replaced with the resulting string. The template for zero
+     * defaults to the template for positive numbers and the template for negative
+     * numbers defaults to the template for positive numbers with the prefix `"-"`,
+     * if omitted. This option is convenient to decorate the resulting string with
+     * a currency symbol and/or negative parenstheses. See the above example for
+     * usage.
+     */
+    templates?: [string, string?, string?];
+    /**
+     * [Default: `false`] _Experimental_. Use Indian _2,2,3_ digit grouping rule
+     * (e.g. `"1,00,00,000"`) instead of the three digit system. This option has
+     * to be used in conjunction with the `groupSeparator` option.
+     */
+    experimentalUseLakhCrore?: boolean;
+}
