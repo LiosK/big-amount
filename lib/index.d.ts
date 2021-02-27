@@ -233,6 +233,12 @@ export declare class BigAmount {
     /** @category Conversion */
     toJSON(): string;
     /**
+     * Returns `this` as a `number`.
+     *
+     * @category Conversion
+     */
+    toNumber(): number;
+    /**
      * Formats a [[BigAmount]] using decimal fixed-point notation just like
      * `Number#toFixed`. In addition, this method takes format options to
      * customize the output. See [[FormatOptions]] for options and examples.
