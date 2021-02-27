@@ -514,6 +514,32 @@ export class BigAmount {
   }
 
   /**
+   * Returns `this` as a `number`.
+   *
+   * @category Conversion
+   */
+  toNumber(): number {
+    const f = this.reduce();
+    if (f.num === 0n) {
+      return 0;
+    } else if (
+      f.num >= Number.MIN_SAFE_INTEGER &&
+      f.num <= Number.MAX_SAFE_INTEGER &&
+      f.den <= Number.MAX_SAFE_INTEGER
+    ) {
+      return Number(f.num) / Number(f.den);
+    }
+    const exp =
+      String(f.num < 0n ? -f.num : f.num).length - String(f.den).length;
+    const eNotation =
+      (exp < 0
+        ? new BigAmount(f.num * 10n ** BigInt(-exp), f.den)
+        : new BigAmount(f.num, f.den * 10n ** BigInt(exp))
+      ).toFixed(20) + `e${exp}`;
+    return Number(eNotation);
+  }
+
+  /**
    * Formats a [[BigAmount]] using decimal fixed-point notation just like
    * `Number#toFixed`. In addition, this method takes format options to
    * customize the output. See [[FormatOptions]] for options and examples.
