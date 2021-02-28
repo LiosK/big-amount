@@ -1,4 +1,4 @@
-import { BigAmount } from "../lib/index.js";
+import { BigAmount } from "../dist/index.js";
 import { reduced, rounded } from "./util/cases.js";
 const assert = chai.assert;
 

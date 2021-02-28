@@ -1,23 +1,24 @@
 {
   "name": "big-amount",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "BigInt-based rational number library focused on accounting",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
-    "import": "./lib/index.js",
-    "require": "./lib/index.cjs"
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
   },
   "files": [
-    "lib"
+    "dist"
   ],
-  "type": "module",
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf doc lib",
+    "clean": "rm -rf dist doc",
     "doc": "typedoc src/index.ts --out doc --gitRevision \"v$npm_package_version\"",
     "lint": "prettier -c README.md src test && eslint src test",
-    "prebuild": "tsc -m commonjs && mv lib/index.js lib/index.cjs",
+    "prebuild": "tsc -m commonjs && mv dist/index.js dist/index.cjs",
     "prepare": "npm run lint && npm run clean && npm run build && npm test && npm run doc",
     "test": "mocha -p -t 8000 -r test/util/load_chai.cjs"
   },
