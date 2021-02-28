@@ -557,7 +557,7 @@ export class BigAmount {
       groupSeparator = "",
       templates = ["{}"],
       experimentalUseLakhCrore = false,
-    } = formatOptions ?? {};
+    } = formatOptions || {};
     if (ndigits < 0) {
       throw new RangeError("ndigits is negative");
     }
@@ -591,9 +591,9 @@ export class BigAmount {
     const [tplPositive, tplNegative, tplZero] = templates;
     let tplToUse = tplPositive;
     if (decimal.num < 0n) {
-      tplToUse = tplNegative ?? `-${tplPositive}`;
+      tplToUse = tplNegative == null ? `-${tplPositive}` : tplNegative;
     } else if (decimal.num === 0n) {
-      tplToUse = tplZero ?? tplPositive;
+      tplToUse = tplZero == null ? tplPositive : tplZero;
     }
     const result = tplToUse.replace("{}", buffer.join(""));
     if (result.includes("{}")) {

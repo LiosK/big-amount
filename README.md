@@ -36,6 +36,8 @@ let s = BigAmount.sum([
 console.log(s); // "($7,399,325.32)"
 ```
 
+Note that this library requires ES2020 compatibility (as does BigInt).
+
 [bigint]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
 
 ## Instance Creation
