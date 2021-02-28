@@ -72,11 +72,11 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>example</dt>
-						<dd><pre><code class="language-javascript"><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">x</span><span style="color: #000000"> = </span><span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123456789/10&quot;</span><span style="color: #000000">);</span>
-<span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">);                            </span><span style="color: #008000">// &quot;12345678.90&quot;</span>
-<span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, { </span><span style="color: #001080">decimalSeparator:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;,&quot;</span><span style="color: #000000"> }); </span><span style="color: #008000">// &quot;12345678,90&quot;</span>
-<span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, { </span><span style="color: #001080">groupSeparator:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;,&quot;</span><span style="color: #000000"> });   </span><span style="color: #008000">// &quot;12,345,678.90&quot;</span>
-<span style="color: #001080">x</span><span style="color: #000000">.</span><span style="color: #795E26">neg</span><span style="color: #000000">().</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, {</span>
+						<dd><pre><code class="language-javascript"><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">f</span><span style="color: #000000"> = </span><span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123456789/10&quot;</span><span style="color: #000000">);</span>
+<span style="color: #001080">f</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">);                            </span><span style="color: #008000">// &quot;12345678.90&quot;</span>
+<span style="color: #001080">f</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, { </span><span style="color: #001080">decimalSeparator:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;,&quot;</span><span style="color: #000000"> }); </span><span style="color: #008000">// &quot;12345678,90&quot;</span>
+<span style="color: #001080">f</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, { </span><span style="color: #001080">groupSeparator:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;,&quot;</span><span style="color: #000000"> });   </span><span style="color: #008000">// &quot;12,345,678.90&quot;</span>
+<span style="color: #001080">f</span><span style="color: #000000">.</span><span style="color: #795E26">neg</span><span style="color: #000000">().</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, {</span>
 <span style="color: #000000">  </span><span style="color: #001080">decimalSeparator:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;,&quot;</span><span style="color: #000000">,</span>
 <span style="color: #000000">  </span><span style="color: #001080">groupSeparator:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot; &quot;</span><span style="color: #000000">,</span>
 <span style="color: #000000">  </span><span style="color: #001080">templates:</span><span style="color: #000000"> [</span><span style="color: #A31515">&quot;{} €&quot;</span><span style="color: #000000">],</span>
@@ -123,7 +123,7 @@
 					<div class="tsd-signature tsd-kind-icon">decimal<wbr>Separator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.3.1/src/index.ts#L653">index.ts:653</a></li>
+							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.3.2/src/index.ts#L657">index.ts:657</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -139,7 +139,7 @@
 					<div class="tsd-signature tsd-kind-icon">experimental<wbr>Use<wbr>Lakh<wbr>Crore<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.3.1/src/index.ts#L679">index.ts:679</a></li>
+							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.3.2/src/index.ts#L683">index.ts:683</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -156,7 +156,7 @@
 					<div class="tsd-signature tsd-kind-icon">group<wbr>Separator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.3.1/src/index.ts#L661">index.ts:661</a></li>
+							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.3.2/src/index.ts#L665">index.ts:665</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -173,7 +173,7 @@
 					<div class="tsd-signature tsd-kind-icon">templates<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.3.1/src/index.ts#L672">index.ts:672</a></li>
+							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.3.2/src/index.ts#L676">index.ts:676</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
