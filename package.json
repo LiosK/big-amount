@@ -1,9 +1,13 @@
 {
   "name": "big-amount",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "BigInt-based rational number library focused on accounting",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "exports": {
+    "import": "./lib/index.js",
+    "require": "./lib/index.cjs"
+  },
   "files": [
     "lib"
   ],
@@ -13,6 +17,7 @@
     "clean": "rm -rf doc lib",
     "doc": "typedoc src/index.ts --out doc --gitRevision \"v$npm_package_version\"",
     "lint": "prettier -c README.md src test && eslint src test",
+    "prebuild": "tsc -m commonjs && mv lib/index.js lib/index.cjs",
     "prepare": "npm run lint && npm run clean && npm run build && npm test && npm run doc",
     "test": "mocha -p -t 8000 -r test/util/load_chai.cjs"
   },
@@ -39,7 +44,7 @@
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
     "chai": "^4.3.0",
-    "eslint": "^7.20.0",
+    "eslint": "^7.21.0",
     "mocha": "^8.3.0",
     "prettier": "^2.2.1",
     "typedoc": "^0.20.28",

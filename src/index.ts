@@ -10,9 +10,9 @@
  * ```javascript
  * import { q, BigAmount } from "big-amount";
  *
- * let x = q("1/2")           // Same as `BigAmount.create("1/2")`
+ * let f = q("1/2")           // Same as `BigAmount.create("1/2")`
  *   .neg()                   // Unary `-`
- *   .inv()                   // Inverse (`1 / x`)
+ *   .inv()                   // Inverse (`1 / f`)
  *   .add(q("34.5"))          // `+`
  *   .sub(q(".67"))           // `-`
  *   .mul(q(-8n, 9n))         // `*`
@@ -20,10 +20,10 @@
  *   .abs()                   // To absolute value
  *   .reduce();               // To irreducible form
  *
- * console.log(x.toJSON());   // "1061/375"
- * console.log(x.toFixed(6)); // "2.829333"
+ * console.log(f.toJSON());   // "1061/375"
+ * console.log(f.toFixed(6)); // "2.829333"
  *
- * BigAmount.sum([
+ * let s = BigAmount.sum([
  *   "2200811.81",
  *   "5954398.62",
  *   "-6217732.25",
@@ -31,7 +31,8 @@
  * ]).toFixed(2, {
  *   groupSeparator: ",",
  *   templates: ["${}", "(${})"],
- * }); // "($7,399,325.32)"
+ * });
+ * console.log(s); // "($7,399,325.32)"
  * ```
  */
 export class BigAmount {
@@ -91,7 +92,6 @@ export class BigAmount {
    * @remarks
    * This method accepts the following arguments:
    *
-   * -  [[BigAmount]] - Any [[BigAmount]] value.
    * -  `bigint` - Any `bigint` value.
    * -  `number` - _Integer only._ This is because it is often imprecise and
    *    expensive to find a rational approximate of a non-integral number.
@@ -100,12 +100,14 @@ export class BigAmount {
    * -  `string` - Fraction (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
    *    (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`). The
    *    fractional notation `q("num/den")` is equivalent to `q("num", "den")`.
+   * - `object` - Any object that has two `bigint` fields named `num` and `den`,
+   *   including any [[BigAmount]] value.
    *
    * @category Instance Creation
    */
   static create(
-    x: BigAmount | bigint | number | string,
-    y?: BigAmount | bigint | number | string
+    x: bigint | number | string | { num: bigint; den: bigint },
+    y?: bigint | number | string | { num: bigint; den: bigint }
   ): BigAmount {
     // `create("x/y")` is equivalent to `create("x", "y")`
     if (typeof x === "string" && y == null) {
@@ -132,9 +134,7 @@ export class BigAmount {
 
     if (y == null) {
       // `create(x)`
-      if (x instanceof BigAmount) {
-        return x.clone();
-      } else if (typeof x === "bigint") {
+      if (typeof x === "bigint") {
         return new BigAmount(x, 1n);
       } else if (typeof x === "number") {
         throw new RangeError(
@@ -163,6 +163,8 @@ export class BigAmount {
             : new BigAmount(num, 10n ** -exp);
         }
         throw new SyntaxError(`Cannot convert ${x} to a BigAmount`);
+      } else if (typeof x.num === "bigint" && typeof x.den === "bigint") {
+        return new BigAmount(x.num, x.den);
       }
       throw new TypeError(`unsupported type: ${typeof x}`);
     } else {
@@ -241,7 +243,9 @@ export class BigAmount {
    * @param xs - Array of values that are acceptable by [[BigAmount.create]].
    * @category Instance Creation
    */
-  static sum(xs: Array<BigAmount | bigint | number | string>): BigAmount {
+  static sum(
+    xs: Array<bigint | number | string | { num: bigint; den: bigint }>
+  ): BigAmount {
     const groups: { [den: string]: BigAmount } = {};
     for (const x of xs) {
       const f = BigAmount.create(x);
@@ -405,8 +409,8 @@ export class BigAmount {
    *
    * @example Rounding a repeating decimal to a fixed-digit decimal
    * ```javascript
-   * let x = BigAmount.create("1/3"); // 1/3 = 0.333333...
-   * x.quantize(100n);                // 33/100 = 0.33
+   * let f = BigAmount.create("1/3"); // 1/3 = 0.333333...
+   * f.quantize(100n);                // 33/100 = 0.33
    * ```
    *
    * @remarks
@@ -629,11 +633,11 @@ export type RoundingMode =
  *
  * @example
  * ```javascript
- * let x = BigAmount.create("123456789/10");
- * x.toFixed(2);                            // "12345678.90"
- * x.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
- * x.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
- * x.neg().toFixed(2, {
+ * let f = BigAmount.create("123456789/10");
+ * f.toFixed(2);                            // "12345678.90"
+ * f.toFixed(2, { decimalSeparator: "," }); // "12345678,90"
+ * f.toFixed(2, { groupSeparator: "," });   // "12,345,678.90"
+ * f.neg().toFixed(2, {
  *   decimalSeparator: ",",
  *   groupSeparator: " ",
  *   templates: ["{} €"],

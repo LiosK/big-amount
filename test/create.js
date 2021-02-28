@@ -21,6 +21,10 @@ describe("create(x)", () => {
       ["-.0123e-2", new BigAmount(-123n, 1000000n)],
       ["456e4", new BigAmount(4560000n, 1n)],
       ["-456e4", new BigAmount(-4560000n, 1n)],
+      [new BigAmount(123n, 456n), new BigAmount(123n, 456n)],
+      [new BigAmount(-123n, 456n), new BigAmount(-123n, 456n)],
+      [{ num: 123n, den: 456n, ignored: 0 }, new BigAmount(123n, 456n)],
+      [{ num: -123n, den: 456n, ignored: 0 }, new BigAmount(-123n, 456n)],
       // }}}
     ];
     for (const [x, expected] of cases) {

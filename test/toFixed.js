@@ -158,12 +158,12 @@ describe("#toFixed()", () => {
   });
 
   it("returns expected results to documented examples", () => {
-    const x = BigAmount.create("123456789/10");
-    assert.strictEqual(x.toFixed(2), "12345678.90");
-    assert.strictEqual(x.toFixed(2, { decimalSeparator: "," }), "12345678,90");
-    assert.strictEqual(x.toFixed(2, { groupSeparator: "," }), "12,345,678.90");
+    const f = BigAmount.create("123456789/10");
+    assert.strictEqual(f.toFixed(2), "12345678.90");
+    assert.strictEqual(f.toFixed(2, { decimalSeparator: "," }), "12345678,90");
+    assert.strictEqual(f.toFixed(2, { groupSeparator: "," }), "12,345,678.90");
     assert.strictEqual(
-      x.neg().toFixed(2, {
+      f.neg().toFixed(2, {
         decimalSeparator: ",",
         groupSeparator: " ",
         templates: ["{} €"],
