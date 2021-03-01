@@ -240,22 +240,17 @@ export class BigAmount {
    * BigAmount.sum(["123/100", "-456/100", "789/100"]); // 456/100
    * ```
    *
-   * @param xs - Array of values that are acceptable by [[BigAmount.create]].
+   * @param xs - Array of values that [[BigAmount.create]] accepts.
    * @category Instance Creation
    */
   static sum(
     xs: Array<bigint | number | string | { num: bigint; den: bigint }>
   ): BigAmount {
-    const groups: { [den: string]: BigAmount } = {};
-    for (const x of xs) {
-      const f = BigAmount.create(x);
-      const den = String(f.den);
-      groups[den] = den in groups ? groups[den].add(f) : f;
+    if (xs.length > 0) {
+      const [head, ...tail] = xs.map((x) => BigAmount.create(x));
+      return head.batchAdd(tail);
     }
-
-    return xs.length === 0
-      ? new BigAmount(0n, 1n)
-      : Object.values(groups).reduce((acc, f) => acc.add(f));
+    return new BigAmount(0n, 1n);
   }
 
   /**
@@ -400,6 +395,32 @@ export class BigAmount {
    */
   div(other: BigAmount): BigAmount {
     return new BigAmount(this.num * other.den, this.den * other.num);
+  }
+
+  /**
+   * Adds `others` to `this`. This method is conceptually equivalent to
+   * `f.add(others[0]).add(others[1])...`, except for some optimization for a
+   * batch operation.
+   *
+   * @category Arithmetic Operation
+   */
+  batchAdd(others: BigAmount[]): BigAmount {
+    let numSameDen = this.num;
+    const numsOtherDens = new Map<bigint, bigint>();
+    for (const x of others) {
+      if (x.den === this.den) {
+        numSameDen += x.num;
+      } else {
+        const prev = numsOtherDens.get(x.den) || 0n;
+        numsOtherDens.set(x.den, prev + x.num);
+      }
+    }
+
+    let acc = new BigAmount(numSameDen, this.den);
+    for (const [den, num] of numsOtherDens) {
+      acc = acc.add(new BigAmount(num, den));
+    }
+    return acc;
   }
 
   /**
