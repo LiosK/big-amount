@@ -456,6 +456,18 @@ export class BigAmount {
   }
 
   /**
+   * Same as [[BigAmount.quantize]] but returns `undefined` if the numerator
+   * needs to be rounded.
+   *
+   * @category Conversion
+   */
+  tryQuantize(newDen: bigint): BigAmount | undefined {
+    const num = (this.den < 0n ? -this.num : this.num) * newDen;
+    const den = this.den < 0n ? -this.den : this.den;
+    return num % den === 0n ? new BigAmount(num / den, newDen) : void 0;
+  }
+
+  /**
    * Returns a fractional approximate of `this` that is rounded to the multiple
    * of `1 / (10 ** ndigits)`, just like Python's built-in `round()`. This
    * method rounds ties to even by default.
