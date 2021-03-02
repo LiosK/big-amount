@@ -462,9 +462,8 @@ export class BigAmount {
    * @category Conversion
    */
   tryQuantize(newDen: bigint): BigAmount | undefined {
-    const num = (this.den < 0n ? -this.num : this.num) * newDen;
-    const den = this.den < 0n ? -this.den : this.den;
-    return num % den === 0n ? new BigAmount(num / den, newDen) : void 0;
+    const n = this.num * newDen;
+    return n % this.den === 0n ? new BigAmount(n / this.den, newDen) : void 0;
   }
 
   /**
