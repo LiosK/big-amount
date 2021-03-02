@@ -277,6 +277,11 @@ export class BigAmount {
     }
   }
 
+  /** Returns true if `this` is an integer. */
+  isInteger(): boolean {
+    return this.num % this.den === 0n;
+  }
+
   /**
    * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
    *
