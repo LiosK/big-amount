@@ -214,19 +214,15 @@ export class BigAmount {
      * BigAmount.sum(["123/100", "-456/100", "789/100"]); // 456/100
      * ```
      *
-     * @param xs - Array of values that are acceptable by [[BigAmount.create]].
+     * @param xs - Array of values that [[BigAmount.create]] accepts.
      * @category Instance Creation
      */
     static sum(xs) {
-        const groups = {};
-        for (const x of xs) {
-            const f = BigAmount.create(x);
-            const den = String(f.den);
-            groups[den] = den in groups ? groups[den].add(f) : f;
+        if (xs.length > 0) {
+            const [head, ...tail] = xs.map((x) => BigAmount.create(x));
+            return head.batchAdd(tail);
         }
-        return xs.length === 0
-            ? new BigAmount(0n, 1n)
-            : Object.values(groups).reduce((acc, f) => acc.add(f));
+        return new BigAmount(0n, 1n);
     }
     /**
      * Returns a copy of `this`.
@@ -251,6 +247,10 @@ export class BigAmount {
         else {
             return this.den < 0n ? -1n : 1n;
         }
+    }
+    /** Returns true if `this` is an integer. */
+    isInteger() {
+        return this.num % this.den === 0n;
     }
     /**
      * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
@@ -355,6 +355,31 @@ export class BigAmount {
         return new BigAmount(this.num * other.den, this.den * other.num);
     }
     /**
+     * Adds `others` to `this`. This method is conceptually equivalent to
+     * `f.add(others[0]).add(others[1])...`, except for some optimization for a
+     * batch operation.
+     *
+     * @category Arithmetic Operation
+     */
+    batchAdd(others) {
+        let numSameDen = this.num;
+        const numsOtherDens = new Map();
+        for (const x of others) {
+            if (x.den === this.den) {
+                numSameDen += x.num;
+            }
+            else {
+                const prev = numsOtherDens.get(x.den) || 0n;
+                numsOtherDens.set(x.den, prev + x.num);
+            }
+        }
+        let acc = new BigAmount(numSameDen, this.den);
+        for (const [den, num] of numsOtherDens) {
+            acc = acc.add(new BigAmount(num, den));
+        }
+        return acc;
+    }
+    /**
      * Returns a fractional approximate of `this` that has the specified
      * denominator. This method rounds the numerator using the specified rounding
      * mode if it is not divisible by the new denominator.
@@ -378,6 +403,16 @@ export class BigAmount {
         return this.den === newDen
             ? this.clone()
             : new BigAmount(new BigAmount(this.num * newDen, this.den).roundToInt(roundingMode), newDen);
+    }
+    /**
+     * Same as [[BigAmount.quantize]] but returns `undefined` if the numerator
+     * needs to be rounded.
+     *
+     * @category Conversion
+     */
+    tryQuantize(newDen) {
+        const n = this.num * newDen;
+        return n % this.den === 0n ? new BigAmount(n / this.den, newDen) : void 0;
     }
     /**
      * Returns a fractional approximate of `this` that is rounded to the multiple

@@ -1,4 +1,5 @@
 import { BigAmount } from "../dist/index.js";
+import { runTestOnPairs } from "./util/cases.js";
 const assert = chai.assert;
 
 describe("#sign()", () => {
@@ -9,6 +10,14 @@ describe("#sign()", () => {
     assert.strictEqual(new BigAmount(-1n, 2n).sign(), -1n);
     assert.strictEqual(new BigAmount(1n, -2n).sign(), -1n);
     assert.strictEqual(new BigAmount(-1n, -2n).sign(), 1n);
+  });
+});
+
+describe("#isInteger()", () => {
+  it("produces the same result as what the naive algorithm does", () => {
+    runTestOnPairs((xn, xd) => {
+      assert.strictEqual(new BigAmount(xn, xd).isInteger(), xn % xd === 0n);
+    });
   });
 });
 

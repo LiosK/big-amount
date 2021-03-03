@@ -114,7 +114,7 @@ export declare class BigAmount {
      * BigAmount.sum(["123/100", "-456/100", "789/100"]); // 456/100
      * ```
      *
-     * @param xs - Array of values that are acceptable by [[BigAmount.create]].
+     * @param xs - Array of values that [[BigAmount.create]] accepts.
      * @category Instance Creation
      */
     static sum(xs: Array<bigint | number | string | {
@@ -133,6 +133,8 @@ export declare class BigAmount {
      * @returns `1n` if positive, `-1n` if negative, `0n` if zero.
      */
     sign(): bigint;
+    /** Returns true if `this` is an integer. */
+    isInteger(): boolean;
     /**
      * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
      *
@@ -201,6 +203,14 @@ export declare class BigAmount {
      */
     div(other: BigAmount): BigAmount;
     /**
+     * Adds `others` to `this`. This method is conceptually equivalent to
+     * `f.add(others[0]).add(others[1])...`, except for some optimization for a
+     * batch operation.
+     *
+     * @category Arithmetic Operation
+     */
+    batchAdd(others: BigAmount[]): BigAmount;
+    /**
      * Returns a fractional approximate of `this` that has the specified
      * denominator. This method rounds the numerator using the specified rounding
      * mode if it is not divisible by the new denominator.
@@ -221,6 +231,13 @@ export declare class BigAmount {
      * @category Conversion
      */
     quantize(newDen: bigint, roundingMode?: RoundingMode): BigAmount;
+    /**
+     * Same as [[BigAmount.quantize]] but returns `undefined` if the numerator
+     * needs to be rounded.
+     *
+     * @category Conversion
+     */
+    tryQuantize(newDen: bigint): BigAmount | undefined;
     /**
      * Returns a fractional approximate of `this` that is rounded to the multiple
      * of `1 / (10 ** ndigits)`, just like Python's built-in `round()`. This
