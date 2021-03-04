@@ -359,6 +359,17 @@ export class BigAmount {
      * `f.add(others[0]).add(others[1])...`, except for some optimization for a
      * batch operation.
      *
+     * @remarks
+     * Currently, this method is implemented to perform well if the denominators
+     * of `others` do not vary greatly; this method first sums `others` by
+     * denominator (which mathematically requires simple addition of BigInts only)
+     * and then aggregates the subtotals. Therefore, it is recommended to
+     * standardize the denominators of `others` when they are expected to vary
+     * substantially. If the denominators of `others` differ element-by-element,
+     * `f.add(others[0]).reduce().add(others[1]).reduce()...` often outperforms
+     * this method by keeping the intermediate numerators and denominators smaller
+     * because computations on huge BigInts tend to be very slow.
+     *
      * @category Arithmetic Operation
      */
     batchAdd(others) {
