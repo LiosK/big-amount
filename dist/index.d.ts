@@ -287,7 +287,10 @@ export declare class BigAmount {
      */
     toFixed(ndigits?: number, formatOptions?: FormatOptions): string;
 }
-/** Shortcut for [[BigAmount.create]] */
+/**
+ * Creates a [[BigAmount]] from various arguments. This is a synonym for
+ * [[BigAmount.create]].
+ */
 export declare const q: typeof BigAmount.create;
 /**
  * Represents rounding modes.

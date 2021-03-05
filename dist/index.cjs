@@ -103,19 +103,18 @@ class BigAmount {
     static create(x, y) {
         // `create("x/y")` is equivalent to `create("x", "y")`
         if (typeof x === "string" && y == null) {
-            const pair = x.split("/");
-            if (pair.length === 2) {
-                [x, y] = pair;
+            const match = PATTERN_FRACTION.exec(x);
+            if (match !== null) {
+                [, x, y] = match;
             }
         }
         // Convert int-like to BigInt
-        const patIntLike = /^\s*(?:[-+]?[0-9]+|0x[0-9a-f]+|0o[0-7]+|0b[01]+)\s*$/i;
         if ((typeof x === "number" && Number.isInteger(x)) ||
-            (typeof x === "string" && patIntLike.test(x))) {
+            (typeof x === "string" && PATTERN_INT_LIKE.test(x))) {
             x = BigInt(x);
         }
         if ((typeof y === "number" && Number.isInteger(y)) ||
-            (typeof y === "string" && patIntLike.test(y))) {
+            (typeof y === "string" && PATTERN_INT_LIKE.test(y))) {
             y = BigInt(y);
         }
         if (y == null) {
@@ -130,7 +129,7 @@ class BigAmount {
                     : `unsupported Number value: ${x}`);
             }
             else if (typeof x === "string") {
-                const match = x.match(/^\s*([-+]?)(?:([0-9]*)\.([0-9]+)|([0-9]+))(?:e([-+]?[0-9]+))?\s*$/i);
+                const match = PATTERN_DECIMAL.exec(x);
                 if (match !== null) {
                     const [, sign, dsInt = "", dsFrac = "", dsIntOnly = "", dsExp = "0",] = match;
                     const num = BigInt(`${sign}${dsInt}${dsFrac}${dsIntOnly}` || "0");
@@ -414,9 +413,9 @@ class BigAmount {
      * @category Conversion
      */
     quantize(newDen, roundingMode = "HALF_EVEN") {
-        return this.den === newDen
-            ? this.clone()
-            : new BigAmount(new BigAmount(this.num * newDen, this.den).roundToInt(roundingMode), newDen);
+        return new BigAmount(this.den === newDen
+            ? this.num
+            : new BigAmount(this.num * newDen, this.den).roundToInt(roundingMode), newDen);
     }
     /**
      * Same as [[BigAmount.quantize]] but returns `undefined` if the numerator
@@ -425,6 +424,9 @@ class BigAmount {
      * @category Conversion
      */
     tryQuantize(newDen) {
+        if (this.den === newDen) {
+            return new BigAmount(this.num, this.den);
+        }
         const n = this.num * newDen;
         return n % this.den === 0n ? new BigAmount(n / this.den, newDen) : void 0;
     }
@@ -578,8 +580,14 @@ class BigAmount {
     }
 }
 exports.BigAmount = BigAmount;
-/** Shortcut for [[BigAmount.create]] */
+/**
+ * Creates a [[BigAmount]] from various arguments. This is a synonym for
+ * [[BigAmount.create]].
+ */
 exports.q = BigAmount.create;
+const PATTERN_FRACTION = /^([^/]+)\/([^/]+)$/;
+const PATTERN_INT_LIKE = /^\s*(?:[-+]?[0-9]+|0x[0-9a-f]+|0o[0-7]+|0b[01]+)\s*$/i;
+const PATTERN_DECIMAL = /^\s*([-+]?)(?:([0-9]*)\.([0-9]+)|([0-9]+))(?:e([-+]?[0-9]+))?\s*$/i;
 /**
  * Calculates the greatest common divisor of two integers. The result is always
  * positive.
