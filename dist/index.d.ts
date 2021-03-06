@@ -214,9 +214,9 @@ export declare class BigAmount {
      * and then aggregates the subtotals. Therefore, it is recommended to
      * standardize the denominators of `others` when they are expected to vary
      * substantially. If the denominators of `others` differ element-by-element,
-     * `f.add(others[0]).reduce().add(others[1]).reduce()...` often outperforms
-     * this method by keeping the intermediate numerators and denominators smaller
-     * because computations on huge BigInts tend to be very slow.
+     * `f.add(others[0]).reduce().add(others[1]).reduce()...` sometimes
+     * outperforms this method by keeping the intermediate numerators and
+     * denominators smaller because computations on huge BigInts tend to be slow.
      *
      * @category Arithmetic Operation
      */

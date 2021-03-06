@@ -368,9 +368,9 @@ class BigAmount {
      * and then aggregates the subtotals. Therefore, it is recommended to
      * standardize the denominators of `others` when they are expected to vary
      * substantially. If the denominators of `others` differ element-by-element,
-     * `f.add(others[0]).reduce().add(others[1]).reduce()...` often outperforms
-     * this method by keeping the intermediate numerators and denominators smaller
-     * because computations on huge BigInts tend to be very slow.
+     * `f.add(others[0]).reduce().add(others[1]).reduce()...` sometimes
+     * outperforms this method by keeping the intermediate numerators and
+     * denominators smaller because computations on huge BigInts tend to be slow.
      *
      * @category Arithmetic Operation
      */
@@ -382,8 +382,9 @@ class BigAmount {
                 numSameDen += x.num;
             }
             else {
-                const prev = numsOtherDens.get(x.den) || 0n;
-                numsOtherDens.set(x.den, prev + x.num);
+                const num = x.den < 0n ? -x.num : x.num;
+                const den = x.den < 0n ? -x.den : x.den;
+                numsOtherDens.set(den, (numsOtherDens.get(den) || 0n) + num);
             }
         }
         let acc = new BigAmount(numSameDen, this.den);
