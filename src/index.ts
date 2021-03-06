@@ -359,12 +359,15 @@ export class BigAmount {
    * @category Arithmetic Operation
    */
   add(other: BigAmount): BigAmount {
-    return this.den === other.den
-      ? new BigAmount(this.num + other.num, this.den)
-      : new BigAmount(
-          this.num * other.den + this.den * other.num,
-          this.den * other.den
-        );
+    if (this.den === other.den) {
+      return new BigAmount(this.num + other.num, this.den);
+    } else if (this.den === -other.den) {
+      return new BigAmount(this.num - other.num, this.den);
+    }
+    return new BigAmount(
+      this.num * other.den + this.den * other.num,
+      this.den * other.den
+    );
   }
 
   /**
@@ -373,12 +376,15 @@ export class BigAmount {
    * @category Arithmetic Operation
    */
   sub(other: BigAmount): BigAmount {
-    return this.den === other.den
-      ? new BigAmount(this.num - other.num, this.den)
-      : new BigAmount(
-          this.num * other.den - this.den * other.num,
-          this.den * other.den
-        );
+    if (this.den === other.den) {
+      return new BigAmount(this.num - other.num, this.den);
+    } else if (this.den === -other.den) {
+      return new BigAmount(this.num + other.num, this.den);
+    }
+    return new BigAmount(
+      this.num * other.den - this.den * other.num,
+      this.den * other.den
+    );
   }
 
   /**
