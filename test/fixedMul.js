@@ -1,0 +1,3 @@
+describe("#fixedMul()", () => {
+  it("TODO");
+});

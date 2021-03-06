@@ -444,6 +444,46 @@ export class BigAmount {
   }
 
   /**
+   * Adds `other` to `this`, keeping the denominator unchanged. This method is
+   * equivalent to `f.add(other).quantize(f.den, roundingMode)`.
+   *
+   * @category Arithmetic Operation
+   */
+  fixedAdd(
+    other: BigAmount,
+    roundingMode: RoundingMode = "HALF_EVEN"
+  ): BigAmount {
+    if (this.den === other.den) {
+      return new BigAmount(this.num + other.num, this.den);
+    } else if (this.den === -other.den) {
+      return new BigAmount(this.num - other.num, this.den);
+    }
+    return new BigAmount(
+      new BigAmount(
+        this.num * other.den + this.den * other.num,
+        other.den
+      ).roundToInt(roundingMode),
+      this.den
+    );
+  }
+
+  /**
+   * Multiplies `this` by `other`, keeping the denominator unchanged. This
+   * method is equivalent to `f.mul(other).quantize(f.den, roundingMode)`.
+   *
+   * @category Arithmetic Operation
+   */
+  fixedMul(
+    other: BigAmount,
+    roundingMode: RoundingMode = "HALF_EVEN"
+  ): BigAmount {
+    return new BigAmount(
+      new BigAmount(this.num * other.num, other.den).roundToInt(roundingMode),
+      this.den
+    );
+  }
+
+  /**
    * Returns a fractional approximate of `this` that has the specified
    * denominator. This method rounds the numerator using the specified rounding
    * mode if it is not divisible by the new denominator.
