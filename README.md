@@ -169,4 +169,4 @@ specific language governing permissions and limitations under the License.
 - [npm package](https://www.npmjs.com/package/big-amount)
 - [GitHub repository](https://github.com/LiosK/big-amount)
 - [Auto-generated API documentation](https://liosk.github.io/big-amount/doc/)
-- [Run tests on your browser](https://liosk.github.io/big-amount/test/run_on_browser.html)
+- [Run tests on your browser](https://liosk.github.io/big-amount/test/)
