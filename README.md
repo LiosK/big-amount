@@ -112,7 +112,38 @@ the denominator unchanged if both operands share the same denominator; in all
 other cases, the returned object will have implementation-dependent numerator
 and denominator.
 
-## String Conversion
+The following methods are also available for convenience and optimization to
+handle accounting use cases.
+
+| Method             | Operation                                           |
+| ------------------ | --------------------------------------------------- |
+| `batchAdd(others)` | Adds array of BigAmount values at a time            |
+| `fixedAdd(other)`  | Addition that keeps the denominator unchanged       |
+| `fixedMul(other)`  | Multiplication that keeps the denominator unchanged |
+
+## Rounding
+
+`round()` rounds a fraction at a decimal place like the `round` functions of
+Python and Excel.
+
+```javascript
+q("123.456").round(2);  // 12346/100
+q("123.456").round(-1); // 120/1
+```
+
+Use `quantize()` to covert a fraction to another that has the specified
+denominator.
+
+```javascript
+q("123/4").quantize(2n); // 62/2
+```
+
+The rounding functions round ties to the nearest even numbers (i.e. bankers'
+rounding) by default. See [RoundingMode] for rounding mode options.
+
+[roundingmode]: https://liosk.github.io/big-amount/doc/modules.html#roundingmode
+
+## Conversion to String
 
 `toJSON()` generates the preferred form to seriarize a rational number.
 
@@ -140,13 +171,6 @@ BigAmount.create("-678.9").toFixed(2, opts); // "($678.90)"
 BigAmount.create("0").toFixed(2, opts);      // "-"
 ```
 
-`toFixed()` rounds ties to the nearest even (i.e. bankers' rounding).
-
-```javascript
-q("1.15").toFixed(1) // "1.2"
-q("1.25").toFixed(1) // "1.2"
-```
-
 [formatting options]: https://liosk.github.io/big-amount/doc/interfaces/formatoptions.html
 
 ## License
@@ -168,5 +192,5 @@ specific language governing permissions and limitations under the License.
 
 - [npm package](https://www.npmjs.com/package/big-amount)
 - [GitHub repository](https://github.com/LiosK/big-amount)
-- [Auto-generated API documentation](https://liosk.github.io/big-amount/doc/)
-- [Run tests on your browser](https://liosk.github.io/big-amount/test/run_on_browser.html)
+- [Complete API documentation](https://liosk.github.io/big-amount/doc/)
+- [Run tests on your browser](https://liosk.github.io/big-amount/test/)

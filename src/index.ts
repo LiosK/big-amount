@@ -359,12 +359,15 @@ export class BigAmount {
    * @category Arithmetic Operation
    */
   add(other: BigAmount): BigAmount {
-    return this.den === other.den
-      ? new BigAmount(this.num + other.num, this.den)
-      : new BigAmount(
-          this.num * other.den + this.den * other.num,
-          this.den * other.den
-        );
+    if (this.den === other.den) {
+      return new BigAmount(this.num + other.num, this.den);
+    } else if (this.den === -other.den) {
+      return new BigAmount(this.num - other.num, this.den);
+    }
+    return new BigAmount(
+      this.num * other.den + this.den * other.num,
+      this.den * other.den
+    );
   }
 
   /**
@@ -373,12 +376,15 @@ export class BigAmount {
    * @category Arithmetic Operation
    */
   sub(other: BigAmount): BigAmount {
-    return this.den === other.den
-      ? new BigAmount(this.num - other.num, this.den)
-      : new BigAmount(
-          this.num * other.den - this.den * other.num,
-          this.den * other.den
-        );
+    if (this.den === other.den) {
+      return new BigAmount(this.num - other.num, this.den);
+    } else if (this.den === -other.den) {
+      return new BigAmount(this.num + other.num, this.den);
+    }
+    return new BigAmount(
+      this.num * other.den - this.den * other.num,
+      this.den * other.den
+    );
   }
 
   /**
@@ -438,6 +444,47 @@ export class BigAmount {
   }
 
   /**
+   * Adds `other` to `this`, keeping the denominator unchanged. This method is
+   * equivalent to `f.add(other).quantize(f.den, roundingMode)`.
+   *
+   * @category Arithmetic Operation
+   */
+  fixedAdd(
+    other: BigAmount,
+    roundingMode: RoundingMode = "HALF_EVEN"
+  ): BigAmount {
+    if (this.den === other.den) {
+      return new BigAmount(this.num + other.num, this.den);
+    } else if (this.den === -other.den) {
+      return new BigAmount(this.num - other.num, this.den);
+    }
+    return new BigAmount(
+      divInt(
+        this.num * other.den + this.den * other.num,
+        other.den,
+        roundingMode
+      ),
+      this.den
+    );
+  }
+
+  /**
+   * Multiplies `this` by `other`, keeping the denominator unchanged. This
+   * method is equivalent to `f.mul(other).quantize(f.den, roundingMode)`.
+   *
+   * @category Arithmetic Operation
+   */
+  fixedMul(
+    other: BigAmount,
+    roundingMode: RoundingMode = "HALF_EVEN"
+  ): BigAmount {
+    return new BigAmount(
+      divInt(this.num * other.num, other.den, roundingMode),
+      this.den
+    );
+  }
+
+  /**
    * Returns a fractional approximate of `this` that has the specified
    * denominator. This method rounds the numerator using the specified rounding
    * mode if it is not divisible by the new denominator.
@@ -464,7 +511,7 @@ export class BigAmount {
     return new BigAmount(
       this.den === newDen
         ? this.num
-        : new BigAmount(this.num * newDen, this.den).roundToInt(roundingMode),
+        : divInt(this.num * newDen, this.den, roundingMode),
       newDen
     );
   }
@@ -498,8 +545,8 @@ export class BigAmount {
     }
     const term = 10n ** BigInt(Math.abs(ndigits));
     if (ndigits < 0) {
-      const div = new BigAmount(this.num, this.den * term);
-      return new BigAmount(div.roundToInt(roundingMode) * term, 1n);
+      const num = divInt(this.num, this.den * term, roundingMode) * term;
+      return new BigAmount(num, 1n);
     } else {
       return this.quantize(term, roundingMode);
     }
@@ -513,47 +560,7 @@ export class BigAmount {
    * @category Conversion
    */
   roundToInt(roundingMode: RoundingMode = "HALF_EVEN"): bigint {
-    const num = this.den < 0n ? -this.num : this.num;
-    const den = this.den < 0n ? -this.den : this.den;
-
-    let quot = num / den;
-    const rem = (num < 0n ? -num : num) % den;
-    const unit = num < 0n ? -1n : 1n;
-    if (rem === 0n) {
-      return quot;
-    }
-
-    switch (roundingMode) {
-      case "HALF_EVEN":
-        if (rem * 2n > den || (rem * 2n === den && (quot & 1n) === 1n)) {
-          quot += unit;
-        }
-        return quot;
-      case "HALF_UP":
-        if (rem * 2n >= den) {
-          quot += unit;
-        }
-        return quot;
-      case "UP":
-        quot += unit;
-        return quot;
-      case "DOWN":
-        return quot;
-      case "CEIL":
-        if (unit > 0n) {
-          quot += unit;
-        }
-        return quot;
-      case "FLOOR":
-        if (unit < 0n) {
-          quot += unit;
-        }
-        return quot;
-      default:
-        // TypeScript never reaches this line.
-        // XXX not invoked if rem === 0n
-        throw new RangeError(`unknown roundingMode: ${roundingMode}`);
-    }
+    return divInt(this.num, this.den, roundingMode);
   }
 
   /** @category Conversion */
@@ -762,4 +769,48 @@ const findGcd = (x: bigint, y: bigint): bigint => {
     x = tmp;
   }
   return x;
+};
+
+/** Performs integer division using the specified rounding mode. */
+const divInt = (
+  num: bigint,
+  den: bigint,
+  roundingMode: RoundingMode
+): bigint => {
+  if (den < 0n) {
+    num = -num;
+    den = -den;
+  }
+
+  if (den === 1n) {
+    return num;
+  }
+
+  const quot = num / den;
+  const rem = (num < 0n ? -num : num) % den;
+  if (rem === 0n) {
+    return quot;
+  }
+
+  const unit = num < 0n ? -1n : 1n;
+  switch (roundingMode) {
+    case "HALF_EVEN":
+      return rem * 2n > den || (rem * 2n === den && (quot & 1n) === 1n)
+        ? quot + unit
+        : quot;
+    case "HALF_UP":
+      return rem * 2n >= den ? quot + unit : quot;
+    case "UP":
+      return quot + unit;
+    case "DOWN":
+      return quot;
+    case "CEIL":
+      return unit > 0n ? quot + unit : quot;
+    case "FLOOR":
+      return unit < 0n ? quot + unit : quot;
+    default:
+      // Unreachable in TypeScript
+      // NOTE: Not intended to verify argument (not invoked if rem === 0n)
+      throw new RangeError(`unknown roundingMode: ${roundingMode}`);
+  }
 };

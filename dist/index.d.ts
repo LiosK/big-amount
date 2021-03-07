@@ -222,6 +222,20 @@ export declare class BigAmount {
      */
     batchAdd(others: BigAmount[]): BigAmount;
     /**
+     * Adds `other` to `this`, keeping the denominator unchanged. This method is
+     * equivalent to `f.add(other).quantize(f.den, roundingMode)`.
+     *
+     * @category Arithmetic Operation
+     */
+    fixedAdd(other: BigAmount, roundingMode?: RoundingMode): BigAmount;
+    /**
+     * Multiplies `this` by `other`, keeping the denominator unchanged. This
+     * method is equivalent to `f.mul(other).quantize(f.den, roundingMode)`.
+     *
+     * @category Arithmetic Operation
+     */
+    fixedMul(other: BigAmount, roundingMode?: RoundingMode): BigAmount;
+    /**
      * Returns a fractional approximate of `this` that has the specified
      * denominator. This method rounds the numerator using the specified rounding
      * mode if it is not divisible by the new denominator.

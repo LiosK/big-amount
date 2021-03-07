@@ -17,7 +17,7 @@ describe("#add()", () => {
     runTestOnPairs((xn, xd) => {
       const left = new BigAmount(xn, xd);
       runTestOnPairs((yn, yd) => {
-        if (xd === yd) {
+        if (xd === yd || xd === -yd) {
           const result = left.add(new BigAmount(yn, yd));
           assert.strictEqual(result.den, xd);
         }
