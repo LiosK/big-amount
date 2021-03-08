@@ -366,23 +366,12 @@ class BigAmount {
     }
     /**
      * Adds `others` to `this`. This method is conceptually equivalent to
-     * `f.add(others[0]).add(others[1])...`, except for some optimization for a
-     * batch operation.
-     *
-     * @remarks
-     * Currently, this method is implemented to perform well if the denominators
-     * of `others` do not vary greatly; this method first sums `others` by
-     * denominator (which mathematically requires simple addition of BigInts only)
-     * and then aggregates the subtotals. Therefore, it is recommended to
-     * standardize the denominators of `others` when they are expected to vary
-     * substantially. If the denominators of `others` differ element-by-element,
-     * `f.add(others[0]).reduce().add(others[1]).reduce()...` sometimes
-     * outperforms this method by keeping the intermediate numerators and
-     * denominators smaller because computations on huge BigInts tend to be slow.
+     * `f.add(others[0]).add(others[1])...`, except for optimization.
      *
      * @category Arithmetic Operation
      */
     batchAdd(others) {
+        // take subtotals by denominator and then sum them up
         let numSameDen = this.num;
         const numsOtherDens = new Map();
         for (const x of others) {
@@ -397,7 +386,18 @@ class BigAmount {
         }
         let acc = new BigAmount(numSameDen, this.den);
         for (const [den, num] of numsOtherDens) {
-            acc = acc.add(new BigAmount(num, den));
+            if (acc.den === den) {
+                acc = new BigAmount(acc.num + num, acc.den);
+            }
+            else {
+                // conceptually calling `q(num, den).tryQuantize(acc.den)` before
+                // addition in order to alleviate inflation of the denominator
+                const n = acc.den * num;
+                acc =
+                    n % den === 0n
+                        ? new BigAmount(acc.num + n / den, acc.den)
+                        : new BigAmount(acc.num * den + n, acc.den * den);
+            }
         }
         return acc;
     }

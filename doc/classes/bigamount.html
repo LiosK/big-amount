@@ -183,7 +183,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L43">index.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L43">index.ts:43</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -213,7 +213,7 @@
 					<div class="tsd-signature tsd-kind-icon">den<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">bigint</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L43">index.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L43">index.ts:43</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -228,7 +228,7 @@
 					<div class="tsd-signature tsd-kind-icon">num<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">bigint</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L40">index.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L40">index.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -250,7 +250,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L340">index.ts:340</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L340">index.ts:340</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -272,7 +272,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L361">index.ts:361</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L361">index.ts:361</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -300,28 +300,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L426">index.ts:426</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L414">index.ts:414</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Adds <code>others</code> to <code>this</code>. This method is conceptually equivalent to
-										<code>f.add(others[0]).add(others[1])...</code>, except for some optimization for a
-									batch operation.</p>
+									<code>f.add(others[0]).add(others[1])...</code>, except for optimization.</p>
 								</div>
-								<dl class="tsd-comment-tags">
-									<dt>remarks</dt>
-									<dd><p>Currently, this method is implemented to perform well if the denominators
-											of <code>others</code> do not vary greatly; this method first sums <code>others</code> by
-											denominator (which mathematically requires simple addition of BigInts only)
-											and then aggregates the subtotals. Therefore, it is recommended to
-											standardize the denominators of <code>others</code> when they are expected to vary
-											substantially. If the denominators of <code>others</code> differ element-by-element,
-											<code>f.add(others[0]).reduce().add(others[1]).reduce()...</code> sometimes
-											outperforms this method by keeping the intermediate numerators and
-										denominators smaller because computations on huge BigInts tend to be slow.</p>
-									</dd>
-								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -343,7 +329,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L404">index.ts:404</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L404">index.ts:404</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -371,7 +357,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L452">index.ts:452</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L451">index.ts:451</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -403,7 +389,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L477">index.ts:477</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L476">index.ts:476</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -435,7 +421,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L352">index.ts:352</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L352">index.ts:352</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -457,7 +443,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L395">index.ts:395</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L395">index.ts:395</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -485,7 +471,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L331">index.ts:331</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L331">index.ts:331</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -507,7 +493,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L315">index.ts:315</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L315">index.ts:315</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -536,7 +522,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L378">index.ts:378</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L378">index.ts:378</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -567,7 +553,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L301">index.ts:301</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L301">index.ts:301</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -595,7 +581,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L289">index.ts:289</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L289">index.ts:289</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -631,7 +617,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L507">index.ts:507</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L506">index.ts:506</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -681,7 +667,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L542">index.ts:542</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L541">index.ts:541</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -720,7 +706,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L562">index.ts:562</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L561">index.ts:561</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -752,7 +738,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L610">index.ts:610</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L609">index.ts:609</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -788,7 +774,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L572">index.ts:572</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L571">index.ts:571</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -805,7 +791,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L581">index.ts:581</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L580">index.ts:580</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -827,7 +813,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L567">index.ts:567</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L566">index.ts:566</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -844,7 +830,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L525">index.ts:525</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L524">index.ts:524</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -876,7 +862,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L258">index.ts:258</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L258">index.ts:258</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -898,7 +884,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L108">index.ts:108</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L108">index.ts:108</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -975,7 +961,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L183">index.ts:183</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L183">index.ts:183</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1007,7 +993,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L243">index.ts:243</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L243">index.ts:243</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1047,7 +1033,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L278">index.ts:278</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L278">index.ts:278</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1069,7 +1055,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.5/src/index.ts#L267">index.ts:267</a></li>
+									<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v0.4.6/src/index.ts#L267">index.ts:267</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
