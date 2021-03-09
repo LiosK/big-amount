@@ -158,6 +158,9 @@ class BigAmount {
      * Creates a [[BigAmount]] from `number`. Unlike [[BigAmount.create]], this
      * method finds a rational approximate of a non-integral number.
      *
+     * @param precision - _Deprecated._ This parameter may be removed or replaced
+     *        in the future because the argument needs to be determined based on
+     *        highly implementation-specific details.
      * @category Instance Creation
      */
     static fromNumber(x, precision = 100000000) {
@@ -253,6 +256,10 @@ class BigAmount {
     /** Returns true if `this` is an integer. */
     isInteger() {
         return this.num % this.den === 0n;
+    }
+    /** Returns true if `this` is zero. */
+    isZero() {
+        return this.num === 0n;
     }
     /**
      * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.

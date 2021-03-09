@@ -21,6 +21,14 @@ describe("#isInteger()", () => {
   });
 });
 
+describe("#isZero()", () => {
+  it("produces the same result as what the naive algorithm does", () => {
+    runTestOnPairs((xn, xd) => {
+      assert.strictEqual(new BigAmount(xn, xd).isZero(), xn === 0n);
+    });
+  });
+});
+
 describe("fromNumber()", () => {
   it("reasonably approximates a fraction", () => {
     const createCase = (n, d) => [n / d, new BigAmount(BigInt(n), BigInt(d))];
