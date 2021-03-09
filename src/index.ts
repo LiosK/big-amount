@@ -282,6 +282,11 @@ export class BigAmount {
     return this.num % this.den === 0n;
   }
 
+  /** Returns true if `this` is zero. */
+  isZero(): boolean {
+    return this.num === 0n;
+  }
+
   /**
    * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
    *

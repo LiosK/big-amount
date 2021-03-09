@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- `#isZero()`
+
 ### Deprecated
 
 - `precision` parameter of `fromNumber()` because the argument needs to be
