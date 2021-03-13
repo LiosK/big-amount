@@ -1,10 +1,21 @@
 # Changelog
 
+## v1.1.1 - 2021-03-13
+
+### Added
+
+- Test case for `fromNumber()`.
+- Benchmark script for `fromNumber()`.
+
+### Other
+
+- Update dev dependencies.
+
 ## v1.1.0 - 2021-03-10
 
 ### Added
 
-- `#isZero()`
+- `#isZero()`.
 
 ### Deprecated
 
