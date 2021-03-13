@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Other
+
+- Update dev dependencies.
+
 ## v1.1.0 - 2021-03-10
 
 ### Added
