@@ -53,6 +53,16 @@ describe("fromNumber()", () => {
       assert(BigAmount.fromNumber(-n).eq(expected.neg()));
     }
   });
+
+  it("correctly approximates p/q where p, q < 1000", () => {
+    for (let p = 0; p < 1000; p++) {
+      for (let q = 1; q < 1000; q++) {
+        assert(
+          BigAmount.fromNumber(p / q).eq(new BigAmount(BigInt(p), BigInt(q)))
+        );
+      }
+    }
+  });
 });
 
 describe("sum()", () => {

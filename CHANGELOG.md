@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Added
+
+- Test case for `fromNumber()`.
+- Benchmark script for `fromNumber()`.
+
 ### Other
 
 - Update dev dependencies.
@@ -10,7 +15,7 @@
 
 ### Added
 
-- `#isZero()`
+- `#isZero()`.
 
 ### Deprecated
 
