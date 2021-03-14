@@ -10,6 +10,7 @@
 ### Maintenance
 
 - Refactored test code related to `fromNumber()`.
+- Updated dev dependencies.
 
 ## v1.1.1 - 2021-03-13
 
@@ -20,7 +21,7 @@
 
 ### Maintenance
 
-- Update dev dependencies.
+- Updated dev dependencies.
 
 ## v1.1.0 - 2021-03-10
 
