@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Added
+
+- Test case for `fromNumber()` that is specific to the implementation using
+  Farey sequences.
+
 ### Maintenance
 
 - Refactored test code related to `fromNumber()`.

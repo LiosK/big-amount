@@ -37,4 +37,25 @@ describe("fromNumber()", () => {
   });
 });
 
+describe("fromNumber() implemented using Farey sequences", () => {
+  const generateFareySequence = (n) => {
+    let [a, b, c, d] = [0, 1, 1, n];
+    const result = [[a, b]];
+    while (c <= n) {
+      const k = Math.trunc((n + b) / d);
+      [a, b, c, d] = [c, d, k * c - a, k * d - b];
+      result.push([a, b]);
+    }
+    return result;
+  };
+
+  it("determines any term of the Farey sequence of order 1024", () => {
+    for (const [p, q] of generateFareySequence(1024)) {
+      assert(
+        BigAmount.fromNumber(p / q).eq(new BigAmount(BigInt(p), BigInt(q)))
+      );
+    }
+  });
+});
+
 // vim: fdm=marker fmr&
