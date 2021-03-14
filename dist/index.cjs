@@ -175,7 +175,7 @@ class BigAmount {
         const coef = Math.abs(x) / Math.pow(2, exp); // being always 1.dddddd...
         let [num, den] = [1, 1]; // result if coef === 1 (i.e. x === 2 ** exp)
         if (coef !== 1) {
-            // Approximate `coef` using Farey sequences (or just binary search)
+            // Approximate `coef` using Farey sequences
             let [lnum, lden] = [1, 1];
             let [unum, uden] = [2, 1];
             let mid = 1.5;
