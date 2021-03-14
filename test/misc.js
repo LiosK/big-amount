@@ -29,42 +29,6 @@ describe("#isZero()", () => {
   });
 });
 
-describe("fromNumber()", () => {
-  it("reasonably approximates a fraction", () => {
-    const createCase = (n, d) => [n / d, new BigAmount(BigInt(n), BigInt(d))];
-    const cases = [
-      // {{{
-      createCase(1, 3),
-      createCase(2, 3),
-      createCase(1, 4),
-      createCase(1, 5),
-      createCase(4, 5),
-      createCase(1, 7),
-      createCase(6, 7),
-      createCase(1, 10),
-      createCase(7, 10),
-      createCase(3, 11),
-      createCase(7, 19),
-      createCase(17, 19),
-      // }}}
-    ];
-    for (const [n, expected] of cases) {
-      assert(BigAmount.fromNumber(n).eq(expected));
-      assert(BigAmount.fromNumber(-n).eq(expected.neg()));
-    }
-  });
-
-  it("correctly approximates p/q where p, q < 1000", () => {
-    for (let p = 0; p < 1000; p++) {
-      for (let q = 1; q < 1000; q++) {
-        assert(
-          BigAmount.fromNumber(p / q).eq(new BigAmount(BigInt(p), BigInt(q)))
-        );
-      }
-    }
-  });
-});
-
 describe("sum()", () => {
   it("returns zero if the argument is empty", () => {
     assert(BigAmount.sum([]).eq(new BigAmount(0n, 1n)));

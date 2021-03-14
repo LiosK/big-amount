@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Maintenance
+
+- Refactored test code related to `fromNumber()`.
+
 ## v1.1.1 - 2021-03-13
 
 ### Added
@@ -7,7 +13,7 @@
 - Test case for `fromNumber()`.
 - Benchmark script for `fromNumber()`.
 
-### Other
+### Maintenance
 
 - Update dev dependencies.
 

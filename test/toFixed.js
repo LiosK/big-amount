@@ -36,7 +36,7 @@ describe("#toFixed()", () => {
 
     for (const e of cases) {
       const f = BigAmount.fromNumber(e);
-      for (let ndigits = 0; ndigits < 10; ndigits++) {
+      for (let ndigits = 0; ndigits < 8; ndigits++) {
         assert.strictEqual(f.toFixed(ndigits), e.toFixed(ndigits));
       }
     }
