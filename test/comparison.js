@@ -70,50 +70,96 @@ describe("#eq()", () => {
   });
 });
 
+const runOnCmpCases = (test) => {
+  const cases = [
+    // {{{
+    [1n, 2n, 2n, 4n, 0],
+    [1n, 2n, 1n, 3n, 1],
+    [3n, 7n, 7n, 11n, -1],
+    [-1n, 2n, 2n, 4n, -1],
+    [-1n, 2n, 1n, 3n, -1],
+    [-3n, 7n, 7n, 11n, -1],
+    [1n, 2n, -2n, 4n, 1],
+    [1n, 2n, -1n, 3n, 1],
+    [3n, 7n, -7n, 11n, 1],
+
+    [2n, 1n, 4n, 2n, 0],
+    [2n, 1n, 3n, 1n, -1],
+    [7n, 3n, 11n, 7n, 1],
+    [2n, -1n, 4n, 2n, -1],
+    [2n, -1n, 3n, 1n, -1],
+    [7n, -3n, 11n, 7n, -1],
+    [2n, 1n, 4n, -2n, 1],
+    [2n, 1n, 3n, -1n, 1],
+    [7n, 3n, 11n, -7n, 1],
+    // }}}
+  ];
+
+  for (const [xn, xd, yn, yd, cmp] of cases) {
+    test(xn, xd, yn, yd, cmp);
+    test(-xn, xd, -yn, yd, -cmp);
+    test(xn, -xd, yn, -yd, -cmp);
+    test(-xn, -xd, -yn, -yd, cmp);
+
+    test(yn, yd, xn, xd, -cmp);
+    test(-yn, yd, -xn, xd, cmp);
+    test(yn, -yd, xn, -xd, cmp);
+    test(-yn, -yd, -xn, -xd, -cmp);
+  }
+};
+
 describe("cmp()", () => {
   it("compares manually prepared cases properly", () => {
-    const cases = [
-      // {{{
-      [1n, 2n, 2n, 4n, 0],
-      [1n, 2n, 1n, 3n, 1],
-      [3n, 7n, 7n, 11n, -1],
-      [-1n, 2n, 2n, 4n, -1],
-      [-1n, 2n, 1n, 3n, -1],
-      [-3n, 7n, 7n, 11n, -1],
-      [1n, 2n, -2n, 4n, 1],
-      [1n, 2n, -1n, 3n, 1],
-      [3n, 7n, -7n, 11n, 1],
-
-      [2n, 1n, 4n, 2n, 0],
-      [2n, 1n, 3n, 1n, -1],
-      [7n, 3n, 11n, 7n, 1],
-      [2n, -1n, 4n, 2n, -1],
-      [2n, -1n, 3n, 1n, -1],
-      [7n, -3n, 11n, 7n, -1],
-      [2n, 1n, 4n, -2n, 1],
-      [2n, 1n, 3n, -1n, 1],
-      [7n, 3n, 11n, -7n, 1],
-      // }}}
-    ];
-
-    const test = (xn, xd, yn, yd, cmp) => {
+    runOnCmpCases((xn, xd, yn, yd, cmp) => {
       assert.strictEqual(
         BigAmount.cmp(new BigAmount(xn, xd), new BigAmount(yn, yd)),
         cmp
       );
-    };
+    });
+  });
+});
 
-    for (const [xn, xd, yn, yd, cmp] of cases) {
-      test(xn, xd, yn, yd, cmp);
-      test(-xn, xd, -yn, yd, -cmp);
-      test(xn, -xd, yn, -yd, -cmp);
-      test(-xn, -xd, -yn, -yd, cmp);
+describe("#gt()", () => {
+  it("compares manually prepared cases properly", () => {
+    runOnCmpCases((xn, xd, yn, yd, cmp) => {
+      assert.strictEqual(
+        new BigAmount(xn, xd).gt(new BigAmount(yn, yd)),
+        cmp > 0
+      );
+    });
+  });
+});
 
-      test(yn, yd, xn, xd, -cmp);
-      test(-yn, yd, -xn, xd, cmp);
-      test(yn, -yd, xn, -xd, cmp);
-      test(-yn, -yd, -xn, -xd, -cmp);
-    }
+describe("#ge()", () => {
+  it("compares manually prepared cases properly", () => {
+    runOnCmpCases((xn, xd, yn, yd, cmp) => {
+      assert.strictEqual(
+        new BigAmount(xn, xd).ge(new BigAmount(yn, yd)),
+        cmp >= 0
+      );
+    });
+  });
+});
+
+describe("#lt()", () => {
+  it("compares manually prepared cases properly", () => {
+    runOnCmpCases((xn, xd, yn, yd, cmp) => {
+      assert.strictEqual(
+        new BigAmount(xn, xd).lt(new BigAmount(yn, yd)),
+        cmp < 0
+      );
+    });
+  });
+});
+
+describe("#le()", () => {
+  it("compares manually prepared cases properly", () => {
+    runOnCmpCases((xn, xd, yn, yd, cmp) => {
+      assert.strictEqual(
+        new BigAmount(xn, xd).le(new BigAmount(yn, yd)),
+        cmp <= 0
+      );
+    });
   });
 });
 

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Comparison methods: `#gt()`, `#ge()`, `#lt()`, and `#le()`.
+
 ### Maintenance
 
 - Updated dev dependencies.
