@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2.0 - 2021-03-23
+
+### Added
+
+- Comparison methods: `#gt()`, `#ge()`, `#lt()`, and `#le()`.
+
+### Maintenance
+
+- Updated dev dependencies.
+
 ## v1.1.2 - 2021-03-14
 
 ### Added

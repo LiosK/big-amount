@@ -283,6 +283,38 @@ class BigAmount {
         return BigAmount.cmp(this, other) === 0;
     }
     /**
+     * Returns true if `this` is greater than `other`.
+     *
+     * @category Comparison
+     */
+    gt(other) {
+        return BigAmount.cmp(this, other) > 0;
+    }
+    /**
+     * Returns true if `this` is greater than or equal to `other`.
+     *
+     * @category Comparison
+     */
+    ge(other) {
+        return BigAmount.cmp(this, other) >= 0;
+    }
+    /**
+     * Returns true if `this` is less than `other`.
+     *
+     * @category Comparison
+     */
+    lt(other) {
+        return BigAmount.cmp(this, other) < 0;
+    }
+    /**
+     * Returns true if `this` is less than or equal to `other`.
+     *
+     * @category Comparison
+     */
+    le(other) {
+        return BigAmount.cmp(this, other) <= 0;
+    }
+    /**
      * Returns the irreducible form of `this` with a positive denominator.
      *
      * @remarks

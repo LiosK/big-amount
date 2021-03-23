@@ -155,6 +155,30 @@ export declare class BigAmount {
      */
     eq(other: BigAmount): boolean;
     /**
+     * Returns true if `this` is greater than `other`.
+     *
+     * @category Comparison
+     */
+    gt(other: BigAmount): boolean;
+    /**
+     * Returns true if `this` is greater than or equal to `other`.
+     *
+     * @category Comparison
+     */
+    ge(other: BigAmount): boolean;
+    /**
+     * Returns true if `this` is less than `other`.
+     *
+     * @category Comparison
+     */
+    lt(other: BigAmount): boolean;
+    /**
+     * Returns true if `this` is less than or equal to `other`.
+     *
+     * @category Comparison
+     */
+    le(other: BigAmount): boolean;
+    /**
      * Returns the irreducible form of `this` with a positive denominator.
      *
      * @remarks
