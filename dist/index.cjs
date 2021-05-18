@@ -131,7 +131,7 @@ class BigAmount {
             else if (typeof x === "string") {
                 const match = PATTERN_DECIMAL.exec(x);
                 if (match !== null) {
-                    const [, sign, dsInt = "", dsFrac = "", dsIntOnly = "", dsExp = "0",] = match;
+                    const [, sign, dsInt = "", dsFrac = "", dsIntOnly = "", dsExp = "0"] = match;
                     const num = BigInt(`${sign}${dsInt}${dsFrac}${dsIntOnly}` || "0");
                     const exp = BigInt(dsExp) - BigInt(dsFrac.length);
                     return exp > 0

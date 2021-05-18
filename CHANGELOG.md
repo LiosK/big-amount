@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.1 - 2021-05-18
+
+### Maintenance
+
+- Updated dev dependencies.
+
 ## v1.2.0 - 2021-03-23
 
 ### Added
