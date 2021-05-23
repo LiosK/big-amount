@@ -95,14 +95,18 @@ class BigAmount {
      * -  `string` - Fraction (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
      *    (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`). The
      *    fractional notation `q("num/den")` is equivalent to `q("num", "den")`.
-     * -  `object` - Any object (including any [[BigAmount]] value) that has
-     *    proper `num` and `den` fields. `q({ num: x, den: y })` is equivalent to
-     *    `q(x, y)`, except that the fields do not accept an object.
+     * -  `[x, y]` - Tuple of two BigAmount-like scalar values. `q([x, y])` is
+     *    equivalent to `q(x, y)`, except that neither element can be an object.
+     * -  `object` - Any non-array object (including any [[BigAmount]] value) that
+     *    has proper `num` and `den` fields. `q({ num: x, den: y })` is equivalent
+     *    to `q(x, y)`, except that neither member can be an object.
      *
-     * @param x - bigint | number | string | { num: bigint | number | string; den:
-     *        bigint | number | string }
-     * @param y - bigint | number | string | { num: bigint | number | string; den:
-     *        bigint | number | string }
+     * @param x - bigint | number | string | [bigint | number | string, bigint |
+     *        number | string] | { num: bigint | number | string; den: bigint |
+     *        number | string };
+     * @param y - bigint | number | string | [bigint | number | string, bigint |
+     *        number | string] | { num: bigint | number | string; den: bigint |
+     *        number | string };
      * @category Instance Creation
      */
     static create(x, y) {
@@ -114,12 +118,19 @@ class BigAmount {
                     [, x, y] = match;
                 }
             }
-            else if (typeof x === "object") {
-                ({ num: x, den: y } = x);
-                if (typeof y === "object") {
+            else if (x instanceof Array) {
+                if (x.length !== 2 || typeof x[1] === "object") {
                     // Unreachable in TypeScript
-                    throw new TypeError(`unsupported object type: { num: ${typeof x}; den: object }`);
+                    throw new TypeError("unsupported array value");
                 }
+                [x, y] = x;
+            }
+            else if (typeof x === "object") {
+                if (typeof x.den === "object") {
+                    // Unreachable in TypeScript
+                    throw new TypeError("unsupported object value");
+                }
+                ({ num: x, den: y } = x);
             }
         }
         // Convert int-like to BigInt

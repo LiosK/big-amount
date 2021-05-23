@@ -39,6 +39,36 @@ tests["q(number, number)"] = (name) => {
   console.timeEnd(name);
 };
 
+tests["q([bigint, bigint])"] = (name) => {
+  const xs = pairs.map(([n, d]) => [BigInt(n), BigInt(d)]);
+
+  console.time(name);
+  for (const x of xs) {
+    q(x);
+  }
+  console.timeEnd(name);
+};
+
+tests["q([number, number])"] = (name) => {
+  const xs = pairs.map(([n, d]) => [n, d]);
+
+  console.time(name);
+  for (const x of xs) {
+    q(x);
+  }
+  console.timeEnd(name);
+};
+
+tests["q([string, string])"] = (name) => {
+  const xs = pairs.map(([n, d]) => [String(n), String(d)]);
+
+  console.time(name);
+  for (const x of xs) {
+    q(x);
+  }
+  console.timeEnd(name);
+};
+
 tests["q({ num: bigint, den: bigint })"] = (name) => {
   const xs = pairs.map(([n, d]) => ({ num: BigInt(n), den: BigInt(d) }));
 

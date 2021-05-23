@@ -4,6 +4,7 @@
 
 ### Added
 
+- Support for tuple-type arguments to `create()`.
 - Support for number and string fields in object-type arguments of `create()`.
 
 ## v1.2.1 - 2021-05-18
