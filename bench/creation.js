@@ -50,10 +50,8 @@ tests["q([bigint, bigint])"] = (name) => {
 };
 
 tests["q([number, number])"] = (name) => {
-  const xs = pairs.map(([n, d]) => [n, d]);
-
   console.time(name);
-  for (const x of xs) {
+  for (const x of pairs) {
     q(x);
   }
   console.timeEnd(name);
