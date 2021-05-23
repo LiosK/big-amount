@@ -90,30 +90,42 @@ export class BigAmount {
    * ```
    *
    * @remarks
-   * This method accepts the following arguments:
+   * This method accepts the following BigAmount-like arguments:
    *
    * -  `bigint` - Any `bigint` value.
    * -  `number` - _Integer only._ This is because it is often imprecise and
-   *    expensive to find a rational approximate of a non-integral number.
-   *    Pass the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact
-   *    value or use [[BigAmount.fromNumber]] to find an approximate.
+   *    expensive to find a rational approximate of a non-integral number. Pass
+   *    the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact value
+   *    or use [[BigAmount.fromNumber]] to find an approximate.
    * -  `string` - Fraction (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
    *    (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`). The
    *    fractional notation `q("num/den")` is equivalent to `q("num", "den")`.
-   * - `object` - Any object that has two `bigint` fields named `num` and `den`,
-   *   including any [[BigAmount]] value.
+   * -  `object` - Any object (including any [[BigAmount]] value) that has
+   *    proper `num` and `den` fields. `q({ num: x, den: y })` is equivalent to
+   *    `q(x, y)`, except that the fields do not accept an object.
    *
+   * @param x - bigint | number | string | { num: bigint | number | string; den:
+   *        bigint | number | string }
+   * @param y - bigint | number | string | { num: bigint | number | string; den:
+   *        bigint | number | string }
    * @category Instance Creation
    */
-  static create(
-    x: bigint | number | string | { num: bigint; den: bigint },
-    y?: bigint | number | string | { num: bigint; den: bigint }
-  ): BigAmount {
-    // `create("x/y")` is equivalent to `create("x", "y")`
-    if (typeof x === "string" && y == null) {
-      const match = PATTERN_FRACTION.exec(x);
-      if (match !== null) {
-        [, x, y] = match;
+  static create(x: BigAmountLike, y?: BigAmountLike): BigAmount {
+    // Treat `create("x/y")` and `create({ num: x, den: y })` as `create(x, y)`
+    if (y == null) {
+      if (typeof x === "string") {
+        const match = PATTERN_FRACTION.exec(x);
+        if (match !== null) {
+          [, x, y] = match;
+        }
+      } else if (typeof x === "object") {
+        ({ num: x, den: y } = x);
+        if (typeof y === "object") {
+          // Unreachable in TypeScript
+          throw new TypeError(
+            `unsupported object type: { num: ${typeof x}; den: object }`
+          );
+        }
       }
     }
 
@@ -154,9 +166,8 @@ export class BigAmount {
             : new BigAmount(num, 10n ** -exp);
         }
         throw new SyntaxError(`Cannot convert ${x} to a BigAmount`);
-      } else if (typeof x.num === "bigint" && typeof x.den === "bigint") {
-        return new BigAmount(x.num, x.den);
       }
+      // Unreachable in TypeScript
       throw new TypeError(`unsupported type: ${typeof x}`);
     } else {
       // `create(x, y)`
@@ -237,9 +248,7 @@ export class BigAmount {
    * @param xs - Array of values that [[BigAmount.create]] accepts.
    * @category Instance Creation
    */
-  static sum(
-    xs: Array<bigint | number | string | { num: bigint; den: bigint }>
-  ): BigAmount {
+  static sum(xs: BigAmountLike[]): BigAmount {
     if (xs.length > 0) {
       const [head, ...tail] = xs.map((x) => BigAmount.create(x));
       return head.batchAdd(tail);
@@ -784,6 +793,16 @@ const PATTERN_INT_LIKE =
   /^\s*(?:[-+]?[0-9]+|0x[0-9a-f]+|0o[0-7]+|0b[01]+)\s*$/i;
 const PATTERN_DECIMAL =
   /^\s*([-+]?)(?:([0-9]*)\.([0-9]+)|([0-9]+))(?:e([-+]?[0-9]+))?\s*$/i;
+
+/**
+ * Represents types of BigAmount-like values that [[BigAmount.create]] can
+ * convert into [[BigAmount]] values.
+ */
+type BigAmountLike =
+  | bigint
+  | number
+  | string
+  | { num: bigint | number | string; den: bigint | number | string };
 
 /**
  * Calculates the greatest common divisor of two integers. The result is always

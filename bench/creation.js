@@ -49,6 +49,26 @@ tests["q({ num: bigint, den: bigint })"] = (name) => {
   console.timeEnd(name);
 };
 
+tests["q({ num: number, den: number })"] = (name) => {
+  const xs = pairs.map(([n, d]) => ({ num: n, den: d }));
+
+  console.time(name);
+  for (const x of xs) {
+    q(x);
+  }
+  console.timeEnd(name);
+};
+
+tests["q({ num: string, den: string })"] = (name) => {
+  const xs = pairs.map(([n, d]) => ({ num: String(n), den: String(d) }));
+
+  console.time(name);
+  for (const x of xs) {
+    q(x);
+  }
+  console.timeEnd(name);
+};
+
 tests['q("num/den")'] = (name) => {
   const xs = pairs.map(([n, d]) => `${n}/${d}`);
 

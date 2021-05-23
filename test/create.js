@@ -25,6 +25,15 @@ describe("create(x)", () => {
       [new BigAmount(-123n, 456n), new BigAmount(-123n, 456n)],
       [{ num: 123n, den: 456n, ignored: 0 }, new BigAmount(123n, 456n)],
       [{ num: -123n, den: 456n, ignored: 0 }, new BigAmount(-123n, 456n)],
+      [{ num: 123, den: 456, ignored: 0 }, new BigAmount(123n, 456n)],
+      [{ num: -123, den: 456, ignored: 0 }, new BigAmount(-123n, 456n)],
+      [{ num: "123", den: "456", ignored: 0 }, new BigAmount(123n, 456n)],
+      [{ num: "-123", den: "456", ignored: 0 }, new BigAmount(-123n, 456n)],
+      [{ num: "123.0", den: "456.0" }, new BigAmount(12300n, 45600n)],
+      [{ num: "-123.0", den: "456.0" }, new BigAmount(-12300n, 45600n)],
+      [{ num: "1230/10", den: "4560/10" }, new BigAmount(12300n, 45600n)],
+      [{ num: "-1230/10", den: "4560/10" }, new BigAmount(-12300n, 45600n)],
+      [{ num: "123/2", den: "456.0/-5" }, new BigAmount(-6150n, 9120n)],
       // }}}
     ];
     for (const [x, expected] of cases) {
