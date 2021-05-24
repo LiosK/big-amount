@@ -125,11 +125,11 @@ class BigAmount {
         }
         // Convert int-like to BigInt
         if ((typeof x === "number" && Number.isInteger(x)) ||
-            (typeof x === "string" && PATTERN_INT_LIKE.test(x))) {
+            (typeof x === "string" && PATTERN_INTEGER.test(x))) {
             x = BigInt(x);
         }
         if ((typeof y === "number" && Number.isInteger(y)) ||
-            (typeof y === "string" && PATTERN_INT_LIKE.test(y))) {
+            (typeof y === "string" && PATTERN_INTEGER.test(y))) {
             y = BigInt(y);
         }
         if (y == null) {
@@ -633,7 +633,7 @@ exports.BigAmount = BigAmount;
  */
 exports.q = BigAmount.create;
 const PATTERN_FRACTION = /^([^/]+)\/([^/]+)$/;
-const PATTERN_INT_LIKE = /^\s*(?:[-+]?[0-9]+|0x[0-9a-f]+|0o[0-7]+|0b[01]+)\s*$/i;
+const PATTERN_INTEGER = /^\s*(?:[-+]?[0-9]+|0x[0-9a-f]+|0o[0-7]+|0b[01]+)\s*$/i;
 const PATTERN_DECIMAL = /^\s*([-+]?)(?:([0-9]*)\.([0-9]+)|([0-9]+))(?:e([-+]?[0-9]+))?\s*$/i;
 /**
  * Calculates the greatest common divisor of two integers. The result is always
