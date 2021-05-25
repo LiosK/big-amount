@@ -243,6 +243,13 @@ export declare class BigAmount {
      */
     fixedAdd(other: BigAmount, roundingMode?: RoundingMode): BigAmount;
     /**
+     * Subtracts `other` from `this`, keeping the denominator unchanged. This
+     * method is equivalent to `f.sub(other).quantize(f.den, roundingMode)`.
+     *
+     * @category Arithmetic Operation
+     */
+    fixedSub(other: BigAmount, roundingMode?: RoundingMode): BigAmount;
+    /**
      * Multiplies `this` by `other`, keeping the denominator unchanged. This
      * method is equivalent to `f.mul(other).quantize(f.den, roundingMode)`.
      *

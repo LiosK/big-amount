@@ -4,6 +4,7 @@
 
 ### Added
 
+- `#fixedSub()`.
 - Support for number and string fields in object-type arguments of `create()`.
 
 ### Maintenance

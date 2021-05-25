@@ -514,6 +514,31 @@ export class BigAmount {
   }
 
   /**
+   * Subtracts `other` from `this`, keeping the denominator unchanged. This
+   * method is equivalent to `f.sub(other).quantize(f.den, roundingMode)`.
+   *
+   * @category Arithmetic Operation
+   */
+  fixedSub(
+    other: BigAmount,
+    roundingMode: RoundingMode = "HALF_EVEN"
+  ): BigAmount {
+    if (this.den === other.den) {
+      return new BigAmount(this.num - other.num, this.den);
+    } else if (this.den === -other.den) {
+      return new BigAmount(this.num + other.num, this.den);
+    }
+    return new BigAmount(
+      divInt(
+        this.num * other.den - this.den * other.num,
+        other.den,
+        roundingMode
+      ),
+      this.den
+    );
+  }
+
+  /**
    * Multiplies `this` by `other`, keeping the denominator unchanged. This
    * method is equivalent to `f.mul(other).quantize(f.den, roundingMode)`.
    *
