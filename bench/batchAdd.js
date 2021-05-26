@@ -12,7 +12,7 @@ for (let i = 0; i < 1_000_000; i++) {
 }
 
 tests["add(q(num, 1000)).add..."] = (name) => {
-  const xs = pairs.map(([n, d]) => q(BigInt(n), 1000n));
+  const xs = pairs.map(([n]) => q(BigInt(n), 1000n));
 
   console.time(name);
   let acc = q(0n, 1000n);
@@ -23,7 +23,7 @@ tests["add(q(num, 1000)).add..."] = (name) => {
 };
 
 tests["batchAdd([q(num, 1000), ...])"] = (name) => {
-  const xs = pairs.map(([n, d]) => q(BigInt(n), 1000n));
+  const xs = pairs.map(([n]) => q(BigInt(n), 1000n));
 
   console.time(name);
   q(0n, 1000n).batchAdd(xs);
@@ -31,7 +31,7 @@ tests["batchAdd([q(num, 1000), ...])"] = (name) => {
 };
 
 tests["batchAdd([q(num, 10 ** [0-15]), ...])"] = (name) => {
-  const xs = pairs.map(([n, d]) =>
+  const xs = pairs.map(([n]) =>
     q(BigInt(n), 10n ** BigInt(Math.floor(Math.random() * 16)))
   );
 

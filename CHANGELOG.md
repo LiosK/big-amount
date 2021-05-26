@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.3.0 - 2021-05-27
+
+### Added
+
+- `#fixedSub()`.
+- Support for number and string fields in object-type arguments of `create()`.
+
+### Maintenance
+
+- Updated dev dependencies.
+- Refactored benchmark scripts.
+
 ## v1.2.1 - 2021-05-18
 
 ### Maintenance

@@ -77,28 +77,28 @@ export declare class BigAmount {
      * ```
      *
      * @remarks
-     * This method accepts the following arguments:
+     * This method accepts the following BigAmount-like arguments:
      *
      * -  `bigint` - Any `bigint` value.
      * -  `number` - _Integer only._ This is because it is often imprecise and
-     *    expensive to find a rational approximate of a non-integral number.
-     *    Pass the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact
-     *    value or use [[BigAmount.fromNumber]] to find an approximate.
+     *    expensive to find a rational approximate of a non-integral number. Pass
+     *    the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact value
+     *    or use [[BigAmount.fromNumber]] to find an approximate.
      * -  `string` - Fraction (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
      *    (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`). The
      *    fractional notation `q("num/den")` is equivalent to `q("num", "den")`.
-     * - `object` - Any object that has two `bigint` fields named `num` and `den`,
-     *   including any [[BigAmount]] value.
+     * -  `object` - Any object (including any [[BigAmount]] value) that has two
+     *    BigAmount-like scalar fields named `num` and `den`. `q({ num: x, den: y
+     *    })` is equivalent to `q(x, y)`, except that the fields do not accept an
+     *    object.
      *
+     * @param x - bigint | number | string | { num: bigint | number | string; den:
+     *        bigint | number | string }
+     * @param y - bigint | number | string | { num: bigint | number | string; den:
+     *        bigint | number | string }
      * @category Instance Creation
      */
-    static create(x: bigint | number | string | {
-        num: bigint;
-        den: bigint;
-    }, y?: bigint | number | string | {
-        num: bigint;
-        den: bigint;
-    }): BigAmount;
+    static create(x: BigAmountLike, y?: BigAmountLike): BigAmount;
     /**
      * Creates a [[BigAmount]] from `number`. Unlike [[BigAmount.create]], this
      * method finds a rational approximate of a non-integral number.
@@ -120,10 +120,7 @@ export declare class BigAmount {
      * @param xs - Array of values that [[BigAmount.create]] accepts.
      * @category Instance Creation
      */
-    static sum(xs: Array<bigint | number | string | {
-        num: bigint;
-        den: bigint;
-    }>): BigAmount;
+    static sum(xs: BigAmountLike[]): BigAmount;
     /**
      * Returns a copy of `this`.
      *
@@ -245,6 +242,13 @@ export declare class BigAmount {
      * @category Arithmetic Operation
      */
     fixedAdd(other: BigAmount, roundingMode?: RoundingMode): BigAmount;
+    /**
+     * Subtracts `other` from `this`, keeping the denominator unchanged. This
+     * method is equivalent to `f.sub(other).quantize(f.den, roundingMode)`.
+     *
+     * @category Arithmetic Operation
+     */
+    fixedSub(other: BigAmount, roundingMode?: RoundingMode): BigAmount;
     /**
      * Multiplies `this` by `other`, keeping the denominator unchanged. This
      * method is equivalent to `f.mul(other).quantize(f.den, roundingMode)`.
@@ -388,3 +392,12 @@ export interface FormatOptions {
      */
     experimentalUseLakhCrore?: boolean;
 }
+/**
+ * Represents types of BigAmount-like values that [[BigAmount.create]] can
+ * convert into [[BigAmount]] values.
+ */
+declare type BigAmountLike = bigint | number | string | {
+    num: bigint | number | string;
+    den: bigint | number | string;
+};
+export {};

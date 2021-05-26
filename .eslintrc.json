@@ -27,6 +27,12 @@
       "globals": {
         "chai": "readonly"
       }
+    },
+    {
+      "files": ["bench/**"],
+      "env": {
+        "node": true
+      }
     }
   ]
 }

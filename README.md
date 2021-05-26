@@ -119,6 +119,7 @@ handle accounting use cases.
 | ------------------ | --------------------------------------------------- |
 | `batchAdd(others)` | Adds array of BigAmount values at a time            |
 | `fixedAdd(other)`  | Addition that keeps the denominator unchanged       |
+| `fixedSub(other)`  | Subtraction that keeps the denominator unchanged    |
 | `fixedMul(other)`  | Multiplication that keeps the denominator unchanged |
 
 ## Rounding
