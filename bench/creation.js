@@ -80,7 +80,7 @@ tests['q("num/den")'] = (name) => {
 };
 
 tests['q("num/1000")'] = (name) => {
-  const xs = pairs.map(([n, d]) => `${n}/1000`);
+  const xs = pairs.map(([n]) => `${n}/1000`);
 
   console.time(name);
   for (const x of xs) {

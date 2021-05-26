@@ -1,4 +1,4 @@
-import { q, BigAmount } from "../dist/index.js";
+import { BigAmount } from "../dist/index.js";
 
 const tests = {};
 
