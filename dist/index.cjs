@@ -585,11 +585,41 @@ class BigAmount {
             f.den <= Number.MAX_SAFE_INTEGER) {
             return Number(f.num) / Number(f.den);
         }
-        const exp = String(f.num < 0n ? -f.num : f.num).length - String(f.den).length;
-        const eNotation = (exp < 0
-            ? new BigAmount(f.num * 10n ** BigInt(-exp), f.den)
-            : new BigAmount(f.num, f.den * 10n ** BigInt(exp))).toFixed(20) + `e${exp}`;
-        return Number(eNotation);
+        return Number(f.toExponential(20));
+    }
+    /**
+     * Formats a [[BigAmount]] using decimal exponential notation just like
+     * `Number#toExponential`. Unlike `Number#toExponential`, this method always
+     * requires the first argument.
+     *
+     * @param ndigits - Number of digits to appear after the decimal separator.
+     * @category Conversion
+     */
+    toExponential(ndigits) {
+        let num = this.num < 0n ? -this.num : this.num;
+        let den = this.den < 0n ? -this.den : this.den;
+        let exp = String(num).length - String(den).length;
+        if (exp < 0) {
+            num *= 10n ** BigInt(-exp);
+        }
+        else if (exp > 0) {
+            den *= 10n ** BigInt(exp);
+        }
+        if (num === 0n) {
+            exp = 0;
+        }
+        else if (num < den) {
+            num *= 10n;
+            exp--;
+        }
+        let coef = new BigAmount(num, den).toFixed(ndigits);
+        if (/^10/.test(coef)) {
+            // happens when 999999... is rounded
+            den *= 10n;
+            exp++;
+            coef = new BigAmount(num, den).toFixed(ndigits);
+        }
+        return `${this.sign() < 0n ? "-" : ""}${coef}e${exp < 0 ? "" : "+"}${exp}`;
     }
     /**
      * Formats a [[BigAmount]] using decimal fixed-point notation just like

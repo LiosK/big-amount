@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- `#toExponential()`.
+
 ### Maintenance
 
 - Updated dev dependencies.
