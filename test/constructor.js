@@ -6,7 +6,7 @@ describe("constructor()", () => {
   it("creates a BigAmount with num and den fields", () => {
     runTestOnPairs((p, q) => {
       const x = new BigAmount(p, q);
-      assert(x instanceof BigAmount);
+      assert.instanceOf(x, BigAmount);
       assert.strictEqual(x.num, p);
       assert.strictEqual(x.den, q);
     });

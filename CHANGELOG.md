@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.0 - 2021-06-05
+
+### Added
+
+- `#toExponential()`.
+
+### Maintenance
+
+- Updated dev dependencies.
+
 ## v1.3.0 - 2021-05-27
 
 ### Added

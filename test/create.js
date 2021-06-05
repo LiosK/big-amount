@@ -1,4 +1,5 @@
 import { BigAmount } from "../dist/index.js";
+import { runTestOnPairs } from "./util/cases.js";
 const assert = chai.assert;
 
 describe("create(x)", () => {
@@ -39,6 +40,38 @@ describe("create(x)", () => {
     for (const [x, expected] of cases) {
       assert.deepStrictEqual(BigAmount.create(x), expected);
     }
+  });
+
+  it("interprets the result of `#toJSON()` properly", () => {
+    runTestOnPairs((xn, xd) => {
+      const f = new BigAmount(xn, xd);
+      for (let i = 0; i < 10; i += 3) {
+        assert(BigAmount.create(f.toJSON()).eq(f));
+      }
+    });
+  });
+
+  it("interprets the result of `#toExponential()` properly", () => {
+    runTestOnPairs((xn, xd) => {
+      const f = new BigAmount(xn, xd);
+      for (let i = 0; i < 10; i += 3) {
+        const expected = f.toExponential(i);
+        assert.strictEqual(
+          BigAmount.create(expected).toExponential(i),
+          expected
+        );
+      }
+    });
+  });
+
+  it("interprets the result of `#toFixed()` properly", () => {
+    runTestOnPairs((xn, xd) => {
+      const f = new BigAmount(xn, xd);
+      for (let i = 0; i < 10; i += 3) {
+        const expected = f.toFixed(i);
+        assert.strictEqual(BigAmount.create(expected).toFixed(i), expected);
+      }
+    });
   });
 });
 

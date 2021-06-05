@@ -172,6 +172,13 @@ BigAmount.create("-678.9").toFixed(2, opts); // "($678.90)"
 BigAmount.create("0").toFixed(2, opts);      // "-"
 ```
 
+`toExponential()` returns a string representing a fraction in exponential
+notation.
+
+```javascript
+q("12345.678").toExponential(6); // "1.234568e+4"
+```
+
 [formatting options]: https://liosk.github.io/big-amount/doc/interfaces/formatoptions.html
 
 ## License
