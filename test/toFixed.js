@@ -370,6 +370,30 @@ describe("#toFixed()", () => {
       assert.deepEqual(actual, expected[locale], locale);
     }
   });
+
+  it("produces precise representation of repeating decimal even when ndigits is large", () => {
+    const cases = [
+      // {{{
+      [1n, 9n, /^0\.1+$/],
+      [1n, 3n, /^0\.3+$/],
+      [2n, 3n, /^0\.6*7$/],
+      [9n, 11n, /^0\.(?:81)*(?:8|82)?$/],
+      [7n, 12n, /^0\.583*$/],
+      [1n, 7n, /^0\.(?:142857)*(?:1|14|143|1429|14286)?$/],
+      [1n, 81n, /^0\.01(234567901)*(?:2|235?|2346|23457|234568|23456790?)?$/],
+      [22n, 7n, /^3\.(?:142857)*(?:1|14|143|1429|14286)?$/],
+      // }}}
+    ];
+
+    for (const [p, q, pattern] of cases) {
+      const f = new BigAmount(p, q);
+      for (let i = 2; i < 512; i++) {
+        const s = f.toFixed(i);
+        assert.strictEqual(s.length, i + 2);
+        assert.match(s, pattern);
+      }
+    }
+  });
 });
 
 // vim: fdm=marker fmr&
