@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.4.1 - 2021-06-12
 
 ### Maintenance
 
