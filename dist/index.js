@@ -215,11 +215,10 @@ export class BigAmount {
             }
         }
         // Return (num / den) * (2 ** exp)
-        const sign = x < 0 ? -1n : 1n;
         const term = 2n ** BigInt(Math.abs(exp));
         return exp > 0
-            ? new BigAmount(sign * BigInt(num) * term, BigInt(den))
-            : new BigAmount(sign * BigInt(num), BigInt(den) * term);
+            ? new BigAmount(BigInt(Math.sign(x) * num) * term, BigInt(den))
+            : new BigAmount(BigInt(Math.sign(x) * num), BigInt(den) * term);
     }
     /**
      * Creates a [[BigAmount]] instance of the sum of list items.
