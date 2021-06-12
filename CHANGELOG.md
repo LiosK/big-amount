@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.1 - 2021-06-12
+
+### Maintenance
+
+- Refactoring and performance tuning.
+- Updated dev dependencies.
+
 ## v1.4.0 - 2021-06-05
 
 ### Added
