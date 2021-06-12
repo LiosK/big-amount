@@ -5,6 +5,7 @@
 ### Maintenance
 
 - Refactoring and performance tuning.
+- Updated dev dependencies.
 
 ## v1.4.0 - 2021-06-05
 
