@@ -31,9 +31,9 @@ let s = BigAmount.sum([
   "-9336803.50",
 ]).toFixed(2, {
   groupSeparator: ",",
-  templates: ["${}", "(${})"],
+  templates: ["${}", "$({})"],
 });
-console.log(s); // "($7,399,325.32)"
+console.log(s); // "$(7,399,325.32)"
 ```
 
 Note that this library requires ES2020 compatibility (as does BigInt).
@@ -166,9 +166,9 @@ f.neg().toFixed(2, {
   templates: ["{} €"],
 });                                      // "-12 345 678,90 €"
 
-const opts = { templates: ["${}", "(${})", "-"] };
+const opts = { templates: ["${}", "$({})", "-"] };
 BigAmount.create("123.45").toFixed(2, opts); // "$123.45"
-BigAmount.create("-678.9").toFixed(2, opts); // "($678.90)"
+BigAmount.create("-678.9").toFixed(2, opts); // "$(678.90)"
 BigAmount.create("0").toFixed(2, opts);      // "-"
 ```
 

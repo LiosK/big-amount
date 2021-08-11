@@ -26,6 +26,24 @@ tests["BigAmount.fromNumber(random(-1000, 1000))"] = (name) => {
   console.timeEnd(name);
 };
 
+tests["BigAmount.fromNumber(random(-2^50, 2^50))"] = (name) => {
+  const xs = ns.map((n) => (n - 0.5) * 2 ** 50);
+  console.time(name);
+  for (const x of xs) {
+    BigAmount.fromNumber(x);
+  }
+  console.timeEnd(name);
+};
+
+tests["BigAmount.fromNumber(random(-2^-1000, 2^-1000))"] = (name) => {
+  const xs = ns.map((n) => (n - 0.5) * 2 ** -1000);
+  console.time(name);
+  for (const x of xs) {
+    BigAmount.fromNumber(x);
+  }
+  console.timeEnd(name);
+};
+
 tests["BigAmount.create(String(random(-1000, 1000)))"] = (name) => {
   const xs = ns.map((n) => String((n - 0.5) * 2000));
 
