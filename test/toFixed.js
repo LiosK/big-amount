@@ -171,11 +171,11 @@ describe("#toFixed()", () => {
       "-12 345 678,90 €"
     );
 
-    const opts = { templates: ["${}", "(${})", "-"] };
+    const opts = { templates: ["${}", "$({})", "-"] };
     assert.strictEqual(BigAmount.create("123.45").toFixed(2, opts), "$123.45");
     assert.strictEqual(
       BigAmount.create("-678.9").toFixed(2, opts),
-      "($678.90)"
+      "$(678.90)"
     );
     assert.strictEqual(BigAmount.create("0").toFixed(2, opts), "-");
 
@@ -187,9 +187,9 @@ describe("#toFixed()", () => {
         "-9336803.50",
       ]).toFixed(2, {
         groupSeparator: ",",
-        templates: ["${}", "(${})"],
+        templates: ["${}", "$({})"],
       }),
-      "($7,399,325.32)"
+      "$(7,399,325.32)"
     );
   });
 

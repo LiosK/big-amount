@@ -4,6 +4,7 @@
 
 ### Maintenance
 
+- Updated documents.
 - Updated dev dependencies.
 
 ## v1.4.1 - 2021-06-12
