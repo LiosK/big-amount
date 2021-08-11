@@ -29,9 +29,9 @@
  *   "-9336803.50",
  * ]).toFixed(2, {
  *   groupSeparator: ",",
- *   templates: ["${}", "(${})"],
+ *   templates: ["${}", "$({})"],
  * });
- * console.log(s); // "($7,399,325.32)"
+ * console.log(s); // "$(7,399,325.32)"
  * ```
  */
 export class BigAmount {

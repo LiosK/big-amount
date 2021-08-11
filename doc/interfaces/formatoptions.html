@@ -82,9 +82,9 @@
 <span style="color: #000000">  </span><span style="color: #001080">templates:</span><span style="color: #000000"> [</span><span style="color: #A31515">&quot;{} €&quot;</span><span style="color: #000000">],</span>
 <span style="color: #000000">});                                      </span><span style="color: #008000">// &quot;-12 345 678,90 €&quot;</span>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">opts</span><span style="color: #000000"> = { </span><span style="color: #001080">templates:</span><span style="color: #000000"> [</span><span style="color: #A31515">&quot;${}&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;(${})&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;-&quot;</span><span style="color: #000000">] };</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">opts</span><span style="color: #000000"> = { </span><span style="color: #001080">templates:</span><span style="color: #000000"> [</span><span style="color: #A31515">&quot;${}&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;$({})&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;-&quot;</span><span style="color: #000000">] };</span>
 <span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;123.45&quot;</span><span style="color: #000000">).</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #001080">opts</span><span style="color: #000000">); </span><span style="color: #008000">// &quot;$123.45&quot;</span>
-<span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;-678.9&quot;</span><span style="color: #000000">).</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #001080">opts</span><span style="color: #000000">); </span><span style="color: #008000">// &quot;($678.90)&quot;</span>
+<span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;-678.9&quot;</span><span style="color: #000000">).</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #001080">opts</span><span style="color: #000000">); </span><span style="color: #008000">// &quot;$(678.90)&quot;</span>
 <span style="color: #001080">BigAmount</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;0&quot;</span><span style="color: #000000">).</span><span style="color: #795E26">toFixed</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #001080">opts</span><span style="color: #000000">);      </span><span style="color: #008000">// &quot;-&quot;</span>
 </code></pre>
 						</dd>
@@ -123,7 +123,7 @@
 					<div class="tsd-signature tsd-kind-icon">decimal<wbr>Separator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v1.4.1/src/index.ts#L814">index.ts:814</a></li>
+							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v1.4.2/src/index.ts#L814">index.ts:814</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -139,7 +139,7 @@
 					<div class="tsd-signature tsd-kind-icon">experimental<wbr>Use<wbr>Lakh<wbr>Crore<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v1.4.1/src/index.ts#L840">index.ts:840</a></li>
+							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v1.4.2/src/index.ts#L840">index.ts:840</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -156,7 +156,7 @@
 					<div class="tsd-signature tsd-kind-icon">group<wbr>Separator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v1.4.1/src/index.ts#L822">index.ts:822</a></li>
+							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v1.4.2/src/index.ts#L822">index.ts:822</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -173,7 +173,7 @@
 					<div class="tsd-signature tsd-kind-icon">templates<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">?</span><span class="tsd-signature-symbol">]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v1.4.1/src/index.ts#L833">index.ts:833</a></li>
+							<li>Defined in <a href="https://github.com/LiosK/big-amount/blob/v1.4.2/src/index.ts#L833">index.ts:833</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
