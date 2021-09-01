@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.3 - 2021-09-01
+
+### Maintenance
+
+- Updated dev dependencies.
+
 ## v1.4.2 - 2021-08-11
 
 ### Maintenance

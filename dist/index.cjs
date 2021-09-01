@@ -4,6 +4,7 @@
  *
  * @license Apache-2.0
  * @copyright 2021 LiosK
+ * @packageDocumentation
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.q = exports.BigAmount = void 0;

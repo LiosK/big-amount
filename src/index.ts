@@ -3,6 +3,7 @@
  *
  * @license Apache-2.0
  * @copyright 2021 LiosK
+ * @packageDocumentation
  */
 
 /**
