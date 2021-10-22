@@ -1,6 +1,6 @@
 {
   "name": "big-amount",
-  "version": "1.4.3",
+  "version": "2.0.0",
   "description": "BigInt-based rational number library focused on accounting",
   "type": "module",
   "main": "./dist/index.js",
@@ -42,14 +42,14 @@
   },
   "homepage": "https://github.com/LiosK/big-amount#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.30.0",
-    "@typescript-eslint/parser": "^4.30.0",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
     "chai": "^4.3.4",
     "eslint": "^7.32.0",
-    "mocha": "^9.1.1",
-    "prettier": "^2.3.2",
+    "mocha": "^9.1.3",
+    "prettier": "^2.4.1",
     "typedoc": "^0.21.9",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.4"
   },
   "prettier": {
     "embeddedLanguageFormatting": "off"

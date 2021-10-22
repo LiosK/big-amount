@@ -104,12 +104,9 @@ export declare class BigAmount {
      * Creates a [[BigAmount]] from `number`. Unlike [[BigAmount.create]], this
      * method finds a rational approximate of a non-integral number.
      *
-     * @param precision - _Deprecated._ This parameter may be removed or replaced
-     *        in the future because the argument needs to be determined based on
-     *        highly implementation-specific details.
      * @category Instance Creation
      */
-    static fromNumber(x: number, precision?: number): BigAmount;
+    static fromNumber(x: number): BigAmount;
     /**
      * Creates a [[BigAmount]] instance of the sum of list items.
      *
@@ -139,19 +136,24 @@ export declare class BigAmount {
     /** Returns true if `this` is zero. */
     isZero(): boolean;
     /**
-     * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
+     * Returns `-1`, `0`, and `1` if `this` is less than, equal to, and greater
+     * than `other`, respectively.
      *
-     * @returns `-1` if `x` is less than `y`, `0` if `x` equals to `y`, or `1` if
-     *          `x` is greater than `y`.
      * @category Comparison
      */
-    static cmp(x: BigAmount, y: BigAmount): number;
+    cmp(other: BigAmount): number;
     /**
      * Returns true if `this` is an equivalent fraction to `other`.
      *
      * @category Comparison
      */
     eq(other: BigAmount): boolean;
+    /**
+     * Returns true if `this` is not an equivalent fraction to `other`.
+     *
+     * @category Comparison
+     */
+    ne(other: BigAmount): boolean;
     /**
      * Returns true if `this` is greater than `other`.
      *

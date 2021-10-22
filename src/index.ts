@@ -165,7 +165,7 @@ export class BigAmount {
             ? new BigAmount(num * 10n ** exp, 1n)
             : new BigAmount(num, 10n ** -exp);
         }
-        throw new SyntaxError(`Cannot convert ${x} to a BigAmount`);
+        throw new SyntaxError(`cannot convert ${x} to a BigAmount`);
       }
       // Unreachable in TypeScript
       throw new TypeError(`unsupported type: ${typeof x}`);
@@ -183,12 +183,10 @@ export class BigAmount {
    * Creates a [[BigAmount]] from `number`. Unlike [[BigAmount.create]], this
    * method finds a rational approximate of a non-integral number.
    *
-   * @param precision - _Deprecated._ This parameter may be removed or replaced
-   *        in the future because the argument needs to be determined based on
-   *        highly implementation-specific details.
    * @category Instance Creation
    */
-  static fromNumber(x: number, precision = 100_000_000): BigAmount {
+  static fromNumber(x: number): BigAmount {
+    const PRECISION = 100_000_000;
     if (Number.isInteger(x)) {
       return new BigAmount(BigInt(x), 1n);
     } else if (!Number.isFinite(x)) {
@@ -205,7 +203,7 @@ export class BigAmount {
       let [lnum, lden] = [1, 1];
       let [unum, uden] = [2, 1];
       let mid = 1.5;
-      while (lden + uden <= precision) {
+      while (lden + uden <= PRECISION) {
         num = lnum + unum;
         den = lden + uden;
         mid = num / den;
@@ -290,17 +288,18 @@ export class BigAmount {
   }
 
   /**
-   * Compares two [[BigAmount]]s. This method coordinates with `Array#sort`.
+   * Returns `-1`, `0`, and `1` if `this` is less than, equal to, and greater
+   * than `other`, respectively.
    *
-   * @returns `-1` if `x` is less than `y`, `0` if `x` equals to `y`, or `1` if
-   *          `x` is greater than `y`.
    * @category Comparison
    */
-  static cmp(x: BigAmount, y: BigAmount): number {
-    const diff = x.num * y.den - x.den * y.num;
+  cmp(other: BigAmount): number {
+    const diff = this.num * other.den - this.den * other.num;
     return diff === 0n
       ? 0
-      : (diff < 0n ? -1 : 1) * (x.den < 0n ? -1 : 1) * (y.den < 0n ? -1 : 1);
+      : (diff < 0n ? -1 : 1) *
+          (this.den < 0n ? -1 : 1) *
+          (other.den < 0n ? -1 : 1);
   }
 
   /**
@@ -309,7 +308,16 @@ export class BigAmount {
    * @category Comparison
    */
   eq(other: BigAmount): boolean {
-    return BigAmount.cmp(this, other) === 0;
+    return this.cmp(other) === 0;
+  }
+
+  /**
+   * Returns true if `this` is not an equivalent fraction to `other`.
+   *
+   * @category Comparison
+   */
+  ne(other: BigAmount): boolean {
+    return this.cmp(other) !== 0;
   }
 
   /**
@@ -318,7 +326,7 @@ export class BigAmount {
    * @category Comparison
    */
   gt(other: BigAmount): boolean {
-    return BigAmount.cmp(this, other) > 0;
+    return this.cmp(other) > 0;
   }
 
   /**
@@ -327,7 +335,7 @@ export class BigAmount {
    * @category Comparison
    */
   ge(other: BigAmount): boolean {
-    return BigAmount.cmp(this, other) >= 0;
+    return this.cmp(other) >= 0;
   }
 
   /**
@@ -336,7 +344,7 @@ export class BigAmount {
    * @category Comparison
    */
   lt(other: BigAmount): boolean {
-    return BigAmount.cmp(this, other) < 0;
+    return this.cmp(other) < 0;
   }
 
   /**
@@ -345,7 +353,7 @@ export class BigAmount {
    * @category Comparison
    */
   le(other: BigAmount): boolean {
-    return BigAmount.cmp(this, other) <= 0;
+    return this.cmp(other) <= 0;
   }
 
   /**

@@ -1,5 +1,24 @@
 # Changelog
 
+## v2.0.0 - 2021-10-23
+
+### Changed
+
+- Signature of `cmp()` from `static cmp(BigAmount, BigAmount): number` to
+  `cmp(BigAmount): number`.
+
+### Removed
+
+- Deprecated `precision` parameter from `fromNumber()`.
+
+### Added
+
+- `#ne()`.
+
+### Maintenance
+
+- Updated dev dependencies.
+
 ## v1.4.3 - 2021-09-01
 
 ### Maintenance
