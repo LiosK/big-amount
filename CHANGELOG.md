@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.0.1 - 2021-12-13
+
+### Maintenance
+
+- Updated dev dependencies.
+- Added badges to README.
+
 ## v2.0.0 - 2021-10-23
 
 ### Changed
