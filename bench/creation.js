@@ -109,6 +109,33 @@ tests["BigAmount.fromNumber(d.ddd)"] = (name) => {
   console.timeEnd(name);
 };
 
+tests['m = PATTERN.exec("num/den"); new BigAmount(m[1], m[2])'] = (name) => {
+  const xs = pairs.map(([n, d]) => `${n}/${d}`);
+  const re = /^(-?[0-9]+)\/(-?[0-9]+)$/;
+
+  console.time(name);
+  for (const x of xs) {
+    const m = re.exec(x);
+    if (m !== null) {
+      new BigAmount(BigInt(m[1]), BigInt(m[2]));
+    } else {
+      throw new Error("unreachable");
+    }
+  }
+  console.timeEnd(name);
+};
+
+tests['[n, d] = "num/den".split("/", 2); new BigAmount(n, d)'] = (name) => {
+  const xs = pairs.map(([n, d]) => `${n}/${d}`);
+
+  console.time(name);
+  for (const x of xs) {
+    const [n, d] = x.split("/", 2);
+    new BigAmount(BigInt(n), BigInt(d));
+  }
+  console.timeEnd(name);
+};
+
 // Run
 console.group("creation.js");
 for (const [name, test] of Object.entries(tests)) {

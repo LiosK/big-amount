@@ -1,4 +1,4 @@
-import { q } from "../dist/index.js";
+import { q, BigAmount } from "../dist/index.js";
 
 const tests = {};
 
@@ -75,6 +75,24 @@ tests["batchAdd([q(num, [-1_ddd_dd0-1_ddd_dd0]), ...])"] = (name) => {
 
   console.time(name);
   q(0n, 1000n).batchAdd(xs);
+  console.timeEnd(name);
+};
+
+tests['BigAmount.sum(["num/1000", ...])'] = (name) => {
+  const xs = pairs.map(([n]) => `${n}/1000`);
+
+  console.time(name);
+  BigAmount.sum(xs);
+  console.timeEnd(name);
+};
+
+tests['BigAmount.sum(["num/(10 ** [0-15])", ...])'] = (name) => {
+  const xs = pairs.map(
+    ([n]) => `${n}/${10n ** BigInt(Math.floor(Math.random() * 16))}`
+  );
+
+  console.time(name);
+  BigAmount.sum(xs);
   console.timeEnd(name);
 };
 
