@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- `fixedDiv()`.
+
 ### Maintenance
 
 - Updated dev dependencies.

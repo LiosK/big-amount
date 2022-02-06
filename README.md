@@ -124,6 +124,7 @@ handle accounting use cases.
 | `fixedAdd(other)`  | Addition that keeps the denominator unchanged       |
 | `fixedSub(other)`  | Subtraction that keeps the denominator unchanged    |
 | `fixedMul(other)`  | Multiplication that keeps the denominator unchanged |
+| `fixedDiv(other)`  | Division that keeps the denominator unchanged       |
 
 ## Rounding
 

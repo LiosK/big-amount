@@ -2,7 +2,7 @@
  * big-amount: BigInt-based rational number library focused on accounting
  *
  * @license Apache-2.0
- * @copyright 2021 LiosK
+ * @copyright 2021-2022 LiosK
  * @packageDocumentation
  */
 
@@ -558,6 +558,25 @@ export class BigAmount {
   ): BigAmount {
     return new BigAmount(
       divInt(this.num * other.num, other.den, roundingMode),
+      this.den
+    );
+  }
+
+  /**
+   * Divides `this` by `other`, keeping the denominator unchanged. This method
+   * is equivalent to `f.div(other).quantize(f.den, roundingMode)`.
+   *
+   * @category Arithmetic Operation
+   */
+  fixedDiv(
+    other: BigAmount,
+    roundingMode: RoundingMode = "HALF_EVEN"
+  ): BigAmount {
+    if (other.num === 0n) {
+      throw new RangeError("denominator is zero");
+    }
+    return new BigAmount(
+      divInt(this.num * other.den, other.num, roundingMode),
       this.den
     );
   }
