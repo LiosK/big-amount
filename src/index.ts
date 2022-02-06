@@ -463,7 +463,7 @@ export class BigAmount {
    * Adds `others` to `this`. This method is conceptually equivalent to
    * `f.add(others[0]).add(others[1])...`, except for optimization.
    *
-   * @category Arithmetic Operation
+   * @category Optimized Arithmetic Operation
    */
   batchAdd(others: BigAmount[]): BigAmount {
     // take subtotals by denominator and then sum them up
@@ -500,7 +500,7 @@ export class BigAmount {
    * Adds `other` to `this`, keeping the denominator unchanged. This method is
    * equivalent to `f.add(other).quantize(f.den, roundingMode)`.
    *
-   * @category Arithmetic Operation
+   * @category Optimized Arithmetic Operation
    */
   fixedAdd(
     other: BigAmount,
@@ -525,7 +525,7 @@ export class BigAmount {
    * Subtracts `other` from `this`, keeping the denominator unchanged. This
    * method is equivalent to `f.sub(other).quantize(f.den, roundingMode)`.
    *
-   * @category Arithmetic Operation
+   * @category Optimized Arithmetic Operation
    */
   fixedSub(
     other: BigAmount,
@@ -550,7 +550,7 @@ export class BigAmount {
    * Multiplies `this` by `other`, keeping the denominator unchanged. This
    * method is equivalent to `f.mul(other).quantize(f.den, roundingMode)`.
    *
-   * @category Arithmetic Operation
+   * @category Optimized Arithmetic Operation
    */
   fixedMul(
     other: BigAmount,
@@ -566,7 +566,7 @@ export class BigAmount {
    * Divides `this` by `other`, keeping the denominator unchanged. This method
    * is equivalent to `f.div(other).quantize(f.den, roundingMode)`.
    *
-   * @category Arithmetic Operation
+   * @category Optimized Arithmetic Operation
    */
   fixedDiv(
     other: BigAmount,
