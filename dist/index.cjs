@@ -3,7 +3,7 @@
  * big-amount: BigInt-based rational number library focused on accounting
  *
  * @license Apache-2.0
- * @copyright 2021 LiosK
+ * @copyright 2021-2022 LiosK
  * @packageDocumentation
  */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -427,7 +427,7 @@ class BigAmount {
      * Adds `others` to `this`. This method is conceptually equivalent to
      * `f.add(others[0]).add(others[1])...`, except for optimization.
      *
-     * @category Arithmetic Operation
+     * @category Optimized Arithmetic Operation
      */
     batchAdd(others) {
         // take subtotals by denominator and then sum them up
@@ -464,7 +464,7 @@ class BigAmount {
      * Adds `other` to `this`, keeping the denominator unchanged. This method is
      * equivalent to `f.add(other).quantize(f.den, roundingMode)`.
      *
-     * @category Arithmetic Operation
+     * @category Optimized Arithmetic Operation
      */
     fixedAdd(other, roundingMode = "HALF_EVEN") {
         if (this.den === other.den) {
@@ -479,7 +479,7 @@ class BigAmount {
      * Subtracts `other` from `this`, keeping the denominator unchanged. This
      * method is equivalent to `f.sub(other).quantize(f.den, roundingMode)`.
      *
-     * @category Arithmetic Operation
+     * @category Optimized Arithmetic Operation
      */
     fixedSub(other, roundingMode = "HALF_EVEN") {
         if (this.den === other.den) {
@@ -494,10 +494,53 @@ class BigAmount {
      * Multiplies `this` by `other`, keeping the denominator unchanged. This
      * method is equivalent to `f.mul(other).quantize(f.den, roundingMode)`.
      *
-     * @category Arithmetic Operation
+     * @category Optimized Arithmetic Operation
      */
     fixedMul(other, roundingMode = "HALF_EVEN") {
         return new BigAmount(divInt(this.num * other.num, other.den, roundingMode), this.den);
+    }
+    /**
+     * Divides `this` by `other`, keeping the denominator unchanged. This method
+     * is equivalent to `f.div(other).quantize(f.den, roundingMode)`.
+     *
+     * @category Optimized Arithmetic Operation
+     */
+    fixedDiv(other, roundingMode = "HALF_EVEN") {
+        if (other.num === 0n) {
+            throw new RangeError("denominator is zero");
+        }
+        return new BigAmount(divInt(this.num * other.den, other.num, roundingMode), this.den);
+    }
+    /**
+     * Multiplies `this` by `other`, resetting the denominator to `newDen`. This
+     * method is equivalent to `f.mul(other).quantize(newDen, roundingMode)` and
+     * is typically useful to multiply a quantity by unit price to calculate the
+     * dollar amount at a specific precision.
+     *
+     * @category Optimized Arithmetic Operation
+     */
+    quantMul(other, newDen, roundingMode = "HALF_EVEN") {
+        const den = this.den * other.den;
+        return new BigAmount(den === newDen
+            ? this.num * other.num
+            : divInt(this.num * other.num * newDen, den, roundingMode), newDen);
+    }
+    /**
+     * Divides `this` by `other`, resetting the denominator to `newDen`. This
+     * method is equivalent to `f.div(other).quantize(newDen, roundingMode)` and
+     * is typically useful to divide a dollar amount by quantity to calculate the
+     * unit price at a specific precision.
+     *
+     * @category Optimized Arithmetic Operation
+     */
+    quantDiv(other, newDen, roundingMode = "HALF_EVEN") {
+        if (other.num === 0n) {
+            throw new RangeError("denominator is zero");
+        }
+        const den = this.den * other.num;
+        return new BigAmount(den === newDen
+            ? this.num * other.den
+            : divInt(this.num * other.den * newDen, den, roundingMode), newDen);
     }
     /**
      * Returns a fractional approximate of `this` that has the specified

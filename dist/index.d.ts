@@ -2,7 +2,7 @@
  * big-amount: BigInt-based rational number library focused on accounting
  *
  * @license Apache-2.0
- * @copyright 2021 LiosK
+ * @copyright 2021-2022 LiosK
  * @packageDocumentation
  */
 /**
@@ -235,30 +235,55 @@ export declare class BigAmount {
      * Adds `others` to `this`. This method is conceptually equivalent to
      * `f.add(others[0]).add(others[1])...`, except for optimization.
      *
-     * @category Arithmetic Operation
+     * @category Optimized Arithmetic Operation
      */
     batchAdd(others: BigAmount[]): BigAmount;
     /**
      * Adds `other` to `this`, keeping the denominator unchanged. This method is
      * equivalent to `f.add(other).quantize(f.den, roundingMode)`.
      *
-     * @category Arithmetic Operation
+     * @category Optimized Arithmetic Operation
      */
     fixedAdd(other: BigAmount, roundingMode?: RoundingMode): BigAmount;
     /**
      * Subtracts `other` from `this`, keeping the denominator unchanged. This
      * method is equivalent to `f.sub(other).quantize(f.den, roundingMode)`.
      *
-     * @category Arithmetic Operation
+     * @category Optimized Arithmetic Operation
      */
     fixedSub(other: BigAmount, roundingMode?: RoundingMode): BigAmount;
     /**
      * Multiplies `this` by `other`, keeping the denominator unchanged. This
      * method is equivalent to `f.mul(other).quantize(f.den, roundingMode)`.
      *
-     * @category Arithmetic Operation
+     * @category Optimized Arithmetic Operation
      */
     fixedMul(other: BigAmount, roundingMode?: RoundingMode): BigAmount;
+    /**
+     * Divides `this` by `other`, keeping the denominator unchanged. This method
+     * is equivalent to `f.div(other).quantize(f.den, roundingMode)`.
+     *
+     * @category Optimized Arithmetic Operation
+     */
+    fixedDiv(other: BigAmount, roundingMode?: RoundingMode): BigAmount;
+    /**
+     * Multiplies `this` by `other`, resetting the denominator to `newDen`. This
+     * method is equivalent to `f.mul(other).quantize(newDen, roundingMode)` and
+     * is typically useful to multiply a quantity by unit price to calculate the
+     * dollar amount at a specific precision.
+     *
+     * @category Optimized Arithmetic Operation
+     */
+    quantMul(other: BigAmount, newDen: bigint, roundingMode?: RoundingMode): BigAmount;
+    /**
+     * Divides `this` by `other`, resetting the denominator to `newDen`. This
+     * method is equivalent to `f.div(other).quantize(newDen, roundingMode)` and
+     * is typically useful to divide a dollar amount by quantity to calculate the
+     * unit price at a specific precision.
+     *
+     * @category Optimized Arithmetic Operation
+     */
+    quantDiv(other: BigAmount, newDen: bigint, roundingMode?: RoundingMode): BigAmount;
     /**
      * Returns a fractional approximate of `this` that has the specified
      * denominator. This method rounds the numerator using the specified rounding
