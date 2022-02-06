@@ -4,7 +4,7 @@
 
 ### Added
 
-- `fixedDiv()`.
+- `fixedDiv()`, `quantMul()`, and `quantDiv()`.
 
 ### Maintenance
 

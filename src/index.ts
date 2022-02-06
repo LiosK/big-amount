@@ -582,6 +582,53 @@ export class BigAmount {
   }
 
   /**
+   * Multiplies `this` by `other`, resetting the denominator to `newDen`. This
+   * method is equivalent to `f.mul(other).quantize(newDen, roundingMode)` and
+   * is typically useful to multiply a quantity by unit price to calculate the
+   * dollar amount at a specific precision.
+   *
+   * @category Optimized Arithmetic Operation
+   */
+  quantMul(
+    other: BigAmount,
+    newDen: bigint,
+    roundingMode: RoundingMode = "HALF_EVEN"
+  ): BigAmount {
+    const den = this.den * other.den;
+    return new BigAmount(
+      den === newDen
+        ? this.num * other.num
+        : divInt(this.num * other.num * newDen, den, roundingMode),
+      newDen
+    );
+  }
+
+  /**
+   * Divides `this` by `other`, resetting the denominator to `newDen`. This
+   * method is equivalent to `f.div(other).quantize(newDen, roundingMode)` and
+   * is typically useful to divide a dollar amount by quantity to calculate the
+   * unit price at a specific precision.
+   *
+   * @category Optimized Arithmetic Operation
+   */
+  quantDiv(
+    other: BigAmount,
+    newDen: bigint,
+    roundingMode: RoundingMode = "HALF_EVEN"
+  ): BigAmount {
+    if (other.num === 0n) {
+      throw new RangeError("denominator is zero");
+    }
+    const den = this.den * other.num;
+    return new BigAmount(
+      den === newDen
+        ? this.num * other.den
+        : divInt(this.num * other.den * newDen, den, roundingMode),
+      newDen
+    );
+  }
+
+  /**
    * Returns a fractional approximate of `this` that has the specified
    * denominator. This method rounds the numerator using the specified rounding
    * mode if it is not divisible by the new denominator.
