@@ -118,12 +118,15 @@ and denominator.
 The following methods are also available for convenience and optimization to
 handle accounting use cases.
 
-| Method             | Operation                                           |
-| ------------------ | --------------------------------------------------- |
-| `batchAdd(others)` | Adds array of BigAmount values at a time            |
-| `fixedAdd(other)`  | Addition that keeps the denominator unchanged       |
-| `fixedSub(other)`  | Subtraction that keeps the denominator unchanged    |
-| `fixedMul(other)`  | Multiplication that keeps the denominator unchanged |
+| Method                 | Operation                                           |
+| ---------------------- | --------------------------------------------------- |
+| `batchAdd(others)`     | Adds array of BigAmount values at a time            |
+| `fixedAdd(other)`      | Addition that keeps the denominator unchanged       |
+| `fixedSub(other)`      | Subtraction that keeps the denominator unchanged    |
+| `fixedMul(other)`      | Multiplication that keeps the denominator unchanged |
+| `fixedDiv(other)`      | Division that keeps the denominator unchanged       |
+| `quantMul(other, den)` | Multiplication that resets the denominator to `den` |
+| `quantDiv(other, den)` | Division that resets the denominator to `den`       |
 
 ## Rounding
 

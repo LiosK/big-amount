@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.1.0 - 2022-02-06
+
+### Added
+
+- `fixedDiv()`, `quantMul()`, and `quantDiv()`.
+
+### Maintenance
+
+- Updated dev dependencies.
+
 ## v2.0.1 - 2021-12-13
 
 ### Maintenance
