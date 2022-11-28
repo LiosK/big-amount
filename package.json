@@ -18,7 +18,6 @@
     "clean": "rm -rf dist doc",
     "doc": "typedoc src/index.ts --out doc --gitRevision \"v$npm_package_version\"",
     "lint": "prettier -c *.md bench src test && eslint bench src test",
-    "prebuild": "tsc -m commonjs && mv dist/index.js dist/index.cjs",
     "prepare": "npm run lint && npm run clean && npm run build && npm test && npm run doc",
     "test": "mocha -p -t 8000 -r test/util/load_chai.cjs"
   },
