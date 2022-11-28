@@ -82,7 +82,7 @@ q(123.45);   // ERROR!
 q(123 / 45); // ERROR!
 ```
 
-[bigamount.create]: https://liosk.github.io/big-amount/doc/classes/bigamount.html#create
+[bigamount.create]: https://liosk.github.io/big-amount/doc/classes/BigAmount.html#create
 
 ### BigAmount.fromNumber
 
@@ -93,7 +93,7 @@ value.
 BigAmount.fromNumber(Math.PI); // 3.14159...
 ```
 
-[bigamount.fromnumber]: https://liosk.github.io/big-amount/doc/classes/bigamount.html#fromnumber
+[bigamount.fromnumber]: https://liosk.github.io/big-amount/doc/classes/BigAmount.html#fromNumber
 
 ## Arithmetic Operations
 
@@ -148,7 +148,7 @@ q("123/4").quantize(2n); // 62/2
 The rounding functions round ties to the nearest even numbers (i.e. bankers'
 rounding) by default. See [RoundingMode] for rounding mode options.
 
-[roundingmode]: https://liosk.github.io/big-amount/doc/modules.html#roundingmode
+[roundingmode]: https://liosk.github.io/big-amount/doc/types/RoundingMode.html
 
 ## Conversion to String
 
@@ -185,7 +185,7 @@ notation.
 q("12345.678").toExponential(6); // "1.234568e+4"
 ```
 
-[formatting options]: https://liosk.github.io/big-amount/doc/interfaces/formatoptions.html
+[formatting options]: https://liosk.github.io/big-amount/doc/interfaces/FormatOptions.html
 
 ## License
 

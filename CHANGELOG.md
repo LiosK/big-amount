@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.1.1 - unreleased
+
+### Maintenance
+
+- Eliminated [[target]]-style links from doc comments.
+- Updated dev dependencies.
+
 ## v2.1.0 - 2022-02-06
 
 ### Added
