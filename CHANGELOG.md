@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.1.1 - unreleased
+## v2.1.1 - 2022-11-28
 
 ### Maintenance
 
