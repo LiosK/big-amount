@@ -43,7 +43,7 @@ export class BigAmount {
   /** Raw denominator. */
   readonly den: bigint;
 
-  /** Creates a [[BigAmount]] from a pair of integers. */
+  /** Creates a {@link BigAmount} from a pair of integers. */
   constructor(numerator: bigint, denominator: bigint) {
     this.num = numerator;
     this.den = denominator;
@@ -56,8 +56,9 @@ export class BigAmount {
   }
 
   /**
-   * Creates a [[BigAmount]] from various arguments. For convenience, this
-   * method is also exported as [[q]] and is callable as `q(x)` and `q(x, y)`.
+   * Creates a {@link BigAmount} from various arguments. For convenience, this
+   * method is also exported as {@link q} and is callable as `q(x)` and
+   * `q(x, y)`.
    *
    * @example `BigAmount.create(x)` creates an instance representing _x / 1_.
    * ```javascript
@@ -97,19 +98,19 @@ export class BigAmount {
    * -  `number` - _Integer only._ This is because it is often imprecise and
    *    expensive to find a rational approximate of a non-integral number. Pass
    *    the number as a string (e.g. `"1/3"`, `"1.23"`) to create an exact value
-   *    or use [[BigAmount.fromNumber]] to find an approximate.
+   *    or use {@link BigAmount.fromNumber} to find an approximate.
    * -  `string` - Fraction (`"1/23"`), integer (`"123"`, `"0xFF"`), decimal
    *    (`"-1.23"`, `".123"`), or scientific (`"1.23e-4"`, `"-12e+3"`). The
    *    fractional notation `q("num/den")` is equivalent to `q("num", "den")`.
-   * -  `object` - Any object (including any [[BigAmount]] value) that has two
-   *    BigAmount-like scalar fields named `num` and `den`. `q({ num: x, den: y
-   *    })` is equivalent to `q(x, y)`, except that the fields do not accept an
-   *    object.
+   * -  `object` - Any object (including any {@link BigAmount} value) that has
+   *    two BigAmount-like scalar fields named `num` and `den`. `q({ num: x, den:
+   *    y })` is equivalent to `q(x, y)`, except that the fields do not accept
+   *    an object.
    *
-   * @param x - bigint | number | string | { num: bigint | number | string; den:
-   *        bigint | number | string }
-   * @param y - bigint | number | string | { num: bigint | number | string; den:
-   *        bigint | number | string }
+   * @param x - `bigint` | `number` | `string` | `{ num: bigint | number |
+   *        string; den: bigint | number | string }`
+   * @param y - `bigint` | `number` | `string` | `{ num: bigint | number |
+   *        string; den: bigint | number | string }`
    * @category Instance Creation
    */
   static create(x: BigAmountLike, y?: BigAmountLike): BigAmount {
@@ -180,8 +181,8 @@ export class BigAmount {
   }
 
   /**
-   * Creates a [[BigAmount]] from `number`. Unlike [[BigAmount.create]], this
-   * method finds a rational approximate of a non-integral number.
+   * Creates a {@link BigAmount} from `number`. Unlike {@link BigAmount.create},
+   * this method finds a rational approximate of a non-integral number.
    *
    * @category Instance Creation
    */
@@ -235,14 +236,14 @@ export class BigAmount {
   }
 
   /**
-   * Creates a [[BigAmount]] instance of the sum of list items.
+   * Creates a {@link BigAmount} instance of the sum of list items.
    *
    * @example
    * ```javascript
    * BigAmount.sum(["123/100", "-456/100", "789/100"]); // 456/100
    * ```
    *
-   * @param xs - Array of values that [[BigAmount.create]] accepts.
+   * @param xs - Array of values that {@link BigAmount.create} accepts.
    * @category Instance Creation
    */
   static sum(xs: BigAmountLike[]): BigAmount {
@@ -640,12 +641,12 @@ export class BigAmount {
    * ```
    *
    * @remarks
-   * Note that the [[RoundingMode]] applies to the resulting numerator; the
+   * Note that the {@link RoundingMode} applies to the resulting numerator; the
    * outcome of "toward positive / negative" is determined by the sign of
    * numerator, which could be counterintuitive when the new denominator is
    * negative.
    *
-   * @param roundingMode - See [[RoundingMode]] for rounding mode options.
+   * @param roundingMode - See {@link RoundingMode} for rounding mode options.
    * @category Conversion
    */
   quantize(
@@ -661,7 +662,7 @@ export class BigAmount {
   }
 
   /**
-   * Same as [[BigAmount.quantize]] but returns `undefined` if the numerator
+   * Same as {@link BigAmount.quantize} but returns `undefined` if the numerator
    * needs to be rounded.
    *
    * @category Conversion
@@ -680,7 +681,7 @@ export class BigAmount {
    * method rounds ties to even by default.
    *
    * @param ndigits - Number of digits after the decimal separator.
-   * @param roundingMode - See [[RoundingMode]] for rounding mode options.
+   * @param roundingMode - See {@link RoundingMode} for rounding mode options.
    * @category Conversion
    */
   round(ndigits = 0, roundingMode: RoundingMode = "HALF_EVEN"): BigAmount {
@@ -700,7 +701,7 @@ export class BigAmount {
    * Returns an integral approximate of `this`, rounding ties to even by
    * default.
    *
-   * @param roundingMode - See [[RoundingMode]] for rounding mode options.
+   * @param roundingMode - See {@link RoundingMode} for rounding mode options.
    * @category Conversion
    */
   roundToInt(roundingMode: RoundingMode = "HALF_EVEN"): bigint {
@@ -737,7 +738,7 @@ export class BigAmount {
   }
 
   /**
-   * Formats a [[BigAmount]] using decimal exponential notation just like
+   * Formats a {@link BigAmount} using decimal exponential notation just like
    * `Number#toExponential`. Unlike `Number#toExponential`, this method always
    * requires the first argument.
    *
@@ -773,9 +774,9 @@ export class BigAmount {
   }
 
   /**
-   * Formats a [[BigAmount]] using decimal fixed-point notation just like
+   * Formats a {@link BigAmount} using decimal fixed-point notation just like
    * `Number#toFixed`. In addition, this method takes format options to
-   * customize the output. See [[FormatOptions]] for options and examples.
+   * customize the output. See {@link FormatOptions} for options and examples.
    *
    * @param ndigits - Number of digits to appear after the decimal separator.
    * @category Conversion
@@ -834,8 +835,8 @@ export class BigAmount {
 }
 
 /**
- * Creates a [[BigAmount]] from various arguments. This is a synonym for
- * [[BigAmount.create]].
+ * Creates a {@link BigAmount} from various arguments. This is a synonym for
+ * {@link BigAmount.create}.
  */
 export const q = BigAmount.create;
 
@@ -861,7 +862,8 @@ export type RoundingMode =
   | "HALF_EVEN";
 
 /**
- * Options used by [[BigAmount.toFixed]] to format a [[BigAmount]] as decimal.
+ * Options used by {@link BigAmount.toFixed} to format a {@link BigAmount} as
+ * decimal.
  *
  * @example
  * ```javascript
@@ -921,8 +923,8 @@ const PATTERN_DECIMAL =
   /^\s*([-+]?)(?:([0-9]*)\.([0-9]+)|([0-9]+))(?:e([-+]?[0-9]+))?\s*$/i;
 
 /**
- * Represents types of BigAmount-like values that [[BigAmount.create]] can
- * convert into [[BigAmount]] values.
+ * Represents types of BigAmount-like values that {@link BigAmount.create} can
+ * convert into {@link BigAmount} values.
  */
 type BigAmountLike =
   | bigint
