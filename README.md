@@ -41,7 +41,7 @@ console.log(s); // "$(7,399,325.32)"
 
 Note that this library requires ES2020 compatibility (as does BigInt).
 
-[bigint]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
+[BigInt]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
 
 ## Instance Creation
 
@@ -82,7 +82,7 @@ q(123.45);   // ERROR!
 q(123 / 45); // ERROR!
 ```
 
-[bigamount.create]: https://liosk.github.io/big-amount/doc/classes/BigAmount.html#create
+[BigAmount.create]: https://liosk.github.io/big-amount/doc/classes/BigAmount.html#create
 
 ### BigAmount.fromNumber
 
@@ -93,7 +93,7 @@ value.
 BigAmount.fromNumber(Math.PI); // 3.14159...
 ```
 
-[bigamount.fromnumber]: https://liosk.github.io/big-amount/doc/classes/BigAmount.html#fromNumber
+[BigAmount.fromNumber]: https://liosk.github.io/big-amount/doc/classes/BigAmount.html#fromNumber
 
 ## Arithmetic Operations
 
@@ -148,7 +148,7 @@ q("123/4").quantize(2n); // 62/2
 The rounding functions round ties to the nearest even numbers (i.e. bankers'
 rounding) by default. See [RoundingMode] for rounding mode options.
 
-[roundingmode]: https://liosk.github.io/big-amount/doc/types/RoundingMode.html
+[RoundingMode]: https://liosk.github.io/big-amount/doc/types/RoundingMode.html
 
 ## Conversion to String
 
