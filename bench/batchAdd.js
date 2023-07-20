@@ -32,7 +32,7 @@ tests["batchAdd([q(num, 1000), ...])"] = (name) => {
 
 tests["batchAdd([q(num, 10 ** [0-15]), ...])"] = (name) => {
   const xs = pairs.map(([n]) =>
-    q(BigInt(n), 10n ** BigInt(Math.floor(Math.random() * 16)))
+    q(BigInt(n), 10n ** BigInt(Math.floor(Math.random() * 16))),
   );
 
   console.time(name);
@@ -42,7 +42,7 @@ tests["batchAdd([q(num, 10 ** [0-15]), ...])"] = (name) => {
 
 tests["batchAdd([q(num, [-1_dd0_000-1_dd0_000]), ...])"] = (name) => {
   const xs = pairs.map(([n, d]) =>
-    q(BigInt(n), (BigInt(d) / 10000n || 1n) * 10000n)
+    q(BigInt(n), (BigInt(d) / 10000n || 1n) * 10000n),
   );
 
   console.time(name);
@@ -52,7 +52,7 @@ tests["batchAdd([q(num, [-1_dd0_000-1_dd0_000]), ...])"] = (name) => {
 
 tests["batchAdd([q(num, [-1_ddd_000-1_ddd_000]), ...])"] = (name) => {
   const xs = pairs.map(([n, d]) =>
-    q(BigInt(n), (BigInt(d) / 1000n || 1n) * 1000n)
+    q(BigInt(n), (BigInt(d) / 1000n || 1n) * 1000n),
   );
 
   console.time(name);
@@ -62,7 +62,7 @@ tests["batchAdd([q(num, [-1_ddd_000-1_ddd_000]), ...])"] = (name) => {
 
 tests["batchAdd([q(num, [-1_ddd_d00-1_ddd_d00]), ...])"] = (name) => {
   const xs = pairs.map(([n, d]) =>
-    q(BigInt(n), (BigInt(d) / 100n || 1n) * 100n)
+    q(BigInt(n), (BigInt(d) / 100n || 1n) * 100n),
   );
 
   console.time(name);
@@ -88,7 +88,7 @@ tests['BigAmount.sum(["num/1000", ...])'] = (name) => {
 
 tests['BigAmount.sum(["num/(10 ** [0-15])", ...])'] = (name) => {
   const xs = pairs.map(
-    ([n]) => `${n}/${10n ** BigInt(Math.floor(Math.random() * 16))}`
+    ([n]) => `${n}/${10n ** BigInt(Math.floor(Math.random() * 16))}`,
   );
 
   console.time(name);

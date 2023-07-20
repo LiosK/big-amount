@@ -9,7 +9,7 @@ describe("#quantize()", () => {
     const test = (num, oldDen, newDen) => {
       assert.strictEqual(
         new BigAmount(num, oldDen).quantize(newDen).den,
-        newDen
+        newDen,
       );
     };
 
@@ -67,7 +67,7 @@ describe("#quantize()", () => {
     const test = (num, oldDen, newDen, expected) => {
       assert.strictEqual(
         new BigAmount(num, oldDen).quantize(newDen).num,
-        expected
+        expected,
       );
     };
 
@@ -82,7 +82,7 @@ describe("#quantize()", () => {
     const testWithMode = (num, oldDen, newDen, mode, expected) => {
       assert.strictEqual(
         new BigAmount(num, oldDen).quantize(newDen, mode).num,
-        expected
+        expected,
       );
     };
 

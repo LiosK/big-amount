@@ -9,7 +9,7 @@ describe("#tryQuantize()", () => {
     const test = (num, oldDen, newDen) => {
       assert.strictEqual(
         new BigAmount(num, oldDen).tryQuantize(newDen).den,
-        newDen
+        newDen,
       );
     };
 

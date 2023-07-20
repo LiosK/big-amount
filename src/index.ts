@@ -153,7 +153,7 @@ export class BigAmount {
           Number.isFinite(x)
             ? `non-integral Number value: ${x}` +
               "; pass it as a string or use `fromNumber()` instead"
-            : `unsupported Number value: ${x}`
+            : `unsupported Number value: ${x}`,
         );
       } else if (typeof x === "string") {
         const match = PATTERN_DECIMAL.exec(x);
@@ -395,7 +395,7 @@ export class BigAmount {
   abs(): BigAmount {
     return new BigAmount(
       this.num < 0n ? -this.num : this.num,
-      this.den < 0n ? -this.den : this.den
+      this.den < 0n ? -this.den : this.den,
     );
   }
 
@@ -421,7 +421,7 @@ export class BigAmount {
     }
     return new BigAmount(
       this.num * other.den + this.den * other.num,
-      this.den * other.den
+      this.den * other.den,
     );
   }
 
@@ -438,7 +438,7 @@ export class BigAmount {
     }
     return new BigAmount(
       this.num * other.den - this.den * other.num,
-      this.den * other.den
+      this.den * other.den,
     );
   }
 
@@ -505,7 +505,7 @@ export class BigAmount {
    */
   fixedAdd(
     other: BigAmount,
-    roundingMode: RoundingMode = "HALF_EVEN"
+    roundingMode: RoundingMode = "HALF_EVEN",
   ): BigAmount {
     if (this.den === other.den) {
       return new BigAmount(this.num + other.num, this.den);
@@ -516,9 +516,9 @@ export class BigAmount {
       divInt(
         this.num * other.den + this.den * other.num,
         other.den,
-        roundingMode
+        roundingMode,
       ),
-      this.den
+      this.den,
     );
   }
 
@@ -530,7 +530,7 @@ export class BigAmount {
    */
   fixedSub(
     other: BigAmount,
-    roundingMode: RoundingMode = "HALF_EVEN"
+    roundingMode: RoundingMode = "HALF_EVEN",
   ): BigAmount {
     if (this.den === other.den) {
       return new BigAmount(this.num - other.num, this.den);
@@ -541,9 +541,9 @@ export class BigAmount {
       divInt(
         this.num * other.den - this.den * other.num,
         other.den,
-        roundingMode
+        roundingMode,
       ),
-      this.den
+      this.den,
     );
   }
 
@@ -555,11 +555,11 @@ export class BigAmount {
    */
   fixedMul(
     other: BigAmount,
-    roundingMode: RoundingMode = "HALF_EVEN"
+    roundingMode: RoundingMode = "HALF_EVEN",
   ): BigAmount {
     return new BigAmount(
       divInt(this.num * other.num, other.den, roundingMode),
-      this.den
+      this.den,
     );
   }
 
@@ -571,14 +571,14 @@ export class BigAmount {
    */
   fixedDiv(
     other: BigAmount,
-    roundingMode: RoundingMode = "HALF_EVEN"
+    roundingMode: RoundingMode = "HALF_EVEN",
   ): BigAmount {
     if (other.num === 0n) {
       throw new RangeError("denominator is zero");
     }
     return new BigAmount(
       divInt(this.num * other.den, other.num, roundingMode),
-      this.den
+      this.den,
     );
   }
 
@@ -593,14 +593,14 @@ export class BigAmount {
   quantMul(
     other: BigAmount,
     newDen: bigint,
-    roundingMode: RoundingMode = "HALF_EVEN"
+    roundingMode: RoundingMode = "HALF_EVEN",
   ): BigAmount {
     const den = this.den * other.den;
     return new BigAmount(
       den === newDen
         ? this.num * other.num
         : divInt(this.num * other.num * newDen, den, roundingMode),
-      newDen
+      newDen,
     );
   }
 
@@ -615,7 +615,7 @@ export class BigAmount {
   quantDiv(
     other: BigAmount,
     newDen: bigint,
-    roundingMode: RoundingMode = "HALF_EVEN"
+    roundingMode: RoundingMode = "HALF_EVEN",
   ): BigAmount {
     if (other.num === 0n) {
       throw new RangeError("denominator is zero");
@@ -625,7 +625,7 @@ export class BigAmount {
       den === newDen
         ? this.num * other.den
         : divInt(this.num * other.den * newDen, den, roundingMode),
-      newDen
+      newDen,
     );
   }
 
@@ -651,13 +651,13 @@ export class BigAmount {
    */
   quantize(
     newDen: bigint,
-    roundingMode: RoundingMode = "HALF_EVEN"
+    roundingMode: RoundingMode = "HALF_EVEN",
   ): BigAmount {
     return new BigAmount(
       this.den === newDen
         ? this.num
         : divInt(this.num * newDen, this.den, roundingMode),
-      newDen
+      newDen,
     );
   }
 
@@ -813,7 +813,7 @@ export class BigAmount {
     if (ndigits > 0) {
       buffer.push(
         decimalSeparator,
-        String(absNum % decimal.den).padStart(ndigits, "0")
+        String(absNum % decimal.den).padStart(ndigits, "0"),
       );
     }
 
@@ -961,7 +961,7 @@ const findGcd = (x: bigint, y: bigint): bigint => {
 const divInt = (
   num: bigint,
   den: bigint,
-  roundingMode: RoundingMode
+  roundingMode: RoundingMode,
 ): bigint => {
   if (den < 0n) {
     num = -num;

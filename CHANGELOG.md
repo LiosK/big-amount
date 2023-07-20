@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.3 - 2023-07-20
+
+### Maintenance
+
+- Updated dev dependencies.
+
 ## v2.1.2 - 2023-03-29
 
 ### Maintenance

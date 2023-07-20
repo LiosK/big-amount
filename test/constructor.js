@@ -18,11 +18,11 @@ describe("constructor()", () => {
     assert.throws(() => new BigAmount(-1n, 0n), RangeError);
     assert.throws(
       () => new BigAmount(7392820129741293712731290n, 0n),
-      RangeError
+      RangeError,
     );
     assert.throws(
       () => new BigAmount(-7392820129741293712731290n, 0n),
-      RangeError
+      RangeError,
     );
   });
 });

@@ -33,13 +33,13 @@ describe("#fixedDiv()", () => {
     const test = (num, oldDen, newDen, expected) => {
       if (num === 0n) {
         assert.throws(() =>
-          new BigAmount(newDen, newDen).fixedDiv(new BigAmount(oldDen, num))
+          new BigAmount(newDen, newDen).fixedDiv(new BigAmount(oldDen, num)),
         );
         return;
       }
       assert.strictEqual(
         new BigAmount(newDen, newDen).fixedDiv(new BigAmount(oldDen, num)).num,
-        expected
+        expected,
       );
     };
 
@@ -56,15 +56,15 @@ describe("#fixedDiv()", () => {
         assert.throws(() =>
           new BigAmount(newDen, newDen).fixedDiv(
             new BigAmount(oldDen, num),
-            mode
-          )
+            mode,
+          ),
         );
         return;
       }
       assert.strictEqual(
         new BigAmount(newDen, newDen).fixedDiv(new BigAmount(oldDen, num), mode)
           .num,
-        expected
+        expected,
       );
     };
 

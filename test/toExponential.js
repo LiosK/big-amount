@@ -22,7 +22,7 @@ describe("#toExponential()", () => {
 
         assert.strictEqual(
           new BigAmount(xn, xd).toExponential(i),
-          n.toExponential(i)
+          n.toExponential(i),
         );
       }
     });
