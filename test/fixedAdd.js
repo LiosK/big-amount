@@ -30,7 +30,7 @@ describe("#fixedAdd()", () => {
     const test = (num, oldDen, newDen, expected) => {
       assert.strictEqual(
         new BigAmount(0n, newDen).fixedAdd(new BigAmount(num, oldDen)).num,
-        expected
+        expected,
       );
     };
 
@@ -46,7 +46,7 @@ describe("#fixedAdd()", () => {
       assert.strictEqual(
         new BigAmount(0n, newDen).fixedAdd(new BigAmount(num, oldDen), mode)
           .num,
-        expected
+        expected,
       );
     };
 

@@ -12,7 +12,7 @@ describe("#toNumber()", () => {
         assert.closeTo(
           new BigAmount(xn, xd).toNumber(),
           Number(xn) / Number(xd),
-          Number.EPSILON
+          Number.EPSILON,
         );
       }
     });

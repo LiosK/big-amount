@@ -33,7 +33,7 @@ describe("#quantDiv()", () => {
     const test = (num, oldDen, newDen, expected) => {
       assert.strictEqual(
         new BigAmount(num, oldDen).quantDiv(new BigAmount(1n, 1n), newDen).num,
-        expected
+        expected,
       );
     };
 
@@ -49,7 +49,7 @@ describe("#quantDiv()", () => {
       assert.strictEqual(
         new BigAmount(num, oldDen).quantDiv(new BigAmount(1n, 1n), newDen, mode)
           .num,
-        expected
+        expected,
       );
     };
 

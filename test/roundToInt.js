@@ -8,7 +8,7 @@ describe("#roundToInt()", () => {
     for (let i = 0; i < input.length; i++) {
       assert.strictEqual(
         new BigAmount(input[i], 10n).roundToInt(),
-        expected["HALF_EVEN"][i]
+        expected["HALF_EVEN"][i],
       );
     }
   });
@@ -21,7 +21,7 @@ describe("#roundToInt(roundingMode)", () => {
       for (let i = 0; i < input.length; i++) {
         assert.strictEqual(
           new BigAmount(input[i], 10n).roundToInt(mode),
-          expected[mode][i]
+          expected[mode][i],
         );
       }
     }

@@ -58,7 +58,7 @@ describe("create(x)", () => {
         const expected = f.toExponential(i);
         assert.strictEqual(
           BigAmount.create(expected).toExponential(i),
-          expected
+          expected,
         );
       }
     });

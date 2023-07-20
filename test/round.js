@@ -23,7 +23,7 @@ describe("#round(N, roundingMode)", () => {
         for (let i = 0; i < input.length; i++) {
           const result = new BigAmount(input[i] * nTerm, 10n * dTerm).round(
             ndigits,
-            mode
+            mode,
           );
           assert.strictEqual(result.num, expected[mode][i] * nTerm);
           assert.strictEqual(result.den, 1n * dTerm);

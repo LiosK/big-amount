@@ -189,7 +189,7 @@ describe("#gt()", () => {
     runOnCmpCases((xn, xd, yn, yd, cmp) => {
       assert.strictEqual(
         new BigAmount(xn, xd).gt(new BigAmount(yn, yd)),
-        cmp > 0
+        cmp > 0,
       );
     });
   });
@@ -200,7 +200,7 @@ describe("#ge()", () => {
     runOnCmpCases((xn, xd, yn, yd, cmp) => {
       assert.strictEqual(
         new BigAmount(xn, xd).ge(new BigAmount(yn, yd)),
-        cmp >= 0
+        cmp >= 0,
       );
     });
   });
@@ -211,7 +211,7 @@ describe("#lt()", () => {
     runOnCmpCases((xn, xd, yn, yd, cmp) => {
       assert.strictEqual(
         new BigAmount(xn, xd).lt(new BigAmount(yn, yd)),
-        cmp < 0
+        cmp < 0,
       );
     });
   });
@@ -222,7 +222,7 @@ describe("#le()", () => {
     runOnCmpCases((xn, xd, yn, yd, cmp) => {
       assert.strictEqual(
         new BigAmount(xn, xd).le(new BigAmount(yn, yd)),
-        cmp <= 0
+        cmp <= 0,
       );
     });
   });

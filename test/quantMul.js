@@ -30,7 +30,7 @@ describe("#quantMul()", () => {
     const test = (num, oldDen, newDen, expected) => {
       assert.strictEqual(
         new BigAmount(num, oldDen).quantMul(new BigAmount(1n, 1n), newDen).num,
-        expected
+        expected,
       );
     };
 
@@ -46,7 +46,7 @@ describe("#quantMul()", () => {
       assert.strictEqual(
         new BigAmount(num, oldDen).quantMul(new BigAmount(1n, 1n), newDen, mode)
           .num,
-        expected
+        expected,
       );
     };
 

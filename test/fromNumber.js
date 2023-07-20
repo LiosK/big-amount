@@ -30,7 +30,7 @@ describe("fromNumber()", () => {
     for (let p = 0; p < 1000; p++) {
       for (let q = 1; q < 1000; q++) {
         assert(
-          BigAmount.fromNumber(p / q).eq(new BigAmount(BigInt(p), BigInt(q)))
+          BigAmount.fromNumber(p / q).eq(new BigAmount(BigInt(p), BigInt(q))),
         );
       }
     }
@@ -52,7 +52,7 @@ describe("fromNumber() implemented using Farey sequences", () => {
   it("determines any term of the Farey sequence of order 1024", () => {
     for (const [p, q] of generateFareySequence(1024)) {
       assert(
-        BigAmount.fromNumber(p / q).eq(new BigAmount(BigInt(p), BigInt(q)))
+        BigAmount.fromNumber(p / q).eq(new BigAmount(BigInt(p), BigInt(q))),
       );
     }
   });

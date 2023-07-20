@@ -30,7 +30,7 @@ describe("#fixedMul()", () => {
     const test = (num, oldDen, newDen, expected) => {
       assert.strictEqual(
         new BigAmount(newDen, newDen).fixedMul(new BigAmount(num, oldDen)).num,
-        expected
+        expected,
       );
     };
 
@@ -46,7 +46,7 @@ describe("#fixedMul()", () => {
       assert.strictEqual(
         new BigAmount(newDen, newDen).fixedMul(new BigAmount(num, oldDen), mode)
           .num,
-        expected
+        expected,
       );
     };
 
