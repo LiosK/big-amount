@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.1.3 - unreleased
+## v2.1.3 - 2023-07-20
 
 ### Maintenance
 
