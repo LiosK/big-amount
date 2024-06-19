@@ -1,6 +1,5 @@
 import { BigAmount } from "../dist/index.js";
 import { runTestOnPairs } from "./util/cases.js";
-const assert = chai.assert;
 
 describe("#toExponential()", () => {
   it("agrees with `Number#toExponential()`, except rounding", () => {

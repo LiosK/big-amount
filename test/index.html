@@ -9,7 +9,10 @@
   <body>
     <div id="mocha"></div>
 
-    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script type="module">
+      import { assert  } from "https://unpkg.com/chai/chai.js";
+      window.assert = assert;
+    </script>
     <script src="https://unpkg.com/mocha/mocha.js"></script>
 
     <script type="module" class="mocha-init">

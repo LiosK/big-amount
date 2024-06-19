@@ -1,6 +1,5 @@
 import { BigAmount } from "../dist/index.js";
 import { runTestOnPairs, rounded } from "./util/cases.js";
-const assert = chai.assert;
 
 describe("#fixedAdd()", () => {
   it("returns the same fraction as `#add()` + `#quantize()`", () => {

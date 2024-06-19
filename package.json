@@ -19,8 +19,8 @@
     "doc": "typedoc src/index.ts --out doc --gitRevision \"v$npm_package_version\"",
     "lint": "prettier -c *.md bench src test && eslint bench src test",
     "prepare": "npm run lint && npm run clean && npm run build && npm test && npm run doc",
-    "test": "mocha -p -t 8000 -r ./test/util/load_chai.cjs",
-    "test-bun": "bun test -r ./test/util/load_chai.cjs"
+    "test": "mocha -p -t 8000 -r chai/register-assert.js",
+    "test-bun": "bun test -r chai/register-assert.js"
   },
   "repository": {
     "type": "git",
@@ -44,9 +44,9 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "@typescript-eslint/parser": "^6.1.0",
-    "chai": "^4.3.7",
+    "chai": "^5.1.1",
     "eslint": "^8.45.0",
-    "mocha": "^10.2.0",
+    "mocha": "^10.4.0",
     "prettier": "^3.0.0",
     "typedoc": "^0.24.8",
     "typescript": "^5.1.6"

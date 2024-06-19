@@ -1,6 +1,5 @@
 import { BigAmount } from "../dist/index.js";
 import { rounded } from "./util/cases.js";
-const assert = chai.assert;
 
 describe("#roundToInt()", () => {
   it("rounds the fraction as expected (test [-5.0, 5.0])", () => {

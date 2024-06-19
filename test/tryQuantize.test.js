@@ -1,6 +1,5 @@
 import { BigAmount } from "../dist/index.js";
 import { reduced, rounded } from "./util/cases.js";
-const assert = chai.assert;
 
 describe("#tryQuantize()", () => {
   it("changes the denominator", () => {

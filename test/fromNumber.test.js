@@ -1,5 +1,4 @@
 import { BigAmount } from "../dist/index.js";
-const assert = chai.assert;
 
 describe("fromNumber()", () => {
   it("reasonably approximates a fraction", () => {
