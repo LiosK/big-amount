@@ -1,8 +1,7 @@
 import { BigAmount } from "../dist/index.js";
 import { runTestOnPairs, rounded } from "./util/cases.js";
-const assert = chai.assert;
 
-describe("#fixedMul()", () => {
+describe("#quantMul()", () => {
   it("returns the same fraction as `#mul()` + `#quantize()`", () => {
     const THRESH = 0.5; // threshold to randomly cut down test cases
     runTestOnPairs((xn, xd) => {
@@ -15,8 +14,8 @@ describe("#fixedMul()", () => {
           return;
         }
         const right = new BigAmount(yn, yd);
-        const expected = left.mul(right).quantize(left.den);
-        const actual = left.fixedMul(right);
+        const expected = left.mul(right).quantize(yd);
+        const actual = left.quantMul(right, yd);
         assert.strictEqual(actual.num, expected.num);
         assert.strictEqual(actual.den, expected.den);
       });
@@ -29,7 +28,7 @@ describe("#fixedMul()", () => {
 
     const test = (num, oldDen, newDen, expected) => {
       assert.strictEqual(
-        new BigAmount(newDen, newDen).fixedMul(new BigAmount(num, oldDen)).num,
+        new BigAmount(num, oldDen).quantMul(new BigAmount(1n, 1n), newDen).num,
         expected,
       );
     };
@@ -44,7 +43,7 @@ describe("#fixedMul()", () => {
 
     const testWithMode = (num, oldDen, newDen, mode, expected) => {
       assert.strictEqual(
-        new BigAmount(newDen, newDen).fixedMul(new BigAmount(num, oldDen), mode)
+        new BigAmount(num, oldDen).quantMul(new BigAmount(1n, 1n), newDen, mode)
           .num,
         expected,
       );

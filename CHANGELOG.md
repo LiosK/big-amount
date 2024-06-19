@@ -1,5 +1,16 @@
 # Changelog
 
+## v2.1.4 - 2024-06-19
+
+### Fixed
+
+- Broken browser test runner.
+
+### Maintenance
+
+- Changed naming convention of test files.
+- Updated dev dependencies.
+
 ## v2.1.3 - 2023-07-20
 
 ### Maintenance

@@ -1,6 +1,5 @@
 import { BigAmount } from "../dist/index.js";
 import { reduced } from "./util/cases.js";
-const assert = chai.assert;
 
 const testReduce = (num, den, simplestNum, simplestDen) => {
   const amount = new BigAmount(num, den).reduce();

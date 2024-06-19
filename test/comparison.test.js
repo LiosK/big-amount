@@ -1,6 +1,5 @@
 import { BigAmount } from "../dist/index.js";
 import { reduced } from "./util/cases.js";
-const assert = chai.assert;
 
 describe("#eq()", () => {
   it("returns true if two instances are equivalent", () => {

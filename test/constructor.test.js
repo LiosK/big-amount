@@ -1,6 +1,5 @@
 import { BigAmount } from "../dist/index.js";
 import { runTestOnPairs } from "./util/cases.js";
-const assert = chai.assert;
 
 describe("constructor()", () => {
   it("creates a BigAmount with num and den fields", () => {

@@ -1,5 +1,4 @@
 import { BigAmount } from "../dist/index.js";
-const assert = chai.assert;
 
 describe("#toFixed()", () => {
   it("agrees with `Number#toFixed()`, except -0 and rounding", () => {

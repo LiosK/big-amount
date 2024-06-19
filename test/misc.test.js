@@ -1,6 +1,5 @@
 import { BigAmount } from "../dist/index.js";
 import { runTestOnPairs } from "./util/cases.js";
-const assert = chai.assert;
 
 describe("#sign()", () => {
   it("returns the correct sign of a fraction", () => {

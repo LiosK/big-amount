@@ -1,9 +1,8 @@
 import { BigAmount } from "../dist/index.js";
 import { runTestOnPairs, rounded } from "./util/cases.js";
-const assert = chai.assert;
 
-describe("#quantDiv()", () => {
-  it("returns the same fraction as `#div()` + `#quantize()`", () => {
+describe("#fixedMul()", () => {
+  it("returns the same fraction as `#mul()` + `#quantize()`", () => {
     const THRESH = 0.5; // threshold to randomly cut down test cases
     runTestOnPairs((xn, xd) => {
       if (Math.random() < THRESH) {
@@ -13,13 +12,10 @@ describe("#quantDiv()", () => {
       runTestOnPairs((yn, yd) => {
         if (Math.random() < THRESH) {
           return;
-        } else if (yn === 0n) {
-          assert.throws(() => left.quantDiv(right, yn));
-          return;
         }
         const right = new BigAmount(yn, yd);
-        const expected = left.div(right).quantize(yn);
-        const actual = left.quantDiv(right, yn);
+        const expected = left.mul(right).quantize(left.den);
+        const actual = left.fixedMul(right);
         assert.strictEqual(actual.num, expected.num);
         assert.strictEqual(actual.den, expected.den);
       });
@@ -32,7 +28,7 @@ describe("#quantDiv()", () => {
 
     const test = (num, oldDen, newDen, expected) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).quantDiv(new BigAmount(1n, 1n), newDen).num,
+        new BigAmount(newDen, newDen).fixedMul(new BigAmount(num, oldDen)).num,
         expected,
       );
     };
@@ -47,7 +43,7 @@ describe("#quantDiv()", () => {
 
     const testWithMode = (num, oldDen, newDen, mode, expected) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).quantDiv(new BigAmount(1n, 1n), newDen, mode)
+        new BigAmount(newDen, newDen).fixedMul(new BigAmount(num, oldDen), mode)
           .num,
         expected,
       );

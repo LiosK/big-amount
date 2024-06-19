@@ -1,6 +1,5 @@
 import { BigAmount } from "../dist/index.js";
 import { runTestOnPairs } from "./util/cases.js";
-const assert = chai.assert;
 
 describe("#toNumber()", () => {
   it("converts a BigAmount into a number (num, den within SAFE_INTEGER)", () => {

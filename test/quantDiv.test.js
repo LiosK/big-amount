@@ -1,8 +1,7 @@
 import { BigAmount } from "../dist/index.js";
 import { runTestOnPairs, rounded } from "./util/cases.js";
-const assert = chai.assert;
 
-describe("#fixedDiv()", () => {
+describe("#quantDiv()", () => {
   it("returns the same fraction as `#div()` + `#quantize()`", () => {
     const THRESH = 0.5; // threshold to randomly cut down test cases
     runTestOnPairs((xn, xd) => {
@@ -14,12 +13,12 @@ describe("#fixedDiv()", () => {
         if (Math.random() < THRESH) {
           return;
         } else if (yn === 0n) {
-          assert.throws(() => left.fixedDiv(right));
+          assert.throws(() => left.quantDiv(right, yn));
           return;
         }
         const right = new BigAmount(yn, yd);
-        const expected = left.div(right).quantize(left.den);
-        const actual = left.fixedDiv(right);
+        const expected = left.div(right).quantize(yn);
+        const actual = left.quantDiv(right, yn);
         assert.strictEqual(actual.num, expected.num);
         assert.strictEqual(actual.den, expected.den);
       });
@@ -31,14 +30,8 @@ describe("#fixedDiv()", () => {
     const len = input.length;
 
     const test = (num, oldDen, newDen, expected) => {
-      if (num === 0n) {
-        assert.throws(() =>
-          new BigAmount(newDen, newDen).fixedDiv(new BigAmount(oldDen, num)),
-        );
-        return;
-      }
       assert.strictEqual(
-        new BigAmount(newDen, newDen).fixedDiv(new BigAmount(oldDen, num)).num,
+        new BigAmount(num, oldDen).quantDiv(new BigAmount(1n, 1n), newDen).num,
         expected,
       );
     };
@@ -52,17 +45,8 @@ describe("#fixedDiv()", () => {
     }
 
     const testWithMode = (num, oldDen, newDen, mode, expected) => {
-      if (num === 0n) {
-        assert.throws(() =>
-          new BigAmount(newDen, newDen).fixedDiv(
-            new BigAmount(oldDen, num),
-            mode,
-          ),
-        );
-        return;
-      }
       assert.strictEqual(
-        new BigAmount(newDen, newDen).fixedDiv(new BigAmount(oldDen, num), mode)
+        new BigAmount(num, oldDen).quantDiv(new BigAmount(1n, 1n), newDen, mode)
           .num,
         expected,
       );

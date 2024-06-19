@@ -1,9 +1,8 @@
 import { BigAmount } from "../dist/index.js";
 import { runTestOnPairs, rounded } from "./util/cases.js";
-const assert = chai.assert;
 
-describe("#fixedAdd()", () => {
-  it("returns the same fraction as `#add()` + `#quantize()`", () => {
+describe("#fixedDiv()", () => {
+  it("returns the same fraction as `#div()` + `#quantize()`", () => {
     const THRESH = 0.5; // threshold to randomly cut down test cases
     runTestOnPairs((xn, xd) => {
       if (Math.random() < THRESH) {
@@ -13,10 +12,13 @@ describe("#fixedAdd()", () => {
       runTestOnPairs((yn, yd) => {
         if (Math.random() < THRESH) {
           return;
+        } else if (yn === 0n) {
+          assert.throws(() => left.fixedDiv(right));
+          return;
         }
         const right = new BigAmount(yn, yd);
-        const expected = left.add(right).quantize(left.den);
-        const actual = left.fixedAdd(right);
+        const expected = left.div(right).quantize(left.den);
+        const actual = left.fixedDiv(right);
         assert.strictEqual(actual.num, expected.num);
         assert.strictEqual(actual.den, expected.den);
       });
@@ -28,8 +30,14 @@ describe("#fixedAdd()", () => {
     const len = input.length;
 
     const test = (num, oldDen, newDen, expected) => {
+      if (num === 0n) {
+        assert.throws(() =>
+          new BigAmount(newDen, newDen).fixedDiv(new BigAmount(oldDen, num)),
+        );
+        return;
+      }
       assert.strictEqual(
-        new BigAmount(0n, newDen).fixedAdd(new BigAmount(num, oldDen)).num,
+        new BigAmount(newDen, newDen).fixedDiv(new BigAmount(oldDen, num)).num,
         expected,
       );
     };
@@ -43,8 +51,17 @@ describe("#fixedAdd()", () => {
     }
 
     const testWithMode = (num, oldDen, newDen, mode, expected) => {
+      if (num === 0n) {
+        assert.throws(() =>
+          new BigAmount(newDen, newDen).fixedDiv(
+            new BigAmount(oldDen, num),
+            mode,
+          ),
+        );
+        return;
+      }
       assert.strictEqual(
-        new BigAmount(0n, newDen).fixedAdd(new BigAmount(num, oldDen), mode)
+        new BigAmount(newDen, newDen).fixedDiv(new BigAmount(oldDen, num), mode)
           .num,
         expected,
       );

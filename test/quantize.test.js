@@ -1,14 +1,13 @@
 import { BigAmount } from "../dist/index.js";
 import { reduced, rounded } from "./util/cases.js";
-const assert = chai.assert;
 
-describe("#tryQuantize()", () => {
+describe("#quantize()", () => {
   it("changes the denominator", () => {
     const cases = [10n, 25n, 34n, 117n, 429393759437859340759378n];
 
     const test = (num, oldDen, newDen) => {
       assert.strictEqual(
-        new BigAmount(num, oldDen).tryQuantize(newDen).den,
+        new BigAmount(num, oldDen).quantize(newDen).den,
         newDen,
       );
     };
@@ -16,17 +15,14 @@ describe("#tryQuantize()", () => {
     for (const x of cases) {
       for (const y of cases) {
         for (let n = -50n; n <= 50n; n++) {
-          const nx = n * x;
-          test(nx, x, y);
-          test(nx, -x, y);
-          test(nx, x, -y);
-          test(nx, -x, y);
-
-          const ny = n * y;
-          test(ny, y, x);
-          test(ny, -y, x);
-          test(ny, y, -x);
-          test(ny, -y, -x);
+          test(n, x, y);
+          test(n, -x, y);
+          test(n, x, -y);
+          test(n, -x, y);
+          test(n, y, x);
+          test(n, -y, x);
+          test(n, y, -x);
+          test(n, -y, -x);
         }
       }
     }
@@ -48,7 +44,7 @@ describe("#tryQuantize()", () => {
 
     const test = (num, oldDen, newDen) => {
       const original = new BigAmount(num, oldDen);
-      assert(original.tryQuantize(newDen).eq(original));
+      assert(original.quantize(newDen).eq(original));
     };
 
     for (const [num, oldDen, newDen] of cases) {
@@ -63,17 +59,15 @@ describe("#tryQuantize()", () => {
     }
   });
 
-  it("returns undefined if rounding is necessary", () => {
+  it("rounds the numerator as expected (test [-5.0, 5.0])", () => {
     const { input, expected } = rounded;
     const len = input.length;
 
     const test = (num, oldDen, newDen, expected) => {
-      const result = new BigAmount(num, oldDen).tryQuantize(newDen);
-      if (num % 10n === 0n) {
-        assert.strictEqual(result.num, expected);
-      } else {
-        assert.strictEqual(result, void 0);
-      }
+      assert.strictEqual(
+        new BigAmount(num, oldDen).quantize(newDen).num,
+        expected,
+      );
     };
 
     for (let i = 0; i < input.length; i++) {
@@ -82,6 +76,23 @@ describe("#tryQuantize()", () => {
 
       test(input[i], 10n, -1n, expected["HALF_EVEN"][len - i - 1]);
       test(input[i], -10n, 1n, expected["HALF_EVEN"][len - i - 1]);
+    }
+
+    const testWithMode = (num, oldDen, newDen, mode, expected) => {
+      assert.strictEqual(
+        new BigAmount(num, oldDen).quantize(newDen, mode).num,
+        expected,
+      );
+    };
+
+    for (const mode of Object.keys(expected)) {
+      for (let i = 0; i < input.length; i++) {
+        testWithMode(input[i], 10n, 1n, mode, expected[mode][i]);
+        testWithMode(input[i], -10n, -1n, mode, expected[mode][i]);
+
+        testWithMode(input[i], 10n, -1n, mode, expected[mode][len - i - 1]);
+        testWithMode(input[i], -10n, 1n, mode, expected[mode][len - i - 1]);
+      }
     }
   });
 });

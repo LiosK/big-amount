@@ -1,6 +1,5 @@
 import { BigAmount } from "../dist/index.js";
 import { pairs } from "./util/cases.js";
-const assert = chai.assert;
 
 describe("#batchAdd()", () => {
   it("produces an equivalent fraction to what a sequence of #add() does", () => {
