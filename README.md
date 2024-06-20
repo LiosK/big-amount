@@ -138,7 +138,7 @@ q("123.456").round(2);  // 12346/100
 q("123.456").round(-1); // 120/1
 ```
 
-Use `quantize()` to covert a fraction to another that has the specified
+Use `quantize()` to convert a fraction to another that has the specified
 denominator.
 
 ```javascript

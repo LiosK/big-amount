@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Maintenance
+
+- Fixed typo in README.
+
 ## v2.1.4 - 2024-06-19
 
 ### Fixed
