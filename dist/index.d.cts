@@ -47,7 +47,7 @@ export declare class BigAmount {
      * method is also exported as {@link q} and is callable as `q(x)` and
      * `q(x, y)`.
      *
-     * @example `BigAmount.create(x)` creates an instance representing _x / 1_.
+     * @example BigAmount.create(x) creates an instance representing x/1.
      * ```javascript
      * q(123n);        // 123/1
      * q(123);         // 123/1
@@ -66,7 +66,7 @@ export declare class BigAmount {
      * q(123 / 45); // ERROR!
      * ```
      *
-     * @example `BigAmount.create(x, y)` creates an instance representing _x / y_.
+     * @example BigAmount.create(x, y) creates an instance representing x/y.
      * ```javascript
      * q(123n, 45n);    // 123/45
      * q(123, 45);      // 123/45
