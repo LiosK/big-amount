@@ -49,7 +49,7 @@ Note that this library requires ES2020 compatibility (as does BigInt).
 
 Use [BigAmount.create] or the equivalent shortcut `q` to create an instance.
 
-`BigAmount.create(x)` creates an instance representing _x / 1_.
+`BigAmount.create(x)` creates an instance representing _x/1_.
 
 ```javascript
 q(123n);        // 123/1
@@ -62,7 +62,7 @@ q("123/45");    // 123/45
 q("12.3/-4.5"); // 1230/-450
 ```
 
-`BigAmount.create(x, y)` creates an instance representing _x / y_.
+`BigAmount.create(x, y)` creates an instance representing _x/y_.
 
 ```javascript
 q(123n, 45n);    // 123/45
@@ -138,7 +138,7 @@ q("123.456").round(2);  // 12346/100
 q("123.456").round(-1); // 120/1
 ```
 
-Use `quantize()` to covert a fraction to another that has the specified
+Use `quantize()` to convert a fraction to another that has the specified
 denominator.
 
 ```javascript

@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.1.5 - 2024-06-21
+
+### Maintenance
+
+- Removed dev dependency on ESLint and related settings.
+- Fixed typo and minor issues in documentation.
+
 ## v2.1.4 - 2024-06-19
 
 ### Fixed
