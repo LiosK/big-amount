@@ -152,7 +152,7 @@ export class BigAmount {
         throw new RangeError(
           Number.isFinite(x)
             ? `non-integral Number value: ${x}` +
-              "; pass it as a string or use `fromNumber()` instead"
+                "; pass it as a string or use `fromNumber()` instead"
             : `unsupported Number value: ${x}`,
         );
       } else if (typeof x === "string") {
